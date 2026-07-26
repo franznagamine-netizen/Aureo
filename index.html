@@ -1,54 +1,460 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8">
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Áureo V1.0</title><style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#182238;--muted:#718096;--line:#e5eaf2;--nav:#17213b;--g:#237f68;--gb:#edf8f4;--r:#c75e58;--rb:#fff1ef;--p:#665bcb;--pb:#f1efff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-button,input,select{font:inherit}.app{max-width:1280px;margin:auto;padding:14px 10px 80px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#f4da8a,#d3a02d);display:grid;place-items:center;font-weight:900}.ey{font-size:11px;letter-spacing:.14em;color:#9a7629;font-weight:800}h1{font-size:23px;margin:3px 0}.sub{font-size:12px;color:var(--muted)}.year{display:flex;gap:6px}.year select,.year button{border:1px solid var(--line);background:white;border-radius:11px;padding:9px}.nav{display:flex;gap:7px;margin:13px 0;overflow:auto}.nav button{border:0;border-radius:11px;padding:10px 14px;background:#e9edf4;color:#66738a;font-weight:750}.nav .active{background:var(--nav);color:white}.page{display:none}.page.active{display:block}
-.card{background:white;border:1px solid var(--line);border-radius:19px;padding:16px;margin-bottom:12px;box-shadow:0 9px 24px rgba(29,42,66,.07)}.hero{background:linear-gradient(135deg,#5148ca,#786be7);color:white;border:0}.heroGrid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:15px}.big{font-size:33px;font-weight:850;margin-top:6px}.hero small{opacity:.75}.stat{border-left:1px solid rgba(255,255,255,.25);padding-left:15px}.stat strong{display:block;font-size:20px;margin-top:6px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.kpi{background:white;border:1px solid var(--line);border-radius:16px;padding:13px}.label{font-size:11px;color:var(--muted)}.value{font-size:20px;font-weight:820;margin-top:6px}.green{color:var(--g)}.red{color:var(--r)}.purple{color:var(--p)}
-.tableCard{padding:0;overflow:hidden}.note{padding:12px 14px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line)}.wrap{overflow:auto;max-height:70vh}table{border-collapse:separate;border-spacing:0;min-width:2700px;width:100%;font-size:12px}th,td{padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;background:white}thead th{position:sticky;top:0;z-index:20;background:#eef2f8;color:#59667d}th:first-child,td:first-child{position:sticky;left:0;z-index:15;text-align:left;min-width:190px;max-width:190px;background:white;box-shadow:4px 0 8px rgba(30,42,65,.06)}thead th:first-child{z-index:30;background:#e4eaf4}.macro td{font-weight:900}.macro.income td{background:var(--gb);color:var(--g)}.macro.expense td{background:var(--rb);color:var(--r)}.macro.investment td{background:var(--pb);color:var(--p)}.macro td:first-child{z-index:18}.group td{background:#f8f9fc;font-weight:800;color:#5b687f}.group td:first-child{z-index:17;background:#f8f9fc}.cell,.name{width:100%;border:0;background:transparent;text-align:right;padding:5px}.name{text-align:left;font-weight:700}.cell:focus,.name:focus{outline:2px solid #b8c6ea;border-radius:7px}.disp{font-weight:800;color:#40557d;background:#fbfcff}.del{border:0;background:transparent;color:#9ba5b5;font-size:19px}.add td{background:#fafbfe}.add button{border:0;background:transparent;color:#60708f;font-weight:800}.total td{font-weight:900;background:#f4f7fb}
-.modal{position:fixed;inset:0;background:rgba(14,23,40,.55);display:none;align-items:flex-end;justify-content:center;z-index:100}.modal.open{display:flex}.sheet{width:min(540px,100%);background:white;border-radius:24px 24px 0 0;padding:20px;max-height:92vh;overflow:auto}.sheet h2{margin:0 0 14px}.field{margin-bottom:11px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}.field input,.field select{width:100%;padding:11px;border:1px solid var(--line);border-radius:11px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.actions{display:flex;gap:8px}.actions button{flex:1;border:0;border-radius:12px;padding:11px;font-weight:800}.cancel{background:#edf1f5}.save{background:var(--nav);color:white}.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--nav);color:white;padding:10px 15px;border-radius:12px;display:none;z-index:150;font-weight:700}
-@media(max-width:760px){.sub{display:none}.heroGrid{grid-template-columns:1fr 1fr}.heroGrid>div:first-child{grid-column:1/-1}.stat{border:0;padding:0}.kpis{grid-template-columns:1fr 1fr}}
-</style></head><body><div class="app">
-<header class="top"><div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · V1.0</div><h1>Control anual</h1><div class="sub">Flujo de caja e inversión</div></div></div><div class="year"><select id="yearSel" onchange="changeYear()"></select><button onclick="openYear()">＋ Año</button></div></header>
-<nav class="nav"><button class="active" onclick="showPage('home',this)">Inicio</button><button onclick="showPage('annual',this)">Anual</button></nav>
-<section id="home" class="page active"><div class="card hero"><div class="heroGrid"><div><small>META DE INVERSIÓN ANUAL</small><div class="big" id="goal"></div></div><div class="stat"><small>Invertido</small><strong id="invested"></strong></div><div class="stat"><small>Falta</small><strong id="left"></strong></div></div></div>
-<div class="kpis"><div class="kpi"><div class="label">Disponible este mes</div><div class="value green" id="kMonth"></div></div><div class="kpi"><div class="label">Disponible del año</div><div class="value" id="kYear"></div></div><div class="kpi"><div class="label">Ingresos del año</div><div class="value green" id="kIncome"></div></div><div class="kpi"><div class="label">Egresos del año</div><div class="value red" id="kExpense"></div></div><div class="kpi"><div class="label">Inversión del año</div><div class="value purple" id="kInvestment"></div></div><div class="kpi"><div class="label">Inversión este mes</div><div class="value purple" id="kInvestmentMonth"></div></div><div class="kpi"><div class="label">% de ahorro e inversión</div><div class="value" id="kRate"></div></div><div class="kpi"><div class="label">Inversión mensual requerida</div><div class="value purple" id="kRequired"></div></div></div></section>
-<section id="annual" class="page"><div class="card"><b>Presupuesto anual</b><div class="sub" style="display:block">Los totales se actualizan mientras escribes. No necesitas tocar otra celda.</div></div><div class="card tableCard"><div class="note">Cada mes muestra Presupuesto, Actual y Disponible. Puedes crear subgrupos y conceptos.</div><div class="wrap"><table id="table"></table></div></div></section>
+<meta name="theme-color" content="#18213b">
+<title>Áureo V1.3</title>
+<style>
+:root{
+  --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
+  --green:#1f8067;--green-bg:#edf8f4;--amber:#b7801c;--amber-bg:#fff8e8;
+  --red:#c95d58;--red-bg:#fff0ee;--purple:#655bcb;--purple-bg:#f0efff;--blue:#4b72c5;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1320px;margin:auto;padding:14px 10px 90px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#f5dc8f,#d4a02d);display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+.ey{font-size:11px;letter-spacing:.14em;color:#9b782b;font-weight:800}
+h1{font-size:23px;margin:3px 0}
+.sub{font-size:12px;color:var(--muted)}
+.year{display:flex;gap:6px}
+.year select,.year button{border:1px solid var(--line);background:white;border-radius:11px;padding:9px}
+.nav{display:flex;gap:7px;margin:13px 0;overflow:auto}
+.nav button{border:0;border-radius:11px;padding:10px 14px;background:#e8ecf3;color:#65728a;font-weight:750}
+.nav .active{background:var(--nav);color:white}
+.page{display:none}.page.active{display:block}
+.card{background:white;border:1px solid var(--line);border-radius:19px;padding:16px;margin-bottom:12px;box-shadow:0 9px 24px rgba(29,42,66,.065)}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;background:linear-gradient(135deg,#5047c8,#776be4);color:white;border:0}
+.hero-copy{display:flex;flex-direction:column;justify-content:center}
+.hero small{opacity:.78}
+.big{font-size:33px;font-weight:850;margin-top:6px;transition:transform .2s ease}
+.hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.hero-meta strong{display:block;font-size:20px;margin-top:4px}
+.ring-wrap{display:grid;place-items:center}
+.ring{width:170px;height:170px;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-track,.ring-value{fill:none;stroke-width:13}
+.ring-track{stroke:rgba(255,255,255,.22)}
+.ring-value{stroke:white;stroke-linecap:round;transition:stroke-dashoffset .45s ease}
+.ring-label{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring-label strong{font-size:30px}
+.ring-label span{font-size:12px;opacity:.82}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.kpi{background:white;border:1px solid var(--line);border-radius:16px;padding:13px;min-height:96px}
+.label{font-size:11px;color:var(--muted)}
+.value{font-size:20px;font-weight:820;margin-top:6px;transition:transform .18s ease,opacity .18s ease}
+.value.pulse,.big.pulse{transform:scale(1.035);opacity:.74}
+.green{color:var(--green)}.red{color:var(--red)}.purple{color:var(--purple)}.blue{color:var(--blue)}
+.spark{height:32px;margin-top:8px}.spark svg{width:100%;height:100%}
+.progress{height:8px;background:#edf0f6;border-radius:999px;overflow:hidden;margin-top:10px}
+.progress>span{display:block;height:100%;border-radius:inherit;background:var(--purple);transition:width .45s ease}
+.charts{display:grid;grid-template-columns:1.3fr .7fr;gap:12px;margin-top:12px}
+.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.chart-head h2{font-size:16px;margin:0}
+.chart-head select{border:1px solid var(--line);border-radius:10px;padding:7px;background:white}
+.line-chart{height:230px}
+.line-chart svg{width:100%;height:100%}
+.pie-layout{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center}
+.pie{width:150px;height:150px;border-radius:50%;position:relative;transition:background .3s ease}
+.pie::after{content:"";position:absolute;inset:27px;background:white;border-radius:50%}
+.legend{display:grid;gap:8px}
+.legend-item{display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.legend-item span:first-child{display:flex;align-items:center;gap:7px}
+.dot{width:9px;height:9px;border-radius:50%}
+.annual-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search{min-width:220px;border:1px solid var(--line);background:white;border-radius:11px;padding:9px 11px}
+.view-switch{display:flex;gap:5px;background:#edf1f6;border-radius:12px;padding:4px}
+.view-switch button{border:0;background:transparent;color:#68758b;border-radius:9px;padding:8px 11px;font-weight:800}
+.view-switch button.active{background:white;color:var(--nav);box-shadow:0 2px 8px rgba(28,42,67,.08)}
+.macro-hint{font-size:12px;color:var(--muted)}
+.tableCard{padding:0;overflow:hidden}
+.note{padding:12px 14px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line)}
+.wrap{overflow:auto;max-height:72vh}
+table{border-collapse:separate;border-spacing:0;min-width:2720px;width:100%;font-size:12px}
+th,td{padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;background:white}
+thead th{position:sticky;top:0;z-index:20;background:#eef2f8;color:#59667d}
+th:first-child,td:first-child{position:sticky;left:0;z-index:15;text-align:left;min-width:215px;max-width:215px;background:white;box-shadow:4px 0 8px rgba(30,42,65,.06)}
+thead th:first-child{z-index:30;background:#e4eaf4}
+.macro td{font-weight:900}
+.macro.income td{background:var(--green-bg);color:var(--green)}
+.macro.expense td{background:var(--red-bg);color:var(--red)}
+.macro.investment td{background:var(--purple-bg);color:var(--purple)}
+.macro td:first-child{z-index:18}
+.group td{background:#f8f9fc;font-weight:800;color:#5b687f}
+.group td:first-child{z-index:17;background:#f8f9fc}
+.group-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.group-title button{border:0;background:transparent;color:#64718a;padding:2px 4px}
+.cell,.name{width:100%;border:0;background:transparent;text-align:right;padding:5px}
+.name{text-align:left;font-weight:700}
+.cell:focus,.name:focus{outline:2px solid #b8c6ea;border-radius:7px}
+.status-good{background:var(--green-bg)!important;color:var(--green)!important;font-weight:850}
+.status-near{background:var(--amber-bg)!important;color:var(--amber)!important;font-weight:850}
+.status-over{background:var(--red-bg)!important;color:var(--red)!important;font-weight:850}
+.del{border:0;background:transparent;color:#9ba5b5;font-size:18px}
+.add td{background:#fafbfe}
+.add button{border:0;background:transparent;color:#60708f;font-weight:800}
+.total td{font-weight:900;background:#f4f7fb}
+.hidden-row{display:none}
+.empty{padding:26px;text-align:center;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(14,23,40,.55);display:none;align-items:flex-end;justify-content:center;z-index:100}
+.modal.open{display:flex}
+.sheet{width:min(540px,100%);background:white;border-radius:24px 24px 0 0;padding:20px;max-height:92vh;overflow:auto}
+.sheet h2{margin:0 0 14px}
+.field{margin-bottom:11px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+.field input,.field select{width:100%;padding:11px;border:1px solid var(--line);border-radius:11px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.actions{display:flex;gap:8px}
+.actions button{flex:1;border:0;border-radius:12px;padding:11px;font-weight:800}
+.cancel{background:#edf1f5}.save{background:var(--nav);color:white}.danger{background:var(--red-bg);color:var(--red)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--nav);color:white;padding:10px 15px;border-radius:12px;display:none;z-index:150;font-weight:700}
+@media(max-width:850px){
+ .sub{display:none}.hero{grid-template-columns:1fr}.ring-wrap{order:-1}.ring{width:145px;height:145px}
+ .kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}.pie-layout{grid-template-columns:130px 1fr}.pie{width:130px;height:130px}
+ .controls{width:100%}.search{min-width:0;flex:1}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · V1.3</div><h1>Control anual</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
+  <div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div>
+</header>
+
+<nav class="nav">
+  <button class="active" data-page="home">Inicio</button>
+  <button data-page="annual">Anual</button>
+</nav>
+
+<section id="home" class="page active">
+  <div class="card hero">
+    <div class="hero-copy">
+      <small>META DE INVERSIÓN ANUAL</small>
+      <div class="big" id="goal"></div>
+      <div class="hero-meta">
+        <div><small>Invertido</small><strong id="invested"></strong></div>
+        <div><small>Falta</small><strong id="left"></strong></div>
+      </div>
+    </div>
+    <div class="ring-wrap">
+      <div class="ring">
+        <svg viewBox="0 0 120 120" aria-label="Avance de la meta anual"><circle class="ring-track" cx="60" cy="60" r="48"></circle><circle class="ring-value" id="ringValue" cx="60" cy="60" r="48"></circle></svg>
+        <div class="ring-label"><div><strong id="ringPct">0%</strong><br><span>de la meta</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="label">Disponible este mes</div><div class="value green" id="kMonth"></div><div class="spark" id="sparkMonth"></div></div>
+    <div class="kpi"><div class="label">Disponible del año</div><div class="value blue" id="kYear"></div><div class="spark" id="sparkYear"></div></div>
+    <div class="kpi"><div class="label">Ingresos del año</div><div class="value green" id="kIncome"></div></div>
+    <div class="kpi"><div class="label">Egresos del año</div><div class="value red" id="kExpense"></div></div>
+    <div class="kpi"><div class="label">Inversión del año</div><div class="value purple" id="kInvestment"></div><div class="progress"><span id="investmentProgress"></span></div></div>
+    <div class="kpi"><div class="label">Inversión este mes</div><div class="value purple" id="kInvestmentMonth"></div></div>
+    <div class="kpi"><div class="label">% de ahorro e inversión</div><div class="value" id="kRate"></div></div>
+    <div class="kpi"><div class="label">Inversión mensual requerida</div><div class="value purple" id="kRequired"></div></div>
+  </div>
+
+  <div class="charts">
+    <div class="card">
+      <div class="chart-head"><h2>Evolución mensual</h2><select id="metricSelect"><option value="available">Disponible</option><option value="income">Ingresos</option><option value="expense">Egresos</option><option value="investment">Inversión</option></select></div>
+      <div class="line-chart" id="lineChart"></div>
+    </div>
+    <div class="card">
+      <div class="chart-head"><h2>Distribución de egresos</h2></div>
+      <div class="pie-layout"><div class="pie" id="expensePie"></div><div class="legend" id="expenseLegend"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="annual" class="page">
+  <div class="card">
+    <div class="annual-toolbar">
+      <div><b>Presupuesto anual</b><div class="sub" style="display:block">Una lectura macro del año, con acceso al detalle cuando lo necesites.</div></div>
+      <div class="controls">
+        <input id="searchInput" class="search" type="search" placeholder="Buscar concepto o subgrupo">
+        <div class="view-switch"><button id="macroBtn" class="active">Vista macro</button><button id="detailBtn">Ver conceptos</button></div>
+      </div>
+    </div>
+    <div class="macro-hint" id="annualHint" style="margin-top:10px">Vista macro activa: se muestran únicamente grupos y subgrupos.</div>
+  </div>
+  <div class="card tableCard">
+    <div class="note">Semáforo: verde = dentro del presupuesto; ámbar = 85% o más; rojo = presupuesto superado.</div>
+    <div class="wrap"><table id="table"></table></div>
+  </div>
+</section>
 </div>
-<div class="modal" id="conceptModal"><div class="sheet"><h2>Agregar concepto</h2><div class="field"><label>Nombre</label><input id="cName" placeholder="Ej. Netflix"></div><div class="grid"><div class="field"><label>Sección</label><select id="cType" onchange="fillGroups()"><option value="income">Ingresos</option><option value="expense">Egresos</option><option value="investment">Inversión</option></select></div><div class="field"><label>Subgrupo</label><select id="cGroup"></select></div></div><div class="grid"><div class="field"><label>Aplicar a</label><select id="cFreq"><option value="all">Todos los meses</option><option value="one">Solo un mes</option></select></div><div class="field"><label>Mes</label><select id="cMonth"></select></div></div><div class="field"><label>Presupuesto</label><input id="cAmount" type="number" inputmode="decimal"></div><div class="actions"><button class="cancel" onclick="closeM('conceptModal')">Cancelar</button><button class="save" onclick="saveConcept()">Guardar</button></div></div></div>
-<div class="modal" id="groupModal"><div class="sheet"><h2>Agregar subgrupo</h2><div class="field"><label>Sección</label><select id="gType"><option value="income">Ingresos</option><option value="expense">Egresos</option><option value="investment">Inversión</option></select></div><div class="field"><label>Nombre</label><input id="gName" placeholder="Ej. Streaming"></div><div class="actions"><button class="cancel" onclick="closeM('groupModal')">Cancelar</button><button class="save" onclick="saveGroup()">Guardar</button></div></div></div>
-<div class="modal" id="yearModal"><div class="sheet"><h2>Crear nuevo año</h2><div class="field"><label>Año</label><input id="newYear" type="number"></div><div class="field"><label>Base</label><select id="yearBase"><option value="copy">Copiar estructura y presupuestos</option><option value="blank">Crear vacío</option></select></div><div class="actions"><button class="cancel" onclick="closeM('yearModal')">Cancelar</button><button class="save" onclick="saveYear()">Crear</button></div></div></div><div class="toast" id="toast"></div>
+
+<div class="modal" id="conceptModal"><div class="sheet">
+<h2>Agregar concepto</h2>
+<div class="field"><label>Nombre</label><input id="cName" placeholder="Ej. Netflix"></div>
+<div class="grid"><div class="field"><label>Sección</label><select id="cType"><option value="income">Ingresos</option><option value="expense">Egresos</option><option value="investment">Inversión</option></select></div><div class="field"><label>Subgrupo</label><select id="cGroup"></select></div></div>
+<div class="grid"><div class="field"><label>Aplicar a</label><select id="cFreq"><option value="all">Todos los meses</option><option value="one">Solo un mes</option></select></div><div class="field"><label>Mes</label><select id="cMonth"></select></div></div>
+<div class="field"><label>Presupuesto</label><input id="cAmount" type="number" inputmode="decimal"></div>
+<div class="actions"><button class="cancel" data-close="conceptModal">Cancelar</button><button class="save" id="saveConceptBtn">Guardar</button></div>
+</div></div>
+
+<div class="modal" id="groupModal"><div class="sheet">
+<h2>Agregar subgrupo</h2>
+<div class="field"><label>Sección</label><select id="gType"><option value="income">Ingresos</option><option value="expense">Egresos</option><option value="investment">Inversión</option></select></div>
+<div class="field"><label>Nombre</label><input id="gName" placeholder="Ej. Streaming"></div>
+<div class="actions"><button class="cancel" data-close="groupModal">Cancelar</button><button class="save" id="saveGroupBtn">Guardar</button></div>
+</div></div>
+
+<div class="modal" id="editGroupModal"><div class="sheet">
+<h2>Editar subgrupo</h2><input type="hidden" id="egType"><input type="hidden" id="egOld">
+<div class="field"><label>Nombre</label><input id="egName"></div>
+<div class="actions"><button class="danger" id="deleteGroupBtn">Eliminar</button><button class="cancel" data-close="editGroupModal">Cancelar</button><button class="save" id="renameGroupBtn">Guardar</button></div>
+</div></div>
+
+<div class="modal" id="moveModal"><div class="sheet">
+<h2>Mover concepto</h2><input type="hidden" id="moveId">
+<div class="field"><label>Nuevo subgrupo</label><select id="moveGroup"></select></div>
+<div class="actions"><button class="cancel" data-close="moveModal">Cancelar</button><button class="save" id="saveMoveBtn">Mover</button></div>
+</div></div>
+
+<div class="modal" id="yearModal"><div class="sheet">
+<h2>Crear nuevo año</h2>
+<div class="field"><label>Año</label><input id="newYear" type="number"></div>
+<div class="field"><label>Base</label><select id="yearBase"><option value="copy">Copiar estructura y presupuestos</option><option value="blank">Crear vacío</option></select></div>
+<div class="actions"><button class="cancel" data-close="yearModal">Cancelar</button><button class="save" id="saveYearBtn">Crear</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
 <script>
-const M=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],nowMonth=6;
-const G={income:['Ingresos','Cuentas por cobrar'],expense:['Casa','Educación Kenzo','Streaming','Restaurantes','Otros egresos'],investment:['ETF y fondos','Renta fija','Otros']};
-const A=()=>Array(12).fill(0), seed=[
+const M=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const currentMonth=Math.min(new Date().getMonth(),11);
+const baseGroups={income:['Ingresos','Cuentas por cobrar'],expense:['Casa','Educación','Streaming','Restaurantes','Otros egresos'],investment:['ETF y fondos','Renta fija','Otros']};
+const zeros=()=>Array(12).fill(0);
+const seed=[
 {id:'sueldo',type:'income',group:'Ingresos',name:'Sueldo',budget:Array(12).fill(24000),actual:[24000,24000,24000,24000,24000,24000,24000,0,0,0,0,0]},
 {id:'grat',type:'income',group:'Ingresos',name:'Gratificación',budget:[0,0,0,0,0,24000,0,0,0,0,0,24000],actual:[0,0,0,0,0,24000,0,0,0,0,0,0]},
 {id:'util',type:'income',group:'Ingresos',name:'Utilidades',budget:[0,0,12000,0,0,0,0,0,0,0,0,0],actual:[0,0,11800,0,0,0,0,0,0,0,0,0]},
-{id:'cobro',type:'income',group:'Cuentas por cobrar',name:'Reembolso pendiente',budget:A(),actual:A()},
 {id:'casa',type:'expense',group:'Casa',name:'Aportes casa',budget:Array(12).fill(5200),actual:[5100,5300,5350,5200,5600,5280,5520,0,0,0,0,0]},
-{id:'cole',type:'expense',group:'Educación Kenzo',name:'Colegio',budget:Array(12).fill(1500),actual:[1500,1500,1500,1500,1500,1500,1500,0,0,0,0,0]},
-{id:'tall',type:'expense',group:'Educación Kenzo',name:'Talleres',budget:Array(12).fill(300),actual:[300,300,300,300,300,300,300,0,0,0,0,0]},
+{id:'cole',type:'expense',group:'Educación',name:'Colegio',budget:Array(12).fill(1500),actual:[1500,1500,1500,1500,1500,1500,1500,0,0,0,0,0]},
+{id:'tall',type:'expense',group:'Educación',name:'Talleres',budget:Array(12).fill(300),actual:[300,300,300,300,300,300,300,0,0,0,0,0]},
 {id:'net',type:'expense',group:'Streaming',name:'Netflix',budget:Array(12).fill(45),actual:[45,45,45,45,45,45,45,0,0,0,0,0]},
 {id:'yt',type:'expense',group:'Streaming',name:'YouTube Premium',budget:Array(12).fill(35),actual:[35,35,35,35,35,35,35,0,0,0,0,0]},
 {id:'rest',type:'expense',group:'Restaurantes',name:'Restaurantes',budget:Array(12).fill(1000),actual:[980,1120,1040,910,1230,960,870,0,0,0,0,0]},
-{id:'inv',type:'investment',group:'ETF y fondos',name:'Inversión mensual',budget:Array(12).fill(7000),actual:[7000,7000,7000,7000,7000,7000,6000,0,0,0,0,0]}];
-let db=JSON.parse(localStorage.getItem('aureoV10')||'null')||{years:{2026:{goal:84000,groups:G,items:seed}}},year=Number(Object.keys(db.years)[0]),timer;
-const yd=()=>db.years[year],save=()=>localStorage.setItem('aureoV10',JSON.stringify(db)),sum=a=>a.reduce((x,y)=>x+(+y||0),0),money=n=>new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:0}).format(+n||0),items=t=>yd().items.filter(x=>x.type===t);
-function totals(m){let o={income:0,expense:0,investment:0,bIncome:0,bExpense:0,bInvestment:0};yd().items.forEach(x=>{let a=+x.actual[m]||0,b=+x.budget[m]||0;if(x.type==='income'){o.income+=a;o.bIncome+=b}else if(x.type==='expense'){o.expense+=a;o.bExpense+=b}else{o.investment+=a;o.bInvestment+=b}});o.available=o.income-o.expense-o.investment;o.projected=o.bIncome-o.bExpense-o.bInvestment;return o}
-function totalType(t,f='actual'){return sum(items(t).flatMap(x=>x[f]))}
-function showPage(id,b){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(id==='annual')renderTable()}
-function renderYears(){yearSel.innerHTML=Object.keys(db.years).sort((a,b)=>b-a).map(y=>`<option ${+y===year?'selected':''}>${y}</option>`).join('')}
-function changeYear(){year=+yearSel.value;render()}
-function renderDash(){let inc=totalType('income'),exp=totalType('expense'),inv=totalType('investment'),left=Math.max(yd().goal-inv,0);goal.textContent=money(yd().goal);invested.textContent=money(inv);document.getElementById('left').textContent=money(left);kMonth.textContent=money(totals(nowMonth).available);kYear.textContent=money(inc-exp-inv);kIncome.textContent=money(inc);kExpense.textContent=money(exp);kInvestment.textContent=money(inv);kInvestmentMonth.textContent=money(totals(nowMonth).investment);kRate.textContent=(inc?((inc-exp)/inc*100):0).toFixed(1)+'%';kRequired.textContent=money(left/Math.max(11-nowMonth,1))}
-function renderTable(){let h='<thead><tr><th>Concepto</th>'+M.map(m=>`<th>${m} Ppto.</th><th>${m} Actual</th><th>${m} Disp.</th>`).join('')+'<th>Total Ppto.</th><th>Total Actual</th><th>Total Disp.</th><th></th></tr></thead><tbody>';[['income','INGRESOS'],['expense','EGRESOS'],['investment','INVERSIÓN']].forEach(([t,l])=>{h+=`<tr class="macro ${t}"><td>${l} · <span id="macro-${t}">${money(totalType(t))}</span></td>${'<td></td>'.repeat(39)}</tr>`;(yd().groups[t]||[]).forEach(g=>{let gi=items(t).filter(x=>x.group===g);h+=`<tr class="group"><td>${g} · ${money(sum(gi.flatMap(x=>x.actual)))}</td>${'<td></td>'.repeat(39)}</tr>`;gi.forEach(x=>{h+=`<tr><td><input class="name" value="${x.name}" oninput="rename('${x.id}',this.value)"></td>`;M.forEach((_,i)=>{let d=Math.max((+x.budget[i]||0)-(+x.actual[i]||0),0);h+=`<td><input class="cell" type="number" value="${+x.budget[i]||0}" oninput="liveCell('${x.id}','budget',${i},this.value,'disp-${x.id}-${i}')"></td><td><input class="cell" type="number" value="${+x.actual[i]||0}" oninput="liveCell('${x.id}','actual',${i},this.value,'disp-${x.id}-${i}')"></td><td class="disp" id="disp-${x.id}-${i}">${money(d)}</td>`});h+=`<td id="bp-${x.id}">${money(sum(x.budget))}</td><td id="ba-${x.id}">${money(sum(x.actual))}</td><td id="bd-${x.id}">${money(sum(x.budget)-sum(x.actual))}</td><td><button class="del" onclick="removeConcept('${x.id}')">×</button></td></tr>`})});h+=`<tr class="add"><td><button onclick="openConcept('${t}')">＋ Concepto</button> &nbsp; <button onclick="openGroup('${t}')">＋ Subgrupo</button></td>${'<td></td>'.repeat(39)}</tr>`});h+='<tr class="total"><td>DISPONIBLE</td>'+M.map((_,i)=>`<td>${money(totals(i).projected)}</td><td>${money(totals(i).available)}</td><td>${money(totals(i).available)}</td>`).join('')+`<td>${money(M.reduce((a,_,i)=>a+totals(i).projected,0))}</td><td>${money(M.reduce((a,_,i)=>a+totals(i).available,0))}</td><td>${money(M.reduce((a,_,i)=>a+totals(i).available,0))}</td><td></td></tr></tbody>`;table.innerHTML=h}
-function liveCell(id,f,i,v,dispId){let x=yd().items.find(x=>x.id===id);x[f][i]=+v||0;save();document.getElementById(dispId).textContent=money(Math.max((+x.budget[i]||0)-(+x.actual[i]||0),0));document.getElementById('bp-'+id).textContent=money(sum(x.budget));document.getElementById('ba-'+id).textContent=money(sum(x.actual));document.getElementById('bd-'+id).textContent=money(sum(x.budget)-sum(x.actual));renderDash();clearTimeout(timer);timer=setTimeout(renderTable,900)}
-function rename(id,v){yd().items.find(x=>x.id===id).name=v;save()}
-function removeConcept(id){let x=yd().items.find(x=>x.id===id);if(confirm(`¿Eliminar "${x.name}"?`)){yd().items=yd().items.filter(a=>a.id!==id);save();render()}}
-function openConcept(t){cType.value=t;fillGroups();cMonth.innerHTML=M.map((m,i)=>`<option value="${i}">${m}</option>`).join('');conceptModal.classList.add('open')}
-function fillGroups(){cGroup.innerHTML=(yd().groups[cType.value]||[]).map(g=>`<option>${g}</option>`).join('')}
-function saveConcept(){let n=cName.value.trim(),t=cType.value,g=cGroup.value,a=+cAmount.value||0,b=A(),ac=A();if(!n)return;if(cFreq.value==='all')b.fill(a);else b[+cMonth.value]=a;yd().items.push({id:'c'+Date.now(),type:t,group:g,name:n,budget:b,actual:ac});save();closeM('conceptModal');cName.value='';cAmount.value='';render()}
-function openGroup(t){gType.value=t;groupModal.classList.add('open')}function saveGroup(){let t=gType.value,n=gName.value.trim();if(!n||yd().groups[t].includes(n))return;yd().groups[t].push(n);save();closeM('groupModal');gName.value='';render()}
-function openYear(){newYear.value=Math.max(...Object.keys(db.years).map(Number))+1;yearModal.classList.add('open')}function saveYear(){let y=+newYear.value;if(!y||db.years[y])return;if(yearBase.value==='copy'){db.years[y]=JSON.parse(JSON.stringify(yd()));db.years[y].items.forEach(x=>x.actual=A())}else db.years[y]={goal:0,groups:JSON.parse(JSON.stringify(G)),items:[]};year=y;save();closeM('yearModal');render()}
-function closeM(id){document.getElementById(id).classList.remove('open')}function render(){renderYears();renderDash();renderTable()}render();
-</script></body></html>
+{id:'inv',type:'investment',group:'ETF y fondos',name:'Inversión mensual',budget:Array(12).fill(7000),actual:[7000,7000,7000,7000,7000,7000,6000,0,0,0,0,0]}
+];
+
+function loadDb(){
+  const keys=['aureoV13','aureoV12','aureoV11','aureoV10'];
+  for(const k of keys){
+    try{const v=JSON.parse(localStorage.getItem(k)||'null');if(v&&v.years)return v}catch(e){}
+  }
+  return {years:{2026:{goal:84000,groups:structuredClone(baseGroups),items:structuredClone(seed),collapsed:{}}}}
+}
+let db=loadDb();
+Object.values(db.years).forEach(y=>{y.groups=y.groups||structuredClone(baseGroups);y.items=y.items||[];y.collapsed=y.collapsed||{}});
+let year=Number(Object.keys(db.years).sort((a,b)=>b-a)[0]);
+let annualView='macro',searchTerm='',timer;
+
+const $=id=>document.getElementById(id);
+const yd=()=>db.years[year];
+const save=()=>localStorage.setItem('aureoV13',JSON.stringify(db));
+const sum=a=>a.reduce((x,y)=>x+(+y||0),0);
+const money=n=>new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:0}).format(+n||0);
+const typeItems=t=>yd().items.filter(x=>x.type===t);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escJs=s=>String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+function monthTotals(m){
+  const o={income:0,expense:0,investment:0,bIncome:0,bExpense:0,bInvestment:0};
+  yd().items.forEach(x=>{
+    const a=+x.actual[m]||0,b=+x.budget[m]||0;
+    if(x.type==='income'){o.income+=a;o.bIncome+=b}
+    else if(x.type==='expense'){o.expense+=a;o.bExpense+=b}
+    else{o.investment+=a;o.bInvestment+=b}
+  });
+  o.available=o.income-o.expense-o.investment;
+  o.projected=o.bIncome-o.bExpense-o.bInvestment;
+  return o
+}
+function totalType(t,f='actual'){return sum(typeItems(t).flatMap(x=>x[f]))}
+function aggregate(arr,m){
+  const budget=sum(arr.map(x=>x.budget[m])),actual=sum(arr.map(x=>x.actual[m]));
+  return {budget,actual,available:budget-actual}
+}
+function statusClass(b,a){
+  if(b<=0)return a>0?'status-over':'';
+  const ratio=a/b;
+  if(ratio>1)return 'status-over';
+  if(ratio>=.85)return 'status-near';
+  return 'status-good';
+}
+function toastMsg(s){$('toast').textContent=s;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',1600)}
+function pulse(ids){ids.forEach(id=>{const e=$(id);if(!e)return;e.classList.remove('pulse');void e.offsetWidth;e.classList.add('pulse');setTimeout(()=>e.classList.remove('pulse'),220)})}
+
+function renderYears(){
+  $('yearSel').innerHTML=Object.keys(db.years).sort((a,b)=>b-a).map(y=>`<option value="${y}" ${+y===year?'selected':''}>${y}</option>`).join('')
+}
+function renderDash(){
+  const inc=totalType('income'),exp=totalType('expense'),inv=totalType('investment');
+  const left=Math.max(yd().goal-inv,0),pct=yd().goal?Math.min(inv/yd().goal*100,100):0;
+  $('goal').textContent=money(yd().goal);$('invested').textContent=money(inv);$('left').textContent=money(left);
+  $('kMonth').textContent=money(monthTotals(currentMonth).available);$('kYear').textContent=money(inc-exp-inv);
+  $('kIncome').textContent=money(inc);$('kExpense').textContent=money(exp);$('kInvestment').textContent=money(inv);
+  $('kInvestmentMonth').textContent=money(monthTotals(currentMonth).investment);
+  $('kRate').textContent=(inc?((inc-exp)/inc*100):0).toFixed(1)+'%';
+  const remainingMonths=Math.max(12-(currentMonth+1),1);
+  $('kRequired').textContent=money(left/remainingMonths);
+  $('ringPct').textContent=pct.toFixed(0)+'%';$('investmentProgress').style.width=pct+'%';
+  const c=2*Math.PI*48;$('ringValue').style.strokeDasharray=c;$('ringValue').style.strokeDashoffset=c*(1-pct/100);
+  $('sparkMonth').innerHTML=sparkline(M.map((_,i)=>monthTotals(i).available),'#237f68');
+  let run=0,cum=[];M.forEach((_,i)=>{run+=monthTotals(i).available;cum.push(run)});
+  $('sparkYear').innerHTML=sparkline(cum,'#4d73c6');
+}
+function sparkline(vals,color){
+  const w=160,h=30,p=2,min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;
+  const pts=vals.map((v,i)=>`${p+i*(w-2*p)/(vals.length-1)},${h-p-(v-min)*(h-2*p)/range}`).join(' ');
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`
+}
+function renderCharts(){
+  const metric=$('metricSelect').value,vals=M.map((_,i)=>monthTotals(i)[metric]);
+  $('lineChart').innerHTML=lineSvg(vals);
+  const gs=(yd().groups.expense||[]).map(g=>({g,v:sum(typeItems('expense').filter(x=>x.group===g).flatMap(x=>x.actual))})).filter(x=>x.v>0);
+  const total=sum(gs.map(x=>x.v))||1,colors=['#c75e58','#665bcb','#237f68','#d7aa3d','#4d73c6','#8a6f9e'];
+  let acc=0,parts=[];gs.forEach((x,i)=>{const s=acc/total*360;acc+=x.v;parts.push(`${colors[i%colors.length]} ${s}deg ${acc/total*360}deg`)});
+  $('expensePie').style.background=parts.length?`conic-gradient(${parts.join(',')})`:'#edf0f6';
+  $('expenseLegend').innerHTML=gs.length?gs.map((x,i)=>`<div class="legend-item"><span><i class="dot" style="background:${colors[i%colors.length]}"></i>${esc(x.g)}</span><strong>${(x.v/total*100).toFixed(0)}%</strong></div>`).join(''):'<span class="sub">Sin egresos registrados</span>'
+}
+function lineSvg(vals){
+  const w=680,h=220,pl=46,pr=12,pt=12,pb=30,min=Math.min(0,...vals),max=Math.max(...vals,1),range=max-min||1;
+  const pts=vals.map((v,i)=>[pl+i*(w-pl-pr)/(vals.length-1),pt+(max-v)*(h-pt-pb)/range]);
+  const path=pts.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' ');
+  const grid=[0,.25,.5,.75,1].map(k=>{const y=pt+k*(h-pt-pb),val=max-k*range;return `<line x1="${pl}" y1="${y}" x2="${w-pr}" y2="${y}" stroke="#e8ecf3"/><text x="${pl-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#7a879d">${Math.round(val/1000)}k</text>`}).join('');
+  const labels=M.map((m,i)=>`<text x="${pts[i][0]}" y="${h-8}" text-anchor="middle" font-size="10" fill="#7a879d">${m}</text>`).join('');
+  const dots=pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#665bcb"><title>${M[i]}: ${money(vals[i])}</title></circle>`).join('');
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Evolución mensual">${grid}<path d="${path}" fill="none" stroke="#665bcb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`
+}
+
+function matches(text){return !searchTerm||text.toLowerCase().includes(searchTerm)}
+function renderTable(){
+  const labels=[['income','INGRESOS'],['expense','EGRESOS'],['investment','INVERSIÓN']];
+  let visibleCount=0;
+  let h='<thead><tr><th>Concepto</th>'+M.map(m=>`<th>${m} Ppto.</th><th>${m} Actual</th><th>${m} Disp.</th>`).join('')+'<th>Total Ppto.</th><th>Total Actual</th><th>Total Disp.</th><th></th></tr></thead><tbody>';
+  labels.forEach(([t,label])=>{
+    const allType=typeItems(t);
+    const groups=(yd().groups[t]||[]).filter(g=>{
+      if(!searchTerm)return true;
+      return matches(g)||allType.some(x=>x.group===g&&matches(x.name))
+    });
+    if(!groups.length&&searchTerm)return;
+    visibleCount++;
+    h+=`<tr class="macro ${t}"><td>${label}</td>`;
+    M.forEach((_,i)=>{const v=aggregate(allType,i);h+=`<td>${money(v.budget)}</td><td>${money(v.actual)}</td><td>${money(v.available)}</td>`});
+    h+=`<td>${money(totalType(t,'budget'))}</td><td>${money(totalType(t,'actual'))}</td><td>${money(totalType(t,'budget')-totalType(t,'actual'))}</td><td></td></tr>`;
+    groups.forEach(g=>{
+      const groupItems=allType.filter(x=>x.group===g);
+      const key=t+'|'+g,collapsed=!!yd().collapsed[key];
+      const arrow=annualView==='detail'?`<button data-toggle="${esc(t)}|${esc(g)}">${collapsed?'▶':'▼'}</button>`:'';
+      h+=`<tr class="group"><td><div class="group-title"><span>${arrow}${esc(g)}</span><button data-editgroup="${esc(t)}|${esc(g)}">⋯</button></div></td>`;
+      M.forEach((_,i)=>{const v=aggregate(groupItems,i),cls=statusClass(v.budget,v.actual);h+=`<td>${money(v.budget)}</td><td class="${cls}">${money(v.actual)}</td><td>${money(v.available)}</td>`});
+      h+=`<td>${money(sum(groupItems.flatMap(x=>x.budget)))}</td><td>${money(sum(groupItems.flatMap(x=>x.actual)))}</td><td>${money(sum(groupItems.flatMap(x=>x.budget))-sum(groupItems.flatMap(x=>x.actual)))}</td><td></td></tr>`;
+      groupItems.filter(x=>!searchTerm||matches(x.name)||matches(g)).forEach(x=>{
+        const hide=annualView==='macro'||(collapsed&&!searchTerm);
+        h+=`<tr class="${hide?'hidden-row':''}"><td><input class="name" value="${esc(x.name)}" data-name="${x.id}"></td>`;
+        M.forEach((_,i)=>{
+          const b=+x.budget[i]||0,a=+x.actual[i]||0,cls=statusClass(b,a);
+          h+=`<td><input class="cell" type="number" inputmode="decimal" value="${b}" data-cell="${x.id}|budget|${i}"></td><td class="${cls}"><input class="cell" type="number" inputmode="decimal" value="${a}" data-cell="${x.id}|actual|${i}"></td><td>${money(b-a)}</td>`
+        });
+        h+=`<td>${money(sum(x.budget))}</td><td>${money(sum(x.actual))}</td><td>${money(sum(x.budget)-sum(x.actual))}</td><td><button class="del" data-move="${x.id}">↔</button><button class="del" data-remove="${x.id}">×</button></td></tr>`
+      })
+    });
+    if(annualView==='detail'&&!searchTerm)h+=`<tr class="add"><td><button data-addconcept="${t}">＋ Concepto</button> &nbsp; <button data-addgroup="${t}">＋ Subgrupo</button></td>${'<td></td>'.repeat(39)}</tr>`
+  });
+  if(!visibleCount)h+=`<tr><td colspan="40" class="empty">No encontramos coincidencias para “${esc(searchTerm)}”.</td></tr>`;
+  h+='<tr class="total"><td>DISPONIBLE</td>'+M.map((_,i)=>`<td>${money(monthTotals(i).projected)}</td><td>${money(monthTotals(i).available)}</td><td>${money(monthTotals(i).available)}</td>`).join('')+`<td>${money(M.reduce((a,_,i)=>a+monthTotals(i).projected,0))}</td><td>${money(M.reduce((a,_,i)=>a+monthTotals(i).available,0))}</td><td>${money(M.reduce((a,_,i)=>a+monthTotals(i).available,0))}</td><td></td></tr></tbody>`;
+  $('table').innerHTML=h
+}
+
+function renderAll(){renderYears();renderDash();renderCharts();renderTable()}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');if(id==='annual')renderTable()}
+function setAnnualView(mode){
+  annualView=mode;$('macroBtn').classList.toggle('active',mode==='macro');$('detailBtn').classList.toggle('active',mode==='detail');
+  $('annualHint').textContent=mode==='macro'?'Vista macro activa: se muestran únicamente grupos y subgrupos.':'Vista detalle activa: puedes desplegar, editar y mover conceptos.';
+  renderTable()
+}
+function openModal(id){$(id).classList.add('open')}
+function closeModal(id){$(id).classList.remove('open')}
+function fillGroups(){ $('cGroup').innerHTML=(yd().groups[$('cType').value]||[]).map(g=>`<option>${esc(g)}</option>`).join('') }
+function openConcept(t){$('cType').value=t;fillGroups();$('cMonth').innerHTML=M.map((m,i)=>`<option value="${i}">${m}</option>`).join('');openModal('conceptModal')}
+function openGroup(t){$('gType').value=t;$('gName').value='';openModal('groupModal')}
+function openEditGroup(t,g){$('egType').value=t;$('egOld').value=g;$('egName').value=g;openModal('editGroupModal')}
+function openMove(id){const x=yd().items.find(i=>i.id===id);$('moveId').value=id;$('moveGroup').innerHTML=(yd().groups[x.type]||[]).map(g=>`<option ${g===x.group?'selected':''}>${esc(g)}</option>`).join('');openModal('moveModal')}
+
+$('yearSel').addEventListener('change',e=>{year=+e.target.value;renderAll()});
+$('addYearBtn').addEventListener('click',()=>{$('newYear').value=Math.max(...Object.keys(db.years).map(Number))+1;openModal('yearModal')});
+$('metricSelect').addEventListener('change',renderCharts);
+$('macroBtn').addEventListener('click',()=>setAnnualView('macro'));
+$('detailBtn').addEventListener('click',()=>setAnnualView('detail'));
+$('searchInput').addEventListener('input',e=>{searchTerm=e.target.value.trim().toLowerCase();if(searchTerm)setAnnualView('detail');else renderTable()});
+$('cType').addEventListener('change',fillGroups);
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page,b)));
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
+
+$('saveConceptBtn').addEventListener('click',()=>{
+  const name=$('cName').value.trim(),type=$('cType').value,group=$('cGroup').value,amount=+$('cAmount').value||0,budget=zeros();
+  if(!name)return toastMsg('Escribe un nombre');
+  if($('cFreq').value==='all')budget.fill(amount);else budget[+$('cMonth').value]=amount;
+  yd().items.push({id:'c'+Date.now(),type,group,name,budget,actual:zeros()});save();closeModal('conceptModal');$('cName').value='';$('cAmount').value='';renderAll();toastMsg('Concepto agregado')
+});
+$('saveGroupBtn').addEventListener('click',()=>{
+  const type=$('gType').value,name=$('gName').value.trim();if(!name)return toastMsg('Escribe un nombre');if(yd().groups[type].includes(name))return toastMsg('Ese subgrupo ya existe');
+  yd().groups[type].push(name);save();closeModal('groupModal');renderAll();toastMsg('Subgrupo agregado')
+});
+$('renameGroupBtn').addEventListener('click',()=>{
+  const type=$('egType').value,old=$('egOld').value,name=$('egName').value.trim();if(!name)return;
+  if(name!==old&&yd().groups[type].includes(name))return toastMsg('Ese nombre ya existe');
+  yd().groups[type]=yd().groups[type].map(g=>g===old?name:g);yd().items.filter(x=>x.type===type&&x.group===old).forEach(x=>x.group=name);
+  yd().collapsed[type+'|'+name]=yd().collapsed[type+'|'+old]||false;delete yd().collapsed[type+'|'+old];
+  save();closeModal('editGroupModal');renderAll();toastMsg('Subgrupo actualizado')
+});
+$('deleteGroupBtn').addEventListener('click',()=>{
+  const type=$('egType').value,g=$('egOld').value,affected=yd().items.filter(x=>x.type===type&&x.group===g);
+  if(affected.length)return toastMsg('Primero mueve o elimina sus conceptos');
+  if(confirm(`¿Eliminar el subgrupo "${g}"?`)){yd().groups[type]=yd().groups[type].filter(x=>x!==g);save();closeModal('editGroupModal');renderAll()}
+});
+$('saveMoveBtn').addEventListener('click',()=>{
+  const x=yd().items.find(i=>i.id===$('moveId').value);x.group=$('moveGroup').value;save();closeModal('moveModal');renderAll();toastMsg('Concepto movido')
+});
+$('saveYearBtn').addEventListener('click',()=>{
+  const y=+$('newYear').value;if(!y||db.years[y])return toastMsg('Año no válido o ya existente');
+  if($('yearBase').value==='copy'){db.years[y]=structuredClone(yd());db.years[y].items.forEach(x=>x.actual=zeros());db.years[y].collapsed={}}
+  else db.years[y]={goal:0,groups:structuredClone(baseGroups),items:[],collapsed:{}};
+  year=y;save();closeModal('yearModal');renderAll();toastMsg('Año creado')
+});
+
+$('table').addEventListener('input',e=>{
+  if(e.target.dataset.name){const x=yd().items.find(i=>i.id===e.target.dataset.name);x.name=e.target.value;save();return}
+  if(e.target.dataset.cell){
+    const [id,f,m]=e.target.dataset.cell.split('|'),x=yd().items.find(i=>i.id===id);x[f][+m]=+e.target.value||0;save();
+    renderDash();renderCharts();pulse(['goal','kMonth','kYear','kIncome','kExpense','kInvestment','kInvestmentMonth','kRate','kRequired']);
+    clearTimeout(timer);timer=setTimeout(renderTable,300)
+  }
+});
+$('table').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.toggle){const [t,g]=b.dataset.toggle.split('|');yd().collapsed[t+'|'+g]=!yd().collapsed[t+'|'+g];save();renderTable()}
+  else if(b.dataset.editgroup){const [t,g]=b.dataset.editgroup.split('|');openEditGroup(t,g)}
+  else if(b.dataset.addconcept)openConcept(b.dataset.addconcept)
+  else if(b.dataset.addgroup)openGroup(b.dataset.addgroup)
+  else if(b.dataset.move)openMove(b.dataset.move)
+  else if(b.dataset.remove){const x=yd().items.find(i=>i.id===b.dataset.remove);if(confirm(`¿Eliminar "${x.name}"?`)){yd().items=yd().items.filter(i=>i.id!==x.id);save();renderAll()}}
+});
+
+renderAll();
+</script>
+</body>
+</html>
