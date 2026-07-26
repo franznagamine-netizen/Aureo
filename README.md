@@ -1,13 +1,12 @@
-# Áureo V0.9
+# Áureo V1.0
 
-Sube `index.html` directamente a la raíz de tu repositorio de GitHub y reemplaza el anterior.
+Sube `index.html` a la raíz del repositorio de GitHub Pages y reemplaza el archivo anterior.
 
-Cambios principales:
-- Ingresos, egresos e inversión separados.
-- Presupuesto y monto actual separados.
-- Disponible = ingresos - egresos - inversión.
-- Botón para agregar conceptos dentro de cada sección.
-- Eliminación de conceptos desde cada fila.
-- Creación de nuevos años copiando la estructura anterior.
-- Columna Concepto y encabezado de meses fijos sin superposición.
-- Guardado local en el navegador.
+Incluye:
+- Totales de ingresos, egresos e inversión.
+- Subgrupos dinámicos.
+- Autosuma mientras se escribe.
+- Dashboard con ocho indicadores.
+- Presupuesto, actual y disponible por concepto.
+- Creación de años copiando la estructura anterior.
+- Eliminación de la sección Patrimonio.
