@@ -1,17 +1,14 @@
-# Áureo V1.5
+# Áureo V1.6
 
 ## Cambios
 
-- Navegación principal renombrada a **Dashboard** y **Detalle**.
-- En iPhone, navegación inferior fija con apariencia de app nativa.
-- Al modificar un presupuesto mensual, permite aplicar el cambio:
-  - solo al mes seleccionado;
-  - desde ese mes hasta diciembre;
-  - a todo el año.
-- Los importes reales continúan editándose únicamente en el mes correspondiente.
-- Al crear un nuevo año, permite:
-  - copiar estructura y presupuestos del año anterior;
-  - copiar solo estructura y conceptos;
-  - crear un año vacío.
-- En todos los casos, los valores reales del nuevo año comienzan en cero.
-- Conserva la vista anual compacta de V1.4.
+- El encabezado del Dashboard ahora muestra **Hola, Franz**.
+- El nombre es personalizable tocando el saludo.
+- En Detalle, al escribir un presupuesto, la app reconoce el cambio después de una breve pausa, sin tener que tocar otra celda.
+- También se puede presionar Enter para confirmar inmediatamente.
+- Se añadieron botones **Deshacer** y **Rehacer**.
+- Atajos compatibles:
+  - Ctrl/Cmd + Z: deshacer.
+  - Ctrl/Cmd + Shift + Z o Ctrl/Cmd + Y: rehacer.
+- El historial conserva hasta 60 cambios durante la sesión.
+- Mantiene la réplica de presupuestos por mes, meses restantes o todo el año.

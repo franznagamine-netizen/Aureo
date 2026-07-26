@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#18213b">
-<title>Áureo V1.5</title>
+<title>Áureo V1.6</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -29,6 +29,10 @@ h1{font-size:23px;margin:3px 0}
 .nav button{border:0;border-radius:11px;padding:10px 14px;background:#e8ecf3;color:#65728a;font-weight:750}
 .nav .active{background:var(--nav);color:white}
 .nav-icon{display:none;font-size:20px;line-height:1}
+#greetingBtn{cursor:pointer}
+.history-controls{display:flex;gap:6px}
+.history-controls button{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--nav);font-size:21px;line-height:1}
+.history-controls button:disabled{opacity:.35;cursor:not-allowed}
 .page{display:none}.page.active{display:block}
 .card{background:white;border:1px solid var(--line);border-radius:19px;padding:16px;margin-bottom:12px;box-shadow:0 9px 24px rgba(29,42,66,.065)}
 .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;background:linear-gradient(135deg,#5047c8,#776be4);color:white;border:0}
@@ -136,7 +140,7 @@ thead th:first-child{z-index:30;background:#e4eaf4}
 <body>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · V1.5</div><h1>Control anual</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
+  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · V1.6</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">Hola, Franz</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
   <div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div>
 </header>
 
@@ -202,7 +206,7 @@ thead th:first-child{z-index:30;background:#e4eaf4}
   <div class="card">
     <div class="annual-toolbar">
       <div><b>Detalle anual</b><div class="sub" style="display:block">Una lectura macro del año, con acceso al detalle cuando lo necesites.</div></div>
-      <div class="controls">
+      <div class="controls"><div class="history-controls"><button id="undoBtn" title="Deshacer" aria-label="Deshacer">↶</button><button id="redoBtn" title="Rehacer" aria-label="Rehacer">↷</button></div>
         <input id="searchInput" class="search" type="search" placeholder="Buscar concepto o subgrupo">
         <div class="view-switch"><button id="macroBtn" class="active">Vista macro</button><button id="detailBtn">Ver conceptos</button></div>
       </div>
@@ -290,20 +294,34 @@ const seed=[
 ];
 
 function loadDb(){
-  const keys=['aureoV15','aureoV14','aureoV13','aureoV12','aureoV11','aureoV10'];
+  const keys=['aureoV16','aureoV15','aureoV14','aureoV13','aureoV12','aureoV11','aureoV10'];
   for(const k of keys){
     try{const v=JSON.parse(localStorage.getItem(k)||'null');if(v&&v.years)return v}catch(e){}
   }
   return {years:{2026:{goal:84000,groups:structuredClone(baseGroups),items:structuredClone(seed),collapsed:{}}}}
 }
 let db=loadDb();
+db.profileName=db.profileName||'Franz';
 Object.values(db.years).forEach(y=>{y.groups=y.groups||structuredClone(baseGroups);y.items=y.items||[];y.collapsed=y.collapsed||{}});
 let year=Number(Object.keys(db.years).sort((a,b)=>b-a)[0]);
-let annualView='macro',searchTerm='',timer,pendingEdit=null;
+let annualView='macro',searchTerm='',timer,pendingEdit=null,budgetInputTimer=null;
+let undoStack=[],redoStack=[],lastSavedState=JSON.stringify(db),historyLocked=false;
 
 const $=id=>document.getElementById(id);
 const yd=()=>db.years[year];
-const save=()=>localStorage.setItem('aureoV15',JSON.stringify(db));
+const persist=()=>localStorage.setItem('aureoV16',JSON.stringify(db));
+const updateHistoryButtons=()=>{if($('undoBtn'))$('undoBtn').disabled=!undoStack.length;if($('redoBtn'))$('redoBtn').disabled=!redoStack.length};
+const save=()=>{
+  const current=JSON.stringify(db);
+  if(!historyLocked&&current!==lastSavedState){
+    undoStack.push(lastSavedState);
+    if(undoStack.length>60)undoStack.shift();
+    redoStack=[];
+  }
+  lastSavedState=current;
+  persist();
+  updateHistoryButtons();
+};
 const sum=a=>a.reduce((x,y)=>x+(+y||0),0);
 const money=n=>new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:0}).format(+n||0);const compactMoney=n=>new Intl.NumberFormat('es-PE',{maximumFractionDigits:0}).format(+n||0);
 const typeItems=t=>yd().items.filter(x=>x.type===t);
@@ -341,6 +359,7 @@ function renderYears(){
   $('yearSel').innerHTML=Object.keys(db.years).sort((a,b)=>b-a).map(y=>`<option value="${y}" ${+y===year?'selected':''}>${y}</option>`).join('')
 }
 function renderDash(){
+  $('greetingBtn').textContent='Hola, '+(db.profileName||'Franz');
   const inc=totalType('income'),exp=totalType('expense'),inv=totalType('investment');
   const left=Math.max(yd().goal-inv,0),pct=yd().goal?Math.min(inv/yd().goal*100,100):0;
   $('goal').textContent=money(yd().goal);$('invested').textContent=money(inv);$('left').textContent=money(left);
@@ -420,7 +439,31 @@ function renderTable(){
   $('table').innerHTML=h
 }
 
-function renderAll(){renderYears();renderDash();renderCharts();renderTable()}
+function restoreState(serialized){
+  historyLocked=true;
+  db=JSON.parse(serialized);
+  db.profileName=db.profileName||'Franz';
+  Object.values(db.years).forEach(y=>{y.groups=y.groups||structuredClone(baseGroups);y.items=y.items||[];y.collapsed=y.collapsed||{}});
+  if(!db.years[year])year=Number(Object.keys(db.years).sort((a,b)=>b-a)[0]);
+  lastSavedState=JSON.stringify(db);
+  persist();
+  historyLocked=false;
+  renderAll();
+  updateHistoryButtons();
+}
+function undo(){
+  if(!undoStack.length)return;
+  redoStack.push(JSON.stringify(db));
+  restoreState(undoStack.pop());
+  toastMsg('Cambio deshecho');
+}
+function redo(){
+  if(!redoStack.length)return;
+  undoStack.push(JSON.stringify(db));
+  restoreState(redoStack.pop());
+  toastMsg('Cambio rehecho');
+}
+function renderAll(){renderYears();renderDash();renderCharts();renderTable();updateHistoryButtons()}
 function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');if(id==='annual')renderTable()}
 function setAnnualView(mode){
   annualView=mode;$('macroBtn').classList.toggle('active',mode==='macro');$('detailBtn').classList.toggle('active',mode==='detail');
@@ -436,6 +479,7 @@ function openEditGroup(t,g){$('egType').value=t;$('egOld').value=g;$('egName').v
 function openMove(id){const x=yd().items.find(i=>i.id===id);$('moveId').value=id;$('moveGroup').innerHTML=(yd().groups[x.type]||[]).map(g=>`<option ${g===x.group?'selected':''}>${esc(g)}</option>`).join('');openModal('moveModal')}
 
 function requestBudgetScope(input){
+  if($('scopeModal').classList.contains('open'))return true;
   const [id,f,m]=input.dataset.cell.split('|');
   if(f!=='budget')return false;
   const x=yd().items.find(i=>i.id===id);
@@ -452,6 +496,21 @@ function finishEditRefresh(){
 }
 
 
+
+$('greetingBtn').addEventListener('click',()=>{
+  const name=prompt('¿Cómo deseas que te salude Áureo?',db.profileName||'Franz');
+  if(name&&name.trim()){db.profileName=name.trim();save();renderDash();toastMsg('Nombre actualizado')}
+});
+$('undoBtn').addEventListener('click',undo);
+$('redoBtn').addEventListener('click',redo);
+document.addEventListener('keydown',e=>{
+  const mod=e.ctrlKey||e.metaKey;
+  if(mod&&e.key.toLowerCase()==='z'){
+    e.preventDefault();
+    if(e.shiftKey)redo();else undo();
+  }else if(mod&&e.key.toLowerCase()==='y'){e.preventDefault();redo()}
+});
+
 $('yearSel').addEventListener('change',e=>{year=+e.target.value;renderAll()});
 $('addYearBtn').addEventListener('click',()=>{$('newYear').value=Math.max(...Object.keys(db.years).map(Number))+1;openModal('yearModal')});
 $('metricSelect').addEventListener('change',renderCharts);
@@ -464,6 +523,7 @@ document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',
 
 
 $('applyScopeBtn').addEventListener('click',()=>{
+  clearTimeout(budgetInputTimer);
   if(!pendingEdit)return closeModal('scopeModal');
   const x=yd().items.find(i=>i.id===pendingEdit.id),choice=$('scopeChoice').value;
   if(choice==='one')x.budget[pendingEdit.month]=pendingEdit.newValue;
@@ -472,6 +532,7 @@ $('applyScopeBtn').addEventListener('click',()=>{
   pendingEdit=null;closeModal('scopeModal');finishEditRefresh();toastMsg('Presupuesto actualizado')
 });
 $('cancelScopeBtn').addEventListener('click',()=>{
+  clearTimeout(budgetInputTimer);
   if(pendingEdit&&pendingEdit.input)pendingEdit.input.value=pendingEdit.oldValue;
   pendingEdit=null;closeModal('scopeModal')
 });
@@ -520,14 +581,21 @@ $('table').addEventListener('input',e=>{
   if(e.target.dataset.name){const x=yd().items.find(i=>i.id===e.target.dataset.name);x.name=e.target.value;save();return}
   if(e.target.dataset.cell){
     const [id,f,m]=e.target.dataset.cell.split('|');
-    if(f==='budget')return;
+    if(f==='budget'){
+      clearTimeout(budgetInputTimer);
+      budgetInputTimer=setTimeout(()=>requestBudgetScope(e.target),650);
+      return;
+    }
     const x=yd().items.find(i=>i.id===id);x[f][+m]=+e.target.value||0;save();
     renderDash();renderCharts();pulse(['goal','kMonth','kYear','kIncome','kExpense','kInvestment','kInvestmentMonth','kRate','kRequired']);
     clearTimeout(timer);timer=setTimeout(renderTable,300)
   }
 });
-$('table').addEventListener('change',e=>{
-  if(e.target.dataset.cell)requestBudgetScope(e.target)
+$('table').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.dataset.cell){
+    const [,f]=e.target.dataset.cell.split('|');
+    if(f==='budget'){e.preventDefault();clearTimeout(budgetInputTimer);requestBudgetScope(e.target)}
+  }
 });
 $('table').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
