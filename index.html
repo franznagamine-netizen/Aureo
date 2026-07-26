@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#18213b">
-<title>Áureo V1.4</title>
+<title>Áureo V1.5</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -28,6 +28,7 @@ h1{font-size:23px;margin:3px 0}
 .nav{display:flex;gap:7px;margin:13px 0;overflow:auto}
 .nav button{border:0;border-radius:11px;padding:10px 14px;background:#e8ecf3;color:#65728a;font-weight:750}
 .nav .active{background:var(--nav);color:white}
+.nav-icon{display:none;font-size:20px;line-height:1}
 .page{display:none}.page.active{display:block}
 .card{background:white;border:1px solid var(--line);border-radius:19px;padding:16px;margin-bottom:12px;box-shadow:0 9px 24px rgba(29,42,66,.065)}
 .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;background:linear-gradient(135deg,#5047c8,#776be4);color:white;border:0}
@@ -119,19 +120,29 @@ thead th:first-child{z-index:30;background:#e4eaf4}
  .sub{display:none}.hero{grid-template-columns:1fr}.ring-wrap{order:-1}.ring{width:145px;height:145px}
  .kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}.pie-layout{grid-template-columns:130px 1fr}.pie{width:130px;height:130px}
  .controls{width:100%}.search{min-width:0;flex:1}
+ .app{padding-bottom:104px}
+ .nav{position:fixed;left:10px;right:10px;bottom:9px;z-index:90;margin:0;padding:6px;
+      background:rgba(255,255,255,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 34px rgba(20,31,53,.2);
+      display:grid;grid-template-columns:1fr 1fr;gap:6px;overflow:visible}
+ .nav button{padding:7px 10px;background:transparent;border-radius:15px;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:2px;font-size:11px;min-height:50px}
+ .nav .active{background:#edf1f8;color:var(--nav)}
+ .nav-icon{display:block}
+ .toast{bottom:88px}
 }
 </style>
 </head>
 <body>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · V1.4</div><h1>Control anual</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
+  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · V1.5</div><h1>Control anual</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
   <div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div>
 </header>
 
-<nav class="nav">
-  <button class="active" data-page="home">Inicio</button>
-  <button data-page="annual">Anual</button>
+<nav class="nav" aria-label="Navegación principal">
+  <button class="active" data-page="home"><span class="nav-icon">⌂</span><span>Dashboard</span></button>
+  <button data-page="annual"><span class="nav-icon">▦</span><span>Detalle</span></button>
 </nav>
 
 <section id="home" class="page active">
@@ -190,7 +201,7 @@ thead th:first-child{z-index:30;background:#e4eaf4}
 <section id="annual" class="page">
   <div class="card">
     <div class="annual-toolbar">
-      <div><b>Presupuesto anual</b><div class="sub" style="display:block">Una lectura macro del año, con acceso al detalle cuando lo necesites.</div></div>
+      <div><b>Detalle anual</b><div class="sub" style="display:block">Una lectura macro del año, con acceso al detalle cuando lo necesites.</div></div>
       <div class="controls">
         <input id="searchInput" class="search" type="search" placeholder="Buscar concepto o subgrupo">
         <div class="view-switch"><button id="macroBtn" class="active">Vista macro</button><button id="detailBtn">Ver conceptos</button></div>
@@ -236,8 +247,26 @@ thead th:first-child{z-index:30;background:#e4eaf4}
 <div class="modal" id="yearModal"><div class="sheet">
 <h2>Crear nuevo año</h2>
 <div class="field"><label>Año</label><input id="newYear" type="number"></div>
-<div class="field"><label>Base</label><select id="yearBase"><option value="copy">Copiar estructura y presupuestos</option><option value="blank">Crear vacío</option></select></div>
+<div class="field"><label>Punto de partida</label><select id="yearBase">
+<option value="copy">Copiar estructura y presupuestos del año anterior</option>
+<option value="structure">Copiar solo estructura y conceptos</option>
+<option value="blank">Crear año vacío</option>
+</select></div>
+<div class="sub" style="display:block;margin:-4px 0 14px">Los valores reales siempre comenzarán en cero.</div>
 <div class="actions"><button class="cancel" data-close="yearModal">Cancelar</button><button class="save" id="saveYearBtn">Crear</button></div>
+</div></div>
+
+
+<div class="modal" id="scopeModal"><div class="sheet">
+<h2>Aplicar cambio de presupuesto</h2>
+<div class="sub" id="scopeDescription" style="display:block;margin-bottom:15px"></div>
+<div class="field"><label>¿Dónde deseas aplicar el nuevo monto?</label>
+<select id="scopeChoice">
+<option value="one">Solo este mes</option>
+<option value="forward">Desde este mes hasta diciembre</option>
+<option value="all">Todos los meses del año</option>
+</select></div>
+<div class="actions"><button class="cancel" id="cancelScopeBtn">Cancelar</button><button class="save" id="applyScopeBtn">Aplicar</button></div>
 </div></div>
 
 <div class="toast" id="toast"></div>
@@ -261,7 +290,7 @@ const seed=[
 ];
 
 function loadDb(){
-  const keys=['aureoV13','aureoV12','aureoV11','aureoV10'];
+  const keys=['aureoV15','aureoV14','aureoV13','aureoV12','aureoV11','aureoV10'];
   for(const k of keys){
     try{const v=JSON.parse(localStorage.getItem(k)||'null');if(v&&v.years)return v}catch(e){}
   }
@@ -270,11 +299,11 @@ function loadDb(){
 let db=loadDb();
 Object.values(db.years).forEach(y=>{y.groups=y.groups||structuredClone(baseGroups);y.items=y.items||[];y.collapsed=y.collapsed||{}});
 let year=Number(Object.keys(db.years).sort((a,b)=>b-a)[0]);
-let annualView='macro',searchTerm='',timer;
+let annualView='macro',searchTerm='',timer,pendingEdit=null;
 
 const $=id=>document.getElementById(id);
 const yd=()=>db.years[year];
-const save=()=>localStorage.setItem('aureoV13',JSON.stringify(db));
+const save=()=>localStorage.setItem('aureoV15',JSON.stringify(db));
 const sum=a=>a.reduce((x,y)=>x+(+y||0),0);
 const money=n=>new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:0}).format(+n||0);const compactMoney=n=>new Intl.NumberFormat('es-PE',{maximumFractionDigits:0}).format(+n||0);
 const typeItems=t=>yd().items.filter(x=>x.type===t);
@@ -379,7 +408,7 @@ function renderTable(){
         h+=`<tr class="${hide?'hidden-row':''}"><td><input class="name" value="${esc(x.name)}" data-name="${x.id}"></td>`;
         M.forEach((_,i)=>{
           const b=+x.budget[i]||0,a=+x.actual[i]||0,cls=statusClass(b,a);
-          h+=`<td><input class="cell" type="number" inputmode="decimal" value="${b}" data-cell="${x.id}|budget|${i}"></td><td class="${cls}"><input class="cell" type="number" inputmode="decimal" value="${a}" data-cell="${x.id}|actual|${i}"></td><td>${compactMoney(b-a)}</td>`
+          h+=`<td><input class="cell" type="number" inputmode="decimal" value="${b}" data-old="${b}" data-cell="${x.id}|budget|${i}"></td><td class="${cls}"><input class="cell" type="number" inputmode="decimal" value="${a}" data-old="${a}" data-cell="${x.id}|actual|${i}"></td><td>${compactMoney(b-a)}</td>`
         });
         h+=`<td>${compactMoney(sum(x.budget))}</td><td>${compactMoney(sum(x.actual))}</td><td>${compactMoney(sum(x.budget)-sum(x.actual))}</td><td><button class="del" data-move="${x.id}">↔</button><button class="del" data-remove="${x.id}">×</button></td></tr>`
       })
@@ -406,6 +435,23 @@ function openGroup(t){$('gType').value=t;$('gName').value='';openModal('groupMod
 function openEditGroup(t,g){$('egType').value=t;$('egOld').value=g;$('egName').value=g;openModal('editGroupModal')}
 function openMove(id){const x=yd().items.find(i=>i.id===id);$('moveId').value=id;$('moveGroup').innerHTML=(yd().groups[x.type]||[]).map(g=>`<option ${g===x.group?'selected':''}>${esc(g)}</option>`).join('');openModal('moveModal')}
 
+function requestBudgetScope(input){
+  const [id,f,m]=input.dataset.cell.split('|');
+  if(f!=='budget')return false;
+  const x=yd().items.find(i=>i.id===id);
+  pendingEdit={id,f,month:+m,newValue:+input.value||0,oldValue:+input.dataset.old||0,input};
+  $('scopeDescription').textContent=`${x.name} · ${M[+m]} · nuevo presupuesto: ${money(pendingEdit.newValue)}`;
+  $('scopeChoice').value='one';
+  openModal('scopeModal');
+  return true
+}
+function finishEditRefresh(){
+  save();renderDash();renderCharts();
+  pulse(['goal','kMonth','kYear','kIncome','kExpense','kInvestment','kInvestmentMonth','kRate','kRequired']);
+  renderTable()
+}
+
+
 $('yearSel').addEventListener('change',e=>{year=+e.target.value;renderAll()});
 $('addYearBtn').addEventListener('click',()=>{$('newYear').value=Math.max(...Object.keys(db.years).map(Number))+1;openModal('yearModal')});
 $('metricSelect').addEventListener('change',renderCharts);
@@ -415,6 +461,20 @@ $('searchInput').addEventListener('input',e=>{searchTerm=e.target.value.trim().t
 $('cType').addEventListener('change',fillGroups);
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page,b)));
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
+
+
+$('applyScopeBtn').addEventListener('click',()=>{
+  if(!pendingEdit)return closeModal('scopeModal');
+  const x=yd().items.find(i=>i.id===pendingEdit.id),choice=$('scopeChoice').value;
+  if(choice==='one')x.budget[pendingEdit.month]=pendingEdit.newValue;
+  else if(choice==='forward')for(let i=pendingEdit.month;i<12;i++)x.budget[i]=pendingEdit.newValue;
+  else x.budget.fill(pendingEdit.newValue);
+  pendingEdit=null;closeModal('scopeModal');finishEditRefresh();toastMsg('Presupuesto actualizado')
+});
+$('cancelScopeBtn').addEventListener('click',()=>{
+  if(pendingEdit&&pendingEdit.input)pendingEdit.input.value=pendingEdit.oldValue;
+  pendingEdit=null;closeModal('scopeModal')
+});
 
 $('saveConceptBtn').addEventListener('click',()=>{
   const name=$('cName').value.trim(),type=$('cType').value,group=$('cGroup').value,amount=+$('cAmount').value||0,budget=zeros();
@@ -443,18 +503,31 @@ $('saveMoveBtn').addEventListener('click',()=>{
 });
 $('saveYearBtn').addEventListener('click',()=>{
   const y=+$('newYear').value;if(!y||db.years[y])return toastMsg('Año no válido o ya existente');
-  if($('yearBase').value==='copy'){db.years[y]=structuredClone(yd());db.years[y].items.forEach(x=>x.actual=zeros());db.years[y].collapsed={}}
-  else db.years[y]={goal:0,groups:structuredClone(baseGroups),items:[],collapsed:{}};
+  const mode=$('yearBase').value;
+  if(mode==='copy'){
+    db.years[y]=structuredClone(yd());
+    db.years[y].items.forEach(x=>x.actual=zeros());
+    db.years[y].collapsed={}
+  }else if(mode==='structure'){
+    db.years[y]=structuredClone(yd());
+    db.years[y].items.forEach(x=>{x.budget=zeros();x.actual=zeros()});
+    db.years[y].collapsed={}
+  }else db.years[y]={goal:0,groups:structuredClone(baseGroups),items:[],collapsed:{}};
   year=y;save();closeModal('yearModal');renderAll();toastMsg('Año creado')
 });
 
 $('table').addEventListener('input',e=>{
   if(e.target.dataset.name){const x=yd().items.find(i=>i.id===e.target.dataset.name);x.name=e.target.value;save();return}
   if(e.target.dataset.cell){
-    const [id,f,m]=e.target.dataset.cell.split('|'),x=yd().items.find(i=>i.id===id);x[f][+m]=+e.target.value||0;save();
+    const [id,f,m]=e.target.dataset.cell.split('|');
+    if(f==='budget')return;
+    const x=yd().items.find(i=>i.id===id);x[f][+m]=+e.target.value||0;save();
     renderDash();renderCharts();pulse(['goal','kMonth','kYear','kIncome','kExpense','kInvestment','kInvestmentMonth','kRate','kRequired']);
     clearTimeout(timer);timer=setTimeout(renderTable,300)
   }
+});
+$('table').addEventListener('change',e=>{
+  if(e.target.dataset.cell)requestBudgetScope(e.target)
 });
 $('table').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;

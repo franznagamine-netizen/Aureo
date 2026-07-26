@@ -1,8 +1,17 @@
-# Áureo V1.4
+# Áureo V1.5
 
-- Vista anual más compacta para mostrar más columnas en iPhone.
-- Primera columna reducida.
-- Filas, tipografía y espacios más pequeños.
-- Montos de tabla sin repetir S/ en cada celda.
-- Nuevo indicador de disponible libre respecto a ingresos.
-- Disponible libre = ingresos - egresos - inversión obligatoria.
+## Cambios
+
+- Navegación principal renombrada a **Dashboard** y **Detalle**.
+- En iPhone, navegación inferior fija con apariencia de app nativa.
+- Al modificar un presupuesto mensual, permite aplicar el cambio:
+  - solo al mes seleccionado;
+  - desde ese mes hasta diciembre;
+  - a todo el año.
+- Los importes reales continúan editándose únicamente en el mes correspondiente.
+- Al crear un nuevo año, permite:
+  - copiar estructura y presupuestos del año anterior;
+  - copiar solo estructura y conceptos;
+  - crear un año vacío.
+- En todos los casos, los valores reales del nuevo año comienzan en cero.
+- Conserva la vista anual compacta de V1.4.
