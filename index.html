@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#18213b">
-<title>Áureo V1.3</title>
+<title>Áureo V1.4</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -77,10 +77,10 @@ h1{font-size:23px;margin:3px 0}
 .tableCard{padding:0;overflow:hidden}
 .note{padding:12px 14px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line)}
 .wrap{overflow:auto;max-height:72vh}
-table{border-collapse:separate;border-spacing:0;min-width:2720px;width:100%;font-size:12px}
-th,td{padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;background:white}
+table{border-collapse:separate;border-spacing:0;min-width:2040px;width:100%;font-size:10.5px}
+th,td{padding:5px 4px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;background:white;line-height:1.12}
 thead th{position:sticky;top:0;z-index:20;background:#eef2f8;color:#59667d}
-th:first-child,td:first-child{position:sticky;left:0;z-index:15;text-align:left;min-width:215px;max-width:215px;background:white;box-shadow:4px 0 8px rgba(30,42,65,.06)}
+th:first-child,td:first-child{position:sticky;left:0;z-index:15;text-align:left;min-width:142px;max-width:142px;background:white;box-shadow:4px 0 8px rgba(30,42,65,.06);overflow:hidden;text-overflow:ellipsis}
 thead th:first-child{z-index:30;background:#e4eaf4}
 .macro td{font-weight:900}
 .macro.income td{background:var(--green-bg);color:var(--green)}
@@ -91,13 +91,13 @@ thead th:first-child{z-index:30;background:#e4eaf4}
 .group td:first-child{z-index:17;background:#f8f9fc}
 .group-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .group-title button{border:0;background:transparent;color:#64718a;padding:2px 4px}
-.cell,.name{width:100%;border:0;background:transparent;text-align:right;padding:5px}
-.name{text-align:left;font-weight:700}
+.cell,.name{width:100%;border:0;background:transparent;text-align:right;padding:2px;font-size:10.5px}
+.name{text-align:left;font-weight:700;overflow:hidden;text-overflow:ellipsis}
 .cell:focus,.name:focus{outline:2px solid #b8c6ea;border-radius:7px}
 .status-good{background:var(--green-bg)!important;color:var(--green)!important;font-weight:850}
 .status-near{background:var(--amber-bg)!important;color:var(--amber)!important;font-weight:850}
 .status-over{background:var(--red-bg)!important;color:var(--red)!important;font-weight:850}
-.del{border:0;background:transparent;color:#9ba5b5;font-size:18px}
+.del{border:0;background:transparent;color:#9ba5b5;font-size:15px;padding:1px 2px}
 .add td{background:#fafbfe}
 .add button{border:0;background:transparent;color:#60708f;font-weight:800}
 .total td{font-weight:900;background:#f4f7fb}
@@ -125,7 +125,7 @@ thead th:first-child{z-index:30;background:#e4eaf4}
 <body>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · V1.3</div><h1>Control anual</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
+  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · V1.4</div><h1>Control anual</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
   <div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div>
 </header>
 
@@ -154,13 +154,25 @@ thead th:first-child{z-index:30;background:#e4eaf4}
 
   <div class="kpis">
     <div class="kpi"><div class="label">Disponible este mes</div><div class="value green" id="kMonth"></div><div class="spark" id="sparkMonth"></div></div>
-    <div class="kpi"><div class="label">Disponible del año</div><div class="value blue" id="kYear"></div><div class="spark" id="sparkYear"></div></div>
+    <div class="kpi"><div class="label">Disponible libre del año</div><div class="value blue" id="kYear"></div><div class="spark" id="sparkYear"></div></div>
     <div class="kpi"><div class="label">Ingresos del año</div><div class="value green" id="kIncome"></div></div>
     <div class="kpi"><div class="label">Egresos del año</div><div class="value red" id="kExpense"></div></div>
     <div class="kpi"><div class="label">Inversión del año</div><div class="value purple" id="kInvestment"></div><div class="progress"><span id="investmentProgress"></span></div></div>
     <div class="kpi"><div class="label">Inversión este mes</div><div class="value purple" id="kInvestmentMonth"></div></div>
     <div class="kpi"><div class="label">% de ahorro e inversión</div><div class="value" id="kRate"></div></div>
     <div class="kpi"><div class="label">Inversión mensual requerida</div><div class="value purple" id="kRequired"></div></div>
+  </div>
+
+  <div class="card" id="freeAvailableCard">
+    <div class="chart-head">
+      <div><h2>Disponible libre respecto a ingresos</h2><div class="sub" style="display:block">Luego de egresos e inversión obligatoria</div></div>
+      <strong id="freeAvailablePct" class="blue">0%</strong>
+    </div>
+    <div class="progress" style="height:12px"><span id="freeAvailableBar" style="background:var(--blue);width:0%"></span></div>
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:9px;font-size:12px;color:var(--muted)">
+      <span>Disponible libre: <strong id="freeAvailableAmount" style="color:var(--text)"></strong></span>
+      <span>Ingresos: <strong id="freeIncomeAmount" style="color:var(--text)"></strong></span>
+    </div>
   </div>
 
   <div class="charts">
@@ -187,7 +199,7 @@ thead th:first-child{z-index:30;background:#e4eaf4}
     <div class="macro-hint" id="annualHint" style="margin-top:10px">Vista macro activa: se muestran únicamente grupos y subgrupos.</div>
   </div>
   <div class="card tableCard">
-    <div class="note">Semáforo: verde = dentro del presupuesto; ámbar = 85% o más; rojo = presupuesto superado.</div>
+    <div class="note">Montos expresados en S/. Semáforo: verde = dentro del presupuesto; ámbar = 85% o más; rojo = presupuesto superado.</div>
     <div class="wrap"><table id="table"></table></div>
   </div>
 </section>
@@ -264,7 +276,7 @@ const $=id=>document.getElementById(id);
 const yd=()=>db.years[year];
 const save=()=>localStorage.setItem('aureoV13',JSON.stringify(db));
 const sum=a=>a.reduce((x,y)=>x+(+y||0),0);
-const money=n=>new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:0}).format(+n||0);
+const money=n=>new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:0}).format(+n||0);const compactMoney=n=>new Intl.NumberFormat('es-PE',{maximumFractionDigits:0}).format(+n||0);
 const typeItems=t=>yd().items.filter(x=>x.type===t);
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const escJs=s=>String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
@@ -303,8 +315,8 @@ function renderDash(){
   const inc=totalType('income'),exp=totalType('expense'),inv=totalType('investment');
   const left=Math.max(yd().goal-inv,0),pct=yd().goal?Math.min(inv/yd().goal*100,100):0;
   $('goal').textContent=money(yd().goal);$('invested').textContent=money(inv);$('left').textContent=money(left);
-  $('kMonth').textContent=money(monthTotals(currentMonth).available);$('kYear').textContent=money(inc-exp-inv);
-  $('kIncome').textContent=money(inc);$('kExpense').textContent=money(exp);$('kInvestment').textContent=money(inv);
+  const freeAvailable=inc-exp-inv;$('kMonth').textContent=money(monthTotals(currentMonth).available);$('kYear').textContent=money(freeAvailable);
+  $('kIncome').textContent=money(inc);$('kExpense').textContent=money(exp);$('kInvestment').textContent=money(inv);const freePct=inc?Math.max(0,Math.min(freeAvailable/inc*100,100)):0;$('freeAvailablePct').textContent=freePct.toFixed(0)+'%';$('freeAvailableBar').style.width=freePct+'%';$('freeAvailableAmount').textContent=money(freeAvailable);$('freeIncomeAmount').textContent=money(inc);
   $('kInvestmentMonth').textContent=money(monthTotals(currentMonth).investment);
   $('kRate').textContent=(inc?((inc-exp)/inc*100):0).toFixed(1)+'%';
   const remainingMonths=Math.max(12-(currentMonth+1),1);
@@ -343,7 +355,7 @@ function matches(text){return !searchTerm||text.toLowerCase().includes(searchTer
 function renderTable(){
   const labels=[['income','INGRESOS'],['expense','EGRESOS'],['investment','INVERSIÓN']];
   let visibleCount=0;
-  let h='<thead><tr><th>Concepto</th>'+M.map(m=>`<th>${m} Ppto.</th><th>${m} Actual</th><th>${m} Disp.</th>`).join('')+'<th>Total Ppto.</th><th>Total Actual</th><th>Total Disp.</th><th></th></tr></thead><tbody>';
+  let h='<thead><tr><th>Concepto</th>'+M.map(m=>`<th>${m} Ppto.</th><th>${m} Real</th><th>${m} Disp.</th>`).join('')+'<th>Total Ppto.</th><th>Total Real</th><th>Total Disp.</th><th></th></tr></thead><tbody>';
   labels.forEach(([t,label])=>{
     const allType=typeItems(t);
     const groups=(yd().groups[t]||[]).filter(g=>{
@@ -353,29 +365,29 @@ function renderTable(){
     if(!groups.length&&searchTerm)return;
     visibleCount++;
     h+=`<tr class="macro ${t}"><td>${label}</td>`;
-    M.forEach((_,i)=>{const v=aggregate(allType,i);h+=`<td>${money(v.budget)}</td><td>${money(v.actual)}</td><td>${money(v.available)}</td>`});
-    h+=`<td>${money(totalType(t,'budget'))}</td><td>${money(totalType(t,'actual'))}</td><td>${money(totalType(t,'budget')-totalType(t,'actual'))}</td><td></td></tr>`;
+    M.forEach((_,i)=>{const v=aggregate(allType,i);h+=`<td>${compactMoney(v.budget)}</td><td>${compactMoney(v.actual)}</td><td>${compactMoney(v.available)}</td>`});
+    h+=`<td>${compactMoney(totalType(t,'budget'))}</td><td>${compactMoney(totalType(t,'actual'))}</td><td>${compactMoney(totalType(t,'budget')-totalType(t,'actual'))}</td><td></td></tr>`;
     groups.forEach(g=>{
       const groupItems=allType.filter(x=>x.group===g);
       const key=t+'|'+g,collapsed=!!yd().collapsed[key];
       const arrow=annualView==='detail'?`<button data-toggle="${esc(t)}|${esc(g)}">${collapsed?'▶':'▼'}</button>`:'';
       h+=`<tr class="group"><td><div class="group-title"><span>${arrow}${esc(g)}</span><button data-editgroup="${esc(t)}|${esc(g)}">⋯</button></div></td>`;
-      M.forEach((_,i)=>{const v=aggregate(groupItems,i),cls=statusClass(v.budget,v.actual);h+=`<td>${money(v.budget)}</td><td class="${cls}">${money(v.actual)}</td><td>${money(v.available)}</td>`});
-      h+=`<td>${money(sum(groupItems.flatMap(x=>x.budget)))}</td><td>${money(sum(groupItems.flatMap(x=>x.actual)))}</td><td>${money(sum(groupItems.flatMap(x=>x.budget))-sum(groupItems.flatMap(x=>x.actual)))}</td><td></td></tr>`;
+      M.forEach((_,i)=>{const v=aggregate(groupItems,i),cls=statusClass(v.budget,v.actual);h+=`<td>${compactMoney(v.budget)}</td><td class="${cls}">${compactMoney(v.actual)}</td><td>${compactMoney(v.available)}</td>`});
+      h+=`<td>${compactMoney(sum(groupItems.flatMap(x=>x.budget)))}</td><td>${compactMoney(sum(groupItems.flatMap(x=>x.actual)))}</td><td>${compactMoney(sum(groupItems.flatMap(x=>x.budget))-sum(groupItems.flatMap(x=>x.actual)))}</td><td></td></tr>`;
       groupItems.filter(x=>!searchTerm||matches(x.name)||matches(g)).forEach(x=>{
         const hide=annualView==='macro'||(collapsed&&!searchTerm);
         h+=`<tr class="${hide?'hidden-row':''}"><td><input class="name" value="${esc(x.name)}" data-name="${x.id}"></td>`;
         M.forEach((_,i)=>{
           const b=+x.budget[i]||0,a=+x.actual[i]||0,cls=statusClass(b,a);
-          h+=`<td><input class="cell" type="number" inputmode="decimal" value="${b}" data-cell="${x.id}|budget|${i}"></td><td class="${cls}"><input class="cell" type="number" inputmode="decimal" value="${a}" data-cell="${x.id}|actual|${i}"></td><td>${money(b-a)}</td>`
+          h+=`<td><input class="cell" type="number" inputmode="decimal" value="${b}" data-cell="${x.id}|budget|${i}"></td><td class="${cls}"><input class="cell" type="number" inputmode="decimal" value="${a}" data-cell="${x.id}|actual|${i}"></td><td>${compactMoney(b-a)}</td>`
         });
-        h+=`<td>${money(sum(x.budget))}</td><td>${money(sum(x.actual))}</td><td>${money(sum(x.budget)-sum(x.actual))}</td><td><button class="del" data-move="${x.id}">↔</button><button class="del" data-remove="${x.id}">×</button></td></tr>`
+        h+=`<td>${compactMoney(sum(x.budget))}</td><td>${compactMoney(sum(x.actual))}</td><td>${compactMoney(sum(x.budget)-sum(x.actual))}</td><td><button class="del" data-move="${x.id}">↔</button><button class="del" data-remove="${x.id}">×</button></td></tr>`
       })
     });
     if(annualView==='detail'&&!searchTerm)h+=`<tr class="add"><td><button data-addconcept="${t}">＋ Concepto</button> &nbsp; <button data-addgroup="${t}">＋ Subgrupo</button></td>${'<td></td>'.repeat(39)}</tr>`
   });
   if(!visibleCount)h+=`<tr><td colspan="40" class="empty">No encontramos coincidencias para “${esc(searchTerm)}”.</td></tr>`;
-  h+='<tr class="total"><td>DISPONIBLE</td>'+M.map((_,i)=>`<td>${money(monthTotals(i).projected)}</td><td>${money(monthTotals(i).available)}</td><td>${money(monthTotals(i).available)}</td>`).join('')+`<td>${money(M.reduce((a,_,i)=>a+monthTotals(i).projected,0))}</td><td>${money(M.reduce((a,_,i)=>a+monthTotals(i).available,0))}</td><td>${money(M.reduce((a,_,i)=>a+monthTotals(i).available,0))}</td><td></td></tr></tbody>`;
+  h+='<tr class="total"><td>DISPONIBLE</td>'+M.map((_,i)=>`<td>${compactMoney(monthTotals(i).projected)}</td><td>${compactMoney(monthTotals(i).available)}</td><td>${compactMoney(monthTotals(i).available)}</td>`).join('')+`<td>${compactMoney(M.reduce((a,_,i)=>a+monthTotals(i).projected,0))}</td><td>${compactMoney(M.reduce((a,_,i)=>a+monthTotals(i).available,0))}</td><td>${compactMoney(M.reduce((a,_,i)=>a+monthTotals(i).available,0))}</td><td></td></tr></tbody>`;
   $('table').innerHTML=h
 }
 
