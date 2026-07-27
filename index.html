@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-<title>Áureo 2.0</title>
+<title>Áureo 3.0</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -200,13 +200,105 @@ body.standalone .app{padding-left:max(10px,env(safe-area-inset-left));padding-ri
 :root[data-theme="dark"] .nav .active{background:#2a3447;color:white}
 :root[data-theme="dark"] .cancel{background:#283246;color:var(--text)}
 
+
+/* Áureo 3.0 — Identidad Faro */
+.logo.lighthouse-logo{
+  background:linear-gradient(145deg,#0d1b32,#162c4d);
+  border:1px solid rgba(224,177,72,.35);
+  box-shadow:0 10px 24px rgba(11,24,43,.18), inset 0 1px 0 rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.logo.lighthouse-logo svg{width:72%;height:72%;display:block}
+header{align-items:center}
+.brand{min-width:0}
+.brand>div:last-child{min-width:0}
+.top-actions{flex-wrap:nowrap}
+.year{display:flex;gap:6px;align-items:center}
+.year select{
+  min-width:88px;max-width:96px;
+  font-size:13px;font-weight:850;
+  padding:9px 28px 9px 11px;
+  border-radius:12px;
+}
+.year #addYearBtn{
+  width:40px;height:40px;padding:0;
+  font-size:0;border-radius:12px;
+}
+.year #addYearBtn::before{content:"+";font-size:24px;line-height:1;font-weight:500}
+.icon-btn{
+  background:var(--card);
+  transition:transform .18s ease,background .18s ease;
+}
+.icon-btn:active,.year button:active{transform:scale(.94)}
+.hero{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 86% 16%,rgba(255,255,255,.12),transparent 28%),
+    linear-gradient(135deg,#4e46c8,#7165df);
+}
+.hero::after{
+  content:"";
+  position:absolute;right:-42px;bottom:-76px;width:190px;height:190px;
+  border:1px solid rgba(255,255,255,.12);border-radius:50%;
+}
+.ring{width:124px;height:124px}
+.ring-value{animation:ringReveal .8s cubic-bezier(.22,.8,.3,1)}
+@keyframes ringReveal{from{stroke-dashoffset:302}}
+.page{opacity:0;transform:translateY(6px);transition:opacity .22s ease,transform .22s ease}
+.page.active{opacity:1;transform:none}
+.kpi,.card{transition:transform .18s ease,box-shadow .18s ease}
+.kpi:active,.card:active{transform:scale(.995)}
+.nav button{transition:background .18s ease,color .18s ease,transform .18s ease}
+.nav button:active{transform:scale(.97)}
+.save-state{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:205px}
+@media(max-width:850px){
+  header{align-items:flex-start;gap:8px}
+  .brand{align-items:flex-start}
+  .logo{width:47px;height:47px;border-radius:15px;flex:0 0 47px}
+  h1{font-size:18px;line-height:1.08;white-space:nowrap}
+  .ey{font-size:10px}
+  .save-state{font-size:9.5px;max-width:170px}
+  .top-actions{margin-left:auto;gap:5px}
+  .icon-btn{width:38px;height:38px}
+  .year select{min-width:76px;max-width:82px;padding:8px 22px 8px 9px}
+  .year #addYearBtn{width:38px;height:38px}
+  .hero{padding:13px}
+  .hero h2{font-size:28px}
+  .hero-meta strong{font-size:16px}
+  .ring{width:116px;height:116px}
+  .ring-label strong{font-size:24px}
+}
+@media(max-width:390px){
+  .logo{width:43px;height:43px;flex-basis:43px}
+  h1{font-size:17px}
+  .save-state{max-width:150px}
+  .top-actions{gap:4px}
+  .icon-btn,.year #addYearBtn{width:35px;height:35px}
+  .year select{min-width:69px;max-width:72px;font-size:12px}
+}
+
 </style>
 </head>
 <body>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · 2.0</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">¡Hola, Franz! 👋</h1><div class="sub">Flujo de caja, presupuesto e inversión</div><div class="save-state" id="saveState">Guardado en este dispositivo</div></div></div>
-  <div class="top-actions"><button class="icon-btn" id="themeBtn" aria-label="Cambiar apariencia" title="Cambiar apariencia">◐</button><div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div></div>
+  <div class="brand"><div class="logo lighthouse-logo"><svg viewBox="0 0 64 64" aria-hidden="true">
+  <defs>
+    <linearGradient id="goldHead" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7DD91"/>
+      <stop offset="1" stop-color="#C98A1C"/>
+    </linearGradient>
+  </defs>
+  <path d="M6 23 L23 18 L23 27 Z" fill="url(#goldHead)" opacity=".85"/>
+  <path d="M58 23 L41 18 L41 27 Z" fill="url(#goldHead)" opacity=".85"/>
+  <path d="M28 13h8l4 7H24z" fill="url(#goldHead)"/>
+  <rect x="25" y="20" width="14" height="9" rx="2" fill="none" stroke="url(#goldHead)" stroke-width="2.5"/>
+  <path d="M27 29h10l4 23H23z" fill="url(#goldHead)"/>
+  <path d="M21 52h22" stroke="#F7DD91" stroke-width="3" stroke-linecap="round"/>
+  <path d="M18 56c5-3 9-3 14 0 5-3 9-3 14 0" fill="none" stroke="#F7DD91" stroke-width="2" stroke-linecap="round"/>
+</svg></div><div><div class="ey">ÁUREO · 3.0</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">¡Hola, Franz! 👋</h1><div class="sub">Flujo de caja, presupuesto e inversión</div><div class="save-state" id="saveState">Guardado en este dispositivo</div></div></div>
+  <div class="top-actions"><button class="icon-btn" id="themeBtn" aria-label="Cambiar apariencia" title="Cambiar apariencia">☾</button><div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div></div>
 </header>
 <div class="install-banner" id="installBanner">
   <div><strong>Instala Áureo en tu celular</strong><span id="installText">Acceso rápido, pantalla completa y funcionamiento sin conexión.</span></div>
@@ -543,7 +635,15 @@ function redo(){
   toastMsg('Cambio rehecho');
 }
 function renderAll(){renderYears();renderDash();renderCharts();renderTable();updateHistoryButtons()}
-function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));btn.classList.add('active');if(id==='annual')renderTable()}
+function showPage(id,btn){
+  const next=$(id),current=document.querySelector('.page.active');
+  if(current===next)return;
+  if(current)current.classList.remove('active');
+  requestAnimationFrame(()=>next.classList.add('active'));
+  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  if(id==='annual')renderTable();
+}
 function setAnnualView(mode){
   annualView=mode;$('macroBtn').classList.toggle('active',mode==='macro');$('detailBtn').classList.toggle('active',mode==='detail');
   $('annualHint').textContent=mode==='macro'?'Vista macro activa: se muestran únicamente grupos y subgrupos.':'Vista detalle activa: puedes desplegar, editar y mover conceptos.';
@@ -693,7 +793,7 @@ function applyTheme(mode){
   if(mode==='system')document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme',mode);
   localStorage.setItem('aureoTheme',mode);
-  if($('themeBtn'))$('themeBtn').textContent=mode==='dark'?'☾':mode==='light'?'☀':'◐';
+  if($('themeBtn'))$('themeBtn').textContent=mode==='dark'?'☀':mode==='light'?'☾':'◐';
 }
 applyTheme(savedTheme);
 $('themeBtn').addEventListener('click',()=>{

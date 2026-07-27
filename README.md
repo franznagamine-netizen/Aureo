@@ -1,33 +1,25 @@
-# Áureo 2.0 — PWA instalable
+# Áureo 3.0 — Faro
 
-Esta versión convierte Áureo en una aplicación web progresiva para iPhone, Android y escritorio.
+## Cambios principales
+- Nueva identidad visual con un faro dorado sobre azul marino.
+- Nuevo ícono para iPhone, Android, favicon y accesos directos.
+- Nuevas pantallas de inicio con el lema “Tu faro patrimonial”.
+- Encabezado móvil reorganizado y más compacto.
+- Selector de año reducido y botón para nuevo año simplificado.
+- Botón de apariencia más claro.
+- Tarjeta de inversión y anillo ligeramente más compactos.
+- Transiciones suaves entre Dashboard y Detalle.
+- Microanimaciones en tarjetas, navegación y botones.
+- Se mantienen instalación PWA, modo oscuro, guardado local y funcionamiento sin conexión.
 
-## Mejoras incluidas
-- Instalación desde la pantalla de inicio.
-- Apertura en pantalla completa, sin la barra del navegador.
-- Ícono oficial de Áureo.
-- Pantalla de inicio para iPhone 13/13 Pro y iPhone de 6.7".
-- Funcionamiento sin conexión mediante service worker.
-- Indicador de guardado local.
-- Aviso cuando el dispositivo queda sin conexión.
-- Apariencia automática, clara y oscura.
-- Respeto de las áreas seguras del iPhone.
-- Manifest y accesos directos de la app.
-
-## Publicación en GitHub Pages
-Sube **todos** los archivos y carpetas de este ZIP a la raíz del repositorio:
+## Publicación
+Descomprime el ZIP y reemplaza en la raíz del repositorio **todos** los archivos y carpetas:
 - index.html
 - manifest.webmanifest
 - service-worker.js
 - icons/
 - splash/
+- README.md
 
-No subas únicamente index.html, porque la instalación y el modo sin conexión requieren los demás archivos.
-
-## Instalación en iPhone
-1. Abre la URL de Áureo en Safari.
-2. Toca el botón Compartir.
-3. Selecciona “Agregar a pantalla de inicio”.
-4. Toca “Agregar”.
-
-Los datos siguen guardándose localmente en el dispositivo mediante localStorage.
+Después de publicar, abre Áureo en Safari y actualiza la página.  
+Si el ícono anterior sigue apareciendo, elimina el acceso de la pantalla de inicio y vuelve a agregarlo, porque iOS suele conservar el ícono anterior en caché.
