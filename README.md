@@ -1,18 +1,19 @@
-# Áureo 3.1.1 — Hotfix de visibilidad
+# Áureo 3.1.2 — Editor de presupuesto
 
-## Corrección
-- Los nombres de los subconceptos vuelven a verse al escribir.
-- Los importes editables ya no aparecen en blanco.
-- Se fuerza `color`, `-webkit-text-fill-color`, `caret-color` y `opacity` para Safari en iPhone.
-- Se mantiene el semáforo verde, ámbar y rojo con texto legible.
-- Se agrega una protección para campos creados dinámicamente.
-- Caché PWA actualizada a `aureo-3.1.1`.
+## Correcciones ejecutadas
+- El monto ya no se pierde ni llega como S/ 0.
+- Al tocar una celda de presupuesto se abre un editor claro y grande.
+- El monto actual aparece seleccionado y listo para reemplazarse.
+- Se usa teclado numérico en iPhone.
+- El selector “Solo este mes” vuelve a tener fondo y texto legibles.
+- Opciones disponibles:
+  - Solo este mes.
+  - Desde este mes hasta diciembre.
+  - Todos los meses del año.
+- Las celdas de presupuesto ya no intentan editarse directamente dentro de la tabla.
+- Caché PWA actualizada a `aureo-3.1.2`.
 
 ## Publicación
-1. Descomprime este ZIP.
-2. Reemplaza en GitHub todos los archivos actuales por los incluidos.
-3. Haz `Commit changes`.
-4. Espera alrededor de un minuto.
-5. Cierra y vuelve a abrir Áureo en Safari.
-
-Si aún aparece la versión anterior, elimina el acceso de la pantalla de inicio y vuelve a instalarlo.
+Descomprime el ZIP, reemplaza todos los archivos en GitHub y realiza el commit.
+Después cierra y vuelve a abrir Áureo. Si Safari conserva la versión anterior,
+elimina el acceso de la pantalla de inicio y vuelve a instalarlo.

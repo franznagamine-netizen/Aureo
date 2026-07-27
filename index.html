@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-<title>Áureo 3.1.1</title>
+<title>Áureo 3.1.2</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -463,6 +463,72 @@ table [contenteditable="true"]:focus{
   outline-offset:-2px;
 }
 
+
+/* Áureo 3.1.2 — Editor robusto de presupuesto */
+.budget-sheet .field{margin-bottom:16px}
+.money-entry{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:56px;
+  padding:0 16px;
+  border:1px solid #D6DEEA;
+  border-radius:16px;
+  background:#FFFFFF;
+  box-shadow:inset 0 1px 0 rgba(20,35,60,.03);
+}
+.money-entry span{
+  color:#53627A;
+  font-size:20px;
+  font-weight:800;
+}
+.money-entry input{
+  width:100%;
+  min-width:0;
+  border:0 !important;
+  outline:0 !important;
+  background:#FFFFFF !important;
+  color:#17233E !important;
+  -webkit-text-fill-color:#17233E !important;
+  caret-color:#17233E !important;
+  font-size:26px;
+  font-weight:900;
+  padding:12px 0 !important;
+  text-align:left !important;
+}
+.money-entry:focus-within{
+  border-color:#6A76D9;
+  box-shadow:0 0 0 4px rgba(94,111,207,.16);
+}
+#scopeChoice,
+.modal select{
+  width:100%;
+  min-height:54px;
+  padding:0 44px 0 15px !important;
+  border:1px solid #D6DEEA !important;
+  border-radius:15px !important;
+  background-color:#FFFFFF !important;
+  color:#17233E !important;
+  -webkit-text-fill-color:#17233E !important;
+  font-size:16px !important;
+  font-weight:750 !important;
+  color-scheme:light !important;
+}
+body.dark #scopeChoice,
+body.dark .modal select,
+body.dark .money-entry,
+body.dark .money-entry input{
+  background:#17233E !important;
+  color:#F5F7FB !important;
+  -webkit-text-fill-color:#F5F7FB !important;
+  border-color:#34415C !important;
+  color-scheme:dark !important;
+}
+input[data-cell*="|budget|"]{
+  cursor:pointer;
+  user-select:none;
+}
+
 </style>
 </head>
 <body>
@@ -608,10 +674,14 @@ table [contenteditable="true"]:focus{
 </div></div>
 
 
-<div class="modal" id="scopeModal"><div class="sheet">
-<h2>Aplicar cambio de presupuesto</h2>
+<div class="modal" id="scopeModal"><div class="sheet budget-sheet">
+<h2>Editar presupuesto</h2>
 <div class="sub" id="scopeDescription" style="display:block;margin-bottom:15px"></div>
-<div class="field"><label>¿Dónde deseas aplicar el nuevo monto?</label>
+<div class="field">
+<label for="scopeAmount">Nuevo monto</label>
+<div class="money-entry"><span>S/</span><input id="scopeAmount" type="number" inputmode="decimal" min="0" step="0.01" autocomplete="off"></div>
+</div>
+<div class="field"><label for="scopeChoice">¿Dónde deseas aplicar el nuevo monto?</label>
 <select id="scopeChoice">
 <option value="one">Solo este mes</option>
 <option value="forward">Desde este mes hasta diciembre</option>
@@ -783,7 +853,7 @@ function renderTable(){
         h+=`<tr class="${hide?'hidden-row':''}"><td><input class="name" value="${esc(x.name)}" data-name="${x.id}"></td>`;
         M.forEach((_,i)=>{
           const b=+x.budget[i]||0,a=+x.actual[i]||0,cls=statusClass(b,a);
-          h+=`<td><input class="cell" type="number" inputmode="decimal" value="${b}" data-old="${b}" data-cell="${x.id}|budget|${i}"></td><td class="${cls}"><input class="cell" type="number" inputmode="decimal" value="${a}" data-old="${a}" data-cell="${x.id}|actual|${i}"></td>`
+          h+=`<td><input class="cell budget-cell" type="text" inputmode="none" readonly value="${b}" data-old="${b}" data-cell="${x.id}|budget|${i}" aria-label="Editar presupuesto"></td><td class="${cls}"><input class="cell" type="number" inputmode="decimal" value="${a}" data-old="${a}" data-cell="${x.id}|actual|${i}"></td>`
         });
         h+=`<td>${compactMoney(sum(x.budget))}</td><td>${compactMoney(sum(x.actual))}</td><td><button class="del" data-move="${x.id}">↔</button><button class="del" data-remove="${x.id}">×</button></td></tr>`
       })
@@ -847,10 +917,16 @@ function requestBudgetScope(input){
   const [id,f,m]=input.dataset.cell.split('|');
   if(f!=='budget')return false;
   const x=yd().items.find(i=>i.id===id);
-  pendingEdit={id,f,month:+m,newValue:+input.value||0,oldValue:+input.dataset.old||0,input};
-  $('scopeDescription').textContent=`${x.name} · ${M[+m]} · nuevo presupuesto: ${money(pendingEdit.newValue)}`;
+  const current=Number(x.budget[+m])||0;
+  pendingEdit={id,f,month:+m,newValue:current,oldValue:current,input};
+  $('scopeDescription').textContent=`${x.name} · ${M[+m]}`;
+  $('scopeAmount').value=current;
   $('scopeChoice').value='one';
   openModal('scopeModal');
+  requestAnimationFrame(()=>{
+    $('scopeAmount').focus();
+    $('scopeAmount').select();
+  });
   return true
 }
 function finishEditRefresh(){
@@ -886,19 +962,30 @@ document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',(
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
 
 
+
+$('scopeAmount').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();$('applyScopeBtn').click()}
+});
+
 $('applyScopeBtn').addEventListener('click',()=>{
   clearTimeout(budgetInputTimer);
   if(!pendingEdit)return closeModal('scopeModal');
+  const raw=String($('scopeAmount').value).replace(',','.');
+  const amount=Number(raw);
+  if(!Number.isFinite(amount)||amount<0){
+    $('scopeAmount').focus();
+    return toastMsg('Ingresa un monto válido');
+  }
   const x=yd().items.find(i=>i.id===pendingEdit.id),choice=$('scopeChoice').value;
-  if(choice==='one')x.budget[pendingEdit.month]=pendingEdit.newValue;
-  else if(choice==='forward')for(let i=pendingEdit.month;i<12;i++)x.budget[i]=pendingEdit.newValue;
-  else x.budget.fill(pendingEdit.newValue);
+  if(choice==='one')x.budget[pendingEdit.month]=amount;
+  else if(choice==='forward')for(let i=pendingEdit.month;i<12;i++)x.budget[i]=amount;
+  else x.budget.fill(amount);
   pendingEdit=null;closeModal('scopeModal');finishEditRefresh();toastMsg('Presupuesto actualizado')
 });
 $('cancelScopeBtn').addEventListener('click',()=>{
   clearTimeout(budgetInputTimer);
-  if(pendingEdit&&pendingEdit.input)pendingEdit.input.value=pendingEdit.oldValue;
-  pendingEdit=null;closeModal('scopeModal')
+  pendingEdit=null;
+  closeModal('scopeModal')
 });
 
 $('saveConceptBtn').addEventListener('click',()=>{
@@ -945,11 +1032,7 @@ $('table').addEventListener('input',e=>{
   if(e.target.dataset.name){const x=yd().items.find(i=>i.id===e.target.dataset.name);x.name=e.target.value;save();return}
   if(e.target.dataset.cell){
     const [id,f,m]=e.target.dataset.cell.split('|');
-    if(f==='budget'){
-      clearTimeout(budgetInputTimer);
-      budgetInputTimer=setTimeout(()=>requestBudgetScope(e.target),650);
-      return;
-    }
+    if(f==='budget')return;
     const x=yd().items.find(i=>i.id===id);x[f][+m]=+e.target.value||0;save();
     renderDash();renderCharts();pulse(['goal','kMonth','kYear','kIncome','kExpense','kInvestment','kInvestmentMonth','kRate','kRequired']);
     clearTimeout(timer);timer=setTimeout(renderTable,300)
@@ -962,6 +1045,8 @@ $('table').addEventListener('keydown',e=>{
   }
 });
 $('table').addEventListener('click',e=>{
+  const budgetCell=e.target.closest('input[data-cell*="|budget|"]');
+  if(budgetCell){requestBudgetScope(budgetCell);return}
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.toggle){const [t,g]=b.dataset.toggle.split('|');yd().collapsed[t+'|'+g]=!yd().collapsed[t+'|'+g];save();renderTable()}
   else if(b.dataset.editgroup){const [t,g]=b.dataset.editgroup.split('|');openEditGroup(t,g)}
