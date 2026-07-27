@@ -1,17 +1,25 @@
-# Áureo V1.6
+# Áureo 1.1
 
-## Cambios
+## Cambios de esta versión
 
-- El encabezado del Dashboard ahora muestra **Hola, Franz**.
-- El nombre es personalizable tocando el saludo.
-- En Detalle, al escribir un presupuesto, la app reconoce el cambio después de una breve pausa, sin tener que tocar otra celda.
-- También se puede presionar Enter para confirmar inmediatamente.
-- Se añadieron botones **Deshacer** y **Rehacer**.
-- Atajos compatibles:
-  - Ctrl/Cmd + Z: deshacer.
-  - Ctrl/Cmd + Shift + Z o Ctrl/Cmd + Y: rehacer.
-- El historial conserva hasta 60 cambios durante la sesión.
-- Mantiene la réplica de presupuestos por mes, meses restantes o todo el año.
+### Dashboard
+- Tipografía general más compacta.
+- Montos principales aproximadamente 10–15 % más pequeños.
+- Tarjetas KPI con menor altura y padding.
+- Anillo de inversión ligeramente más pequeño y fino.
+- Menor separación vertical entre secciones.
 
+### Detalle
+- Se eliminó la tercera columna **Disp.**.
+- Cada mes conserva únicamente **Ppto.** y **Real**.
+- Se mantiene la fila final **DISPONIBLE**.
+- Se conserva el semáforo de colores en la columna Real.
+- La tabla ocupa menos ancho y permite ver más meses en iPhone.
 
-Release 1.0: retoques finales de tipografía y saludo.
+### Funciones conservadas
+- Dashboard y Detalle.
+- Meta anual de inversión.
+- Disponible libre.
+- Réplica de presupuestos.
+- Creación de nuevos años.
+- Deshacer y rehacer.

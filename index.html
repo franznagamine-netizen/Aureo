@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#18213b">
-<title>Áureo 1.0</title>
+<title>Áureo 1.1</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -16,12 +16,12 @@ html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);font-family:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,Inter,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 button,input,select{font:inherit}
 button{cursor:pointer}
-.app{max-width:1320px;margin:auto;padding:14px 10px 90px}
+.app{max-width:1320px;margin:auto;padding:10px 10px 86px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
 .logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#f5dc8f,#d4a02d);display:grid;place-items:center;font-weight:900;flex:0 0 auto}
 .ey{font-size:11px;letter-spacing:.14em;color:#9b782b;font-weight:800}
-h1{font-size:23px;margin:3px 0;letter-spacing:-0.02em}
+h1{font-size:20px;margin:2px 0;letter-spacing:-0.02em}
 .sub{font-size:12px;color:var(--muted)}
 .year{display:flex;gap:6px}
 .year select,.year button{border:1px solid var(--line);background:white;border-radius:11px;padding:9px}
@@ -34,36 +34,36 @@ h1{font-size:23px;margin:3px 0;letter-spacing:-0.02em}
 .history-controls button{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--nav);font-size:21px;line-height:1}
 .history-controls button:disabled{opacity:.35;cursor:not-allowed}
 .page{display:none}.page.active{display:block}
-.card{background:white;border:1px solid var(--line);border-radius:19px;padding:16px;margin-bottom:12px;box-shadow:0 9px 24px rgba(29,42,66,.065)}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:13px;margin-bottom:9px;box-shadow:0 8px 20px rgba(29,42,66,.06)}
 .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;background:linear-gradient(135deg,#5047c8,#776be4);color:white;border:0}
 .hero-copy{display:flex;flex-direction:column;justify-content:center}
 .hero small{opacity:.78}
-.big{font-size:33px;font-weight:850;margin-top:6px;transition:transform .2s ease}
-.hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
-.hero-meta strong{display:block;font-size:20px;margin-top:4px}
+.big{font-size:29px;font-weight:850;margin-top:4px;transition:transform .2s ease}
+.hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.hero-meta strong{display:block;font-size:17px;margin-top:3px}
 .ring-wrap{display:grid;place-items:center}
-.ring{width:170px;height:170px;position:relative}
+.ring{width:150px;height:150px;position:relative}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring-track,.ring-value{fill:none;stroke-width:13}
+.ring-track,.ring-value{fill:none;stroke-width:11}
 .ring-track{stroke:rgba(255,255,255,.22)}
 .ring-value{stroke:white;stroke-linecap:round;transition:stroke-dashoffset .45s ease}
 .ring-label{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
-.ring-label strong{font-size:30px}
+.ring-label strong{font-size:26px}
 .ring-label span{font-size:12px;opacity:.82}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.kpi{background:white;border:1px solid var(--line);border-radius:16px;padding:13px;min-height:96px}
-.label{font-size:11px;color:var(--muted)}
-.value{font-size:20px;font-weight:820;margin-top:6px;transition:transform .18s ease,opacity .18s ease}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.kpi{background:white;border:1px solid var(--line);border-radius:15px;padding:10px;min-height:82px}
+.label{font-size:10px;color:var(--muted)}
+.value{font-size:17px;font-weight:820;margin-top:4px;transition:transform .18s ease,opacity .18s ease}
 .value.pulse,.big.pulse{transform:scale(1.035);opacity:.74}
 .green{color:var(--green)}.red{color:var(--red)}.purple{color:var(--purple)}.blue{color:var(--blue)}
-.spark{height:32px;margin-top:8px}.spark svg{width:100%;height:100%}
+.spark{height:26px;margin-top:6px}.spark svg{width:100%;height:100%}
 .progress{height:8px;background:#edf0f6;border-radius:999px;overflow:hidden;margin-top:10px}
 .progress>span{display:block;height:100%;border-radius:inherit;background:var(--purple);transition:width .45s ease}
-.charts{display:grid;grid-template-columns:1.3fr .7fr;gap:12px;margin-top:12px}
+.charts{display:grid;grid-template-columns:1.3fr .7fr;gap:9px;margin-top:9px}
 .chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
 .chart-head h2{font-size:16px;margin:0}
 .chart-head select{border:1px solid var(--line);border-radius:10px;padding:7px;background:white}
-.line-chart{height:230px}
+.line-chart{height:205px}
 .line-chart svg{width:100%;height:100%}
 .pie-layout{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center}
 .pie{width:150px;height:150px;border-radius:50%;position:relative;transition:background .3s ease}
@@ -82,7 +82,7 @@ h1{font-size:23px;margin:3px 0;letter-spacing:-0.02em}
 .tableCard{padding:0;overflow:hidden}
 .note{padding:12px 14px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line)}
 .wrap{overflow:auto;max-height:72vh}
-table{border-collapse:separate;border-spacing:0;min-width:2040px;width:100%;font-size:10.5px;font-variant-numeric:tabular-nums}
+table{border-collapse:separate;border-spacing:0;min-width:1460px;width:100%;font-size:10.5px;font-variant-numeric:tabular-nums}
 th,td{padding:5px 4px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;background:white;line-height:1.12}
 thead th{position:sticky;top:0;z-index:20;background:#eef2f8;color:#59667d}
 th:first-child,td:first-child{position:sticky;left:0;z-index:15;text-align:left;min-width:142px;max-width:142px;background:white;box-shadow:4px 0 8px rgba(30,42,65,.06);overflow:hidden;text-overflow:ellipsis}
@@ -121,7 +121,7 @@ thead th:first-child{z-index:30;background:#e4eaf4}
 .cancel{background:#edf1f5}.save{background:var(--nav);color:white}.danger{background:var(--red-bg);color:var(--red)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--nav);color:white;padding:10px 15px;border-radius:12px;display:none;z-index:150;font-weight:700}
 @media(max-width:850px){
- .sub{display:none}.hero{grid-template-columns:1fr}.ring-wrap{order:-1}.ring{width:145px;height:145px}
+ .sub{display:none}.hero{grid-template-columns:1fr}.ring-wrap{order:-1}.ring{width:132px;height:132px}
  .kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}.pie-layout{grid-template-columns:130px 1fr}.pie{width:130px;height:130px}
  .controls{width:100%}.search{min-width:0;flex:1}
  .app{padding-bottom:104px}
@@ -140,7 +140,7 @@ thead th:first-child{z-index:30;background:#e4eaf4}
 <body>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · 1.0</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">¡Hola, Franz! 👋</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
+  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · 1.1</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">¡Hola, Franz! 👋</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
   <div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div>
 </header>
 
@@ -400,10 +400,11 @@ function lineSvg(vals){
 }
 
 function matches(text){return !searchTerm||text.toLowerCase().includes(searchTerm)}
+
 function renderTable(){
   const labels=[['income','INGRESOS'],['expense','EGRESOS'],['investment','INVERSIÓN']];
   let visibleCount=0;
-  let h='<thead><tr><th>Concepto</th>'+M.map(m=>`<th>${m} Ppto.</th><th>${m} Real</th><th>${m} Disp.</th>`).join('')+'<th>Total Ppto.</th><th>Total Real</th><th>Total Disp.</th><th></th></tr></thead><tbody>';
+  let h='<thead><tr><th>Concepto</th>'+M.map(m=>`<th>${m} Ppto.</th><th>${m} Real</th>`).join('')+'<th>Total Ppto.</th><th>Total Real</th><th></th></tr></thead><tbody>';
   labels.forEach(([t,label])=>{
     const allType=typeItems(t);
     const groups=(yd().groups[t]||[]).filter(g=>{
@@ -413,29 +414,29 @@ function renderTable(){
     if(!groups.length&&searchTerm)return;
     visibleCount++;
     h+=`<tr class="macro ${t}"><td>${label}</td>`;
-    M.forEach((_,i)=>{const v=aggregate(allType,i);h+=`<td>${compactMoney(v.budget)}</td><td>${compactMoney(v.actual)}</td><td>${compactMoney(v.available)}</td>`});
-    h+=`<td>${compactMoney(totalType(t,'budget'))}</td><td>${compactMoney(totalType(t,'actual'))}</td><td>${compactMoney(totalType(t,'budget')-totalType(t,'actual'))}</td><td></td></tr>`;
+    M.forEach((_,i)=>{const v=aggregate(allType,i);h+=`<td>${compactMoney(v.budget)}</td><td>${compactMoney(v.actual)}</td>`});
+    h+=`<td>${compactMoney(totalType(t,'budget'))}</td><td>${compactMoney(totalType(t,'actual'))}</td><td></td></tr>`;
     groups.forEach(g=>{
       const groupItems=allType.filter(x=>x.group===g);
       const key=t+'|'+g,collapsed=!!yd().collapsed[key];
       const arrow=annualView==='detail'?`<button data-toggle="${esc(t)}|${esc(g)}">${collapsed?'▶':'▼'}</button>`:'';
       h+=`<tr class="group"><td><div class="group-title"><span>${arrow}${esc(g)}</span><button data-editgroup="${esc(t)}|${esc(g)}">⋯</button></div></td>`;
-      M.forEach((_,i)=>{const v=aggregate(groupItems,i),cls=statusClass(v.budget,v.actual);h+=`<td>${compactMoney(v.budget)}</td><td class="${cls}">${compactMoney(v.actual)}</td><td>${compactMoney(v.available)}</td>`});
-      h+=`<td>${compactMoney(sum(groupItems.flatMap(x=>x.budget)))}</td><td>${compactMoney(sum(groupItems.flatMap(x=>x.actual)))}</td><td>${compactMoney(sum(groupItems.flatMap(x=>x.budget))-sum(groupItems.flatMap(x=>x.actual)))}</td><td></td></tr>`;
+      M.forEach((_,i)=>{const v=aggregate(groupItems,i),cls=statusClass(v.budget,v.actual);h+=`<td>${compactMoney(v.budget)}</td><td class="${cls}">${compactMoney(v.actual)}</td>`});
+      h+=`<td>${compactMoney(sum(groupItems.flatMap(x=>x.budget)))}</td><td>${compactMoney(sum(groupItems.flatMap(x=>x.actual)))}</td><td></td></tr>`;
       groupItems.filter(x=>!searchTerm||matches(x.name)||matches(g)).forEach(x=>{
         const hide=annualView==='macro'||(collapsed&&!searchTerm);
         h+=`<tr class="${hide?'hidden-row':''}"><td><input class="name" value="${esc(x.name)}" data-name="${x.id}"></td>`;
         M.forEach((_,i)=>{
           const b=+x.budget[i]||0,a=+x.actual[i]||0,cls=statusClass(b,a);
-          h+=`<td><input class="cell" type="number" inputmode="decimal" value="${b}" data-old="${b}" data-cell="${x.id}|budget|${i}"></td><td class="${cls}"><input class="cell" type="number" inputmode="decimal" value="${a}" data-old="${a}" data-cell="${x.id}|actual|${i}"></td><td>${compactMoney(b-a)}</td>`
+          h+=`<td><input class="cell" type="number" inputmode="decimal" value="${b}" data-old="${b}" data-cell="${x.id}|budget|${i}"></td><td class="${cls}"><input class="cell" type="number" inputmode="decimal" value="${a}" data-old="${a}" data-cell="${x.id}|actual|${i}"></td>`
         });
-        h+=`<td>${compactMoney(sum(x.budget))}</td><td>${compactMoney(sum(x.actual))}</td><td>${compactMoney(sum(x.budget)-sum(x.actual))}</td><td><button class="del" data-move="${x.id}">↔</button><button class="del" data-remove="${x.id}">×</button></td></tr>`
+        h+=`<td>${compactMoney(sum(x.budget))}</td><td>${compactMoney(sum(x.actual))}</td><td><button class="del" data-move="${x.id}">↔</button><button class="del" data-remove="${x.id}">×</button></td></tr>`
       })
     });
-    if(annualView==='detail'&&!searchTerm)h+=`<tr class="add"><td><button data-addconcept="${t}">＋ Concepto</button> &nbsp; <button data-addgroup="${t}">＋ Subgrupo</button></td>${'<td></td>'.repeat(39)}</tr>`
+    if(annualView==='detail'&&!searchTerm)h+=`<tr class="add"><td><button data-addconcept="${t}">＋ Concepto</button> &nbsp; <button data-addgroup="${t}">＋ Subgrupo</button></td>${'<td></td>'.repeat(27)}</tr>`
   });
-  if(!visibleCount)h+=`<tr><td colspan="40" class="empty">No encontramos coincidencias para “${esc(searchTerm)}”.</td></tr>`;
-  h+='<tr class="total"><td>DISPONIBLE</td>'+M.map((_,i)=>`<td>${compactMoney(monthTotals(i).projected)}</td><td>${compactMoney(monthTotals(i).available)}</td><td>${compactMoney(monthTotals(i).available)}</td>`).join('')+`<td>${compactMoney(M.reduce((a,_,i)=>a+monthTotals(i).projected,0))}</td><td>${compactMoney(M.reduce((a,_,i)=>a+monthTotals(i).available,0))}</td><td>${compactMoney(M.reduce((a,_,i)=>a+monthTotals(i).available,0))}</td><td></td></tr></tbody>`;
+  if(!visibleCount)h+=`<tr><td colspan="28" class="empty">No encontramos coincidencias para “${esc(searchTerm)}”.</td></tr>`;
+  h+='<tr class="total"><td>DISPONIBLE</td>'+M.map((_,i)=>`<td>${compactMoney(monthTotals(i).projected)}</td><td>${compactMoney(monthTotals(i).available)}</td>`).join('')+`<td>${compactMoney(M.reduce((a,_,i)=>a+monthTotals(i).projected,0))}</td><td>${compactMoney(M.reduce((a,_,i)=>a+monthTotals(i).available,0))}</td><td></td></tr></tbody>`;
   $('table').innerHTML=h
 }
 
