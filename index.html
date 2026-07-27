@@ -4,7 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#18213b">
-<title>Áureo 1.1</title>
+<meta name="description" content="Áureo: flujo de caja, presupuesto e inversión personal.">
+<meta name="application-name" content="Áureo">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Áureo">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
+<link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
+<title>Áureo 2.0</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -135,14 +148,71 @@ thead th:first-child{z-index:30;background:#e4eaf4}
  .nav-icon{display:block}
  .toast{bottom:88px}
 }
+
+/* Áureo 2.0: experiencia PWA */
+.top-actions{display:flex;align-items:center;gap:7px}
+.icon-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--text);display:grid;place-items:center;font-size:17px;padding:0}
+.save-state{display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:10px;margin-top:2px}
+.save-state::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green)}
+.save-state.saving::before{background:var(--amber);animation:savePulse .8s infinite alternate}
+@keyframes savePulse{to{opacity:.35}}
+.install-banner{display:none;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px;padding:12px 13px;border-radius:16px;background:linear-gradient(135deg,#18213b,#2d3857);color:white;box-shadow:0 8px 20px rgba(29,42,66,.12)}
+.install-banner.show{display:flex}
+.install-banner strong{display:block;font-size:13px}
+.install-banner span{font-size:11px;opacity:.78}
+.install-actions{display:flex;gap:6px;flex:0 0 auto}
+.install-actions button{border:0;border-radius:10px;padding:8px 10px;font-weight:800}
+.install-primary{background:white;color:#18213b}
+.install-close{background:rgba(255,255,255,.14);color:white}
+.offline-pill{display:none;position:fixed;top:max(10px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:180;background:#18213b;color:white;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.offline-pill.show{display:block}
+body.standalone{padding-top:env(safe-area-inset-top)}
+body.standalone .app{padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}
+@media(max-width:850px){
+  .year{gap:5px}
+  .year select,.year button{padding:8px}
+  .install-banner{align-items:flex-start}
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101522;--card:#171e2d;--text:#edf1f8;--muted:#9aa6ba;--line:#2a3447;--nav:#eef2f8;
+    --green:#63c5a7;--green-bg:#17352f;--amber:#e5b758;--amber-bg:#382d18;
+    --red:#ee8882;--red-bg:#3a2224;--purple:#a89cf8;--purple-bg:#292648;--blue:#88aaf0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101522;--card:#171e2d;--text:#edf1f8;--muted:#9aa6ba;--line:#2a3447;--nav:#eef2f8;
+  --green:#63c5a7;--green-bg:#17352f;--amber:#e5b758;--amber-bg:#382d18;
+  --red:#ee8882;--red-bg:#3a2224;--purple:#a89cf8;--purple-bg:#292648;--blue:#88aaf0;
+}
+:root[data-theme="dark"] body,:root:not([data-theme="light"]) body{color-scheme:dark}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .kpi,:root[data-theme="dark"] th,:root[data-theme="dark"] td,
+:root[data-theme="dark"] .year select,:root[data-theme="dark"] .year button,:root[data-theme="dark"] .chart-head select,
+:root[data-theme="dark"] .search,:root[data-theme="dark"] .sheet,:root[data-theme="dark"] .field input,:root[data-theme="dark"] .field select,
+:root[data-theme="dark"] .cell,:root[data-theme="dark"] .name{background:var(--card);color:var(--text)}
+:root[data-theme="dark"] thead th{background:#202a3b}
+:root[data-theme="dark"] thead th:first-child{background:#263146}
+:root[data-theme="dark"] th:first-child,:root[data-theme="dark"] td:first-child{background:var(--card)}
+:root[data-theme="dark"] .group td,:root[data-theme="dark"] .group td:first-child{background:#1c2434}
+:root[data-theme="dark"] .total td{background:#202a3b}
+:root[data-theme="dark"] .pie::after{background:var(--card)}
+:root[data-theme="dark"] .nav{background:rgba(23,30,45,.94)}
+:root[data-theme="dark"] .nav .active{background:#2a3447;color:white}
+:root[data-theme="dark"] .cancel{background:#283246;color:var(--text)}
+
 </style>
 </head>
 <body>
 <div class="app">
 <header class="top">
-  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · 1.1</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">¡Hola, Franz! 👋</h1><div class="sub">Flujo de caja, presupuesto e inversión</div></div></div>
-  <div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div>
+  <div class="brand"><div class="logo">Á</div><div><div class="ey">ÁUREO · 2.0</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">¡Hola, Franz! 👋</h1><div class="sub">Flujo de caja, presupuesto e inversión</div><div class="save-state" id="saveState">Guardado en este dispositivo</div></div></div>
+  <div class="top-actions"><button class="icon-btn" id="themeBtn" aria-label="Cambiar apariencia" title="Cambiar apariencia">◐</button><div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div></div>
 </header>
+<div class="install-banner" id="installBanner">
+  <div><strong>Instala Áureo en tu celular</strong><span id="installText">Acceso rápido, pantalla completa y funcionamiento sin conexión.</span></div>
+  <div class="install-actions"><button class="install-primary" id="installBtn">Instalar</button><button class="install-close" id="installClose" aria-label="Cerrar">×</button></div>
+</div>
+<div class="offline-pill" id="offlinePill">Modo sin conexión</div>
 
 <nav class="nav" aria-label="Navegación principal">
   <button class="active" data-page="home"><span class="nav-icon">⌂</span><span>Dashboard</span></button>
@@ -309,7 +379,15 @@ let undoStack=[],redoStack=[],lastSavedState=JSON.stringify(db),historyLocked=fa
 
 const $=id=>document.getElementById(id);
 const yd=()=>db.years[year];
-const persist=()=>localStorage.setItem('aureoV16',JSON.stringify(db));
+const persist=()=>{
+  const s=$('saveState');
+  if(s){s.textContent='Guardando…';s.classList.add('saving')}
+  localStorage.setItem('aureoV16',JSON.stringify(db));
+  clearTimeout(window.__saveStateTimer);
+  window.__saveStateTimer=setTimeout(()=>{
+    if(s){s.textContent='Guardado en este dispositivo';s.classList.remove('saving')}
+  },420);
+};
 const updateHistoryButtons=()=>{if($('undoBtn'))$('undoBtn').disabled=!undoStack.length;if($('redoBtn'))$('redoBtn').disabled=!redoStack.length};
 const save=()=>{
   const current=JSON.stringify(db);
@@ -607,6 +685,75 @@ $('table').addEventListener('click',e=>{
   else if(b.dataset.move)openMove(b.dataset.move)
   else if(b.dataset.remove){const x=yd().items.find(i=>i.id===b.dataset.remove);if(confirm(`¿Eliminar "${x.name}"?`)){yd().items=yd().items.filter(i=>i.id!==x.id);save();renderAll()}}
 });
+
+
+// Apariencia
+const savedTheme=localStorage.getItem('aureoTheme')||'system';
+function applyTheme(mode){
+  if(mode==='system')document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme',mode);
+  localStorage.setItem('aureoTheme',mode);
+  if($('themeBtn'))$('themeBtn').textContent=mode==='dark'?'☾':mode==='light'?'☀':'◐';
+}
+applyTheme(savedTheme);
+$('themeBtn').addEventListener('click',()=>{
+  const current=localStorage.getItem('aureoTheme')||'system';
+  const next=current==='system'?'light':current==='light'?'dark':'system';
+  applyTheme(next);
+  toastMsg(next==='system'?'Apariencia automática':next==='dark'?'Modo oscuro':'Modo claro');
+});
+
+// Instalación y modo standalone
+const isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+if(isStandalone)document.body.classList.add('standalone');
+let deferredInstallPrompt=null;
+const installBanner=$('installBanner');
+const installText=$('installText');
+const installBtn=$('installBtn');
+const installDismissed=sessionStorage.getItem('aureoInstallDismissed')==='1';
+
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  if(!isStandalone&&!installDismissed)installBanner.classList.add('show');
+});
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+if(isIOS&&!isStandalone&&!installDismissed){
+  installText.textContent='En Safari, toca Compartir y luego “Agregar a pantalla de inicio”.';
+  installBtn.textContent='Ver cómo';
+  setTimeout(()=>installBanner.classList.add('show'),700);
+}
+installBtn.addEventListener('click',async()=>{
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt=null;
+    installBanner.classList.remove('show');
+  }else if(isIOS){
+    alert('Para instalar Áureo:\\n\\n1. Abre esta página en Safari.\\n2. Toca el botón Compartir.\\n3. Elige “Agregar a pantalla de inicio”.\\n4. Pulsa “Agregar”.');
+  }
+});
+$('installClose').addEventListener('click',()=>{
+  installBanner.classList.remove('show');
+  sessionStorage.setItem('aureoInstallDismissed','1');
+});
+window.addEventListener('appinstalled',()=>{
+  installBanner.classList.remove('show');
+  toastMsg('Áureo se instaló correctamente');
+});
+
+// Estado de conexión
+function updateOnlineState(){
+  $('offlinePill').classList.toggle('show',!navigator.onLine);
+}
+window.addEventListener('online',()=>{updateOnlineState();toastMsg('Conexión restablecida')});
+window.addEventListener('offline',updateOnlineState);
+updateOnlineState();
+
+// Service worker
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
 
 renderAll();
 </script>

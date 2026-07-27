@@ -1,25 +1,33 @@
-# Áureo 1.1
+# Áureo 2.0 — PWA instalable
 
-## Cambios de esta versión
+Esta versión convierte Áureo en una aplicación web progresiva para iPhone, Android y escritorio.
 
-### Dashboard
-- Tipografía general más compacta.
-- Montos principales aproximadamente 10–15 % más pequeños.
-- Tarjetas KPI con menor altura y padding.
-- Anillo de inversión ligeramente más pequeño y fino.
-- Menor separación vertical entre secciones.
+## Mejoras incluidas
+- Instalación desde la pantalla de inicio.
+- Apertura en pantalla completa, sin la barra del navegador.
+- Ícono oficial de Áureo.
+- Pantalla de inicio para iPhone 13/13 Pro y iPhone de 6.7".
+- Funcionamiento sin conexión mediante service worker.
+- Indicador de guardado local.
+- Aviso cuando el dispositivo queda sin conexión.
+- Apariencia automática, clara y oscura.
+- Respeto de las áreas seguras del iPhone.
+- Manifest y accesos directos de la app.
 
-### Detalle
-- Se eliminó la tercera columna **Disp.**.
-- Cada mes conserva únicamente **Ppto.** y **Real**.
-- Se mantiene la fila final **DISPONIBLE**.
-- Se conserva el semáforo de colores en la columna Real.
-- La tabla ocupa menos ancho y permite ver más meses en iPhone.
+## Publicación en GitHub Pages
+Sube **todos** los archivos y carpetas de este ZIP a la raíz del repositorio:
+- index.html
+- manifest.webmanifest
+- service-worker.js
+- icons/
+- splash/
 
-### Funciones conservadas
-- Dashboard y Detalle.
-- Meta anual de inversión.
-- Disponible libre.
-- Réplica de presupuestos.
-- Creación de nuevos años.
-- Deshacer y rehacer.
+No subas únicamente index.html, porque la instalación y el modo sin conexión requieren los demás archivos.
+
+## Instalación en iPhone
+1. Abre la URL de Áureo en Safari.
+2. Toca el botón Compartir.
+3. Selecciona “Agregar a pantalla de inicio”.
+4. Toca “Agregar”.
+
+Los datos siguen guardándose localmente en el dispositivo mediante localStorage.
