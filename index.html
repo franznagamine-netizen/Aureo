@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-<title>Áureo 3.1</title>
+<title>Áureo 3.1.1</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -368,6 +368,99 @@ header{align-items:center}
     height:38px !important;
     flex-basis:38px;
   }
+}
+
+
+/* Áureo 3.1.1 — Visibilidad de subconceptos y edición en Safari iPhone */
+input,
+textarea,
+select,
+[contenteditable="true"]{
+  color:var(--ink) !important;
+  -webkit-text-fill-color:var(--ink) !important;
+  caret-color:var(--ink) !important;
+  opacity:1 !important;
+}
+
+table input,
+table textarea,
+table [contenteditable="true"],
+.concept-input,
+.subconcept-input,
+.name-input,
+.cell-input{
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+  background:#FFFFFF !important;
+  caret-color:#24324A !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+}
+
+table input::placeholder,
+table textarea::placeholder{
+  color:#8A96AA !important;
+  -webkit-text-fill-color:#8A96AA !important;
+  opacity:1 !important;
+}
+
+td,
+td *,
+.concept-name,
+.subconcept-name,
+.editable-name,
+.month-cell,
+.amount-cell{
+  opacity:1 !important;
+}
+
+td input[type="number"],
+td input[inputmode="decimal"],
+td input[inputmode="numeric"]{
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+  background:transparent !important;
+  font-weight:800 !important;
+  text-align:right;
+}
+
+/* Mantener el semáforo legible */
+.good input,
+.status-good input,
+.ok input{
+  color:#1F7A63 !important;
+  -webkit-text-fill-color:#1F7A63 !important;
+}
+.near input,
+.status-near input,
+.warning input{
+  color:#A97718 !important;
+  -webkit-text-fill-color:#A97718 !important;
+}
+.over input,
+.status-over input,
+.danger input{
+  color:#C34F45 !important;
+  -webkit-text-fill-color:#C34F45 !important;
+}
+
+/* Safari puede volver transparente el texto durante autofill o edición */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus{
+  -webkit-text-fill-color:#24324A !important;
+  transition:background-color 9999s ease-out 0s;
+}
+
+/* Cuando el campo está seleccionado, asegurar contraste */
+table input:focus,
+table textarea:focus,
+table [contenteditable="true"]:focus{
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+  background:#FFFFFF !important;
+  outline:3px solid rgba(91,112,204,.38);
+  outline-offset:-2px;
 }
 
 </style>
@@ -949,5 +1042,39 @@ if('serviceWorker' in navigator){
 
 renderAll();
 </script>
+
+<script>
+(function(){
+  function ensureVisibleEditableText(root){
+    (root || document).querySelectorAll('input, textarea, [contenteditable="true"]').forEach(function(el){
+      el.style.setProperty('opacity','1','important');
+      el.style.setProperty('caret-color','#24324A','important');
+      if(!el.closest('.good,.status-good,.ok,.near,.status-near,.warning,.over,.status-over,.danger')){
+        el.style.setProperty('color','#24324A','important');
+        el.style.setProperty('-webkit-text-fill-color','#24324A','important');
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    ensureVisibleEditableText(document);
+    new MutationObserver(function(mutations){
+      mutations.forEach(function(m){
+        m.addedNodes.forEach(function(node){
+          if(node.nodeType===1) ensureVisibleEditableText(node);
+        });
+      });
+    }).observe(document.body,{childList:true,subtree:true});
+  });
+  document.addEventListener('focusin',function(e){
+    if(e.target.matches('input,textarea,[contenteditable="true"]')){
+      e.target.style.setProperty('opacity','1','important');
+      e.target.style.setProperty('caret-color','#24324A','important');
+      e.target.style.setProperty('color','#24324A','important');
+      e.target.style.setProperty('-webkit-text-fill-color','#24324A','important');
+    }
+  });
+})();
+</script>
+
 </body>
 </html>

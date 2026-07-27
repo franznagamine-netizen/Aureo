@@ -1,21 +1,18 @@
-# Áureo 3.1 — Hotfix del encabezado
+# Áureo 3.1.1 — Hotfix de visibilidad
 
-## Correcciones
-- El selector de año mantiene un ancho fijo y muestra correctamente “2026” en iPhone.
-- El botón “+” ya no comprime el selector.
-- Encabezado móvil reorganizado en dos niveles.
-- Botón de apariencia más visible.
-- Marca simplificada a “ÁUREO” con el subtítulo “Patrimonio personal”.
-- Banner de instalación ligeramente más compacto.
-- Caché PWA actualizada a la versión 3.1.
+## Corrección
+- Los nombres de los subconceptos vuelven a verse al escribir.
+- Los importes editables ya no aparecen en blanco.
+- Se fuerza `color`, `-webkit-text-fill-color`, `caret-color` y `opacity` para Safari en iPhone.
+- Se mantiene el semáforo verde, ámbar y rojo con texto legible.
+- Se agrega una protección para campos creados dinámicamente.
+- Caché PWA actualizada a `aureo-3.1.1`.
 
-## Cómo publicar
-1. Descomprime el ZIP.
-2. En GitHub, reemplaza todos los archivos actuales por el contenido descomprimido.
-3. Confirma los cambios con **Commit changes**.
-4. Espera alrededor de un minuto y recarga la página.
+## Publicación
+1. Descomprime este ZIP.
+2. Reemplaza en GitHub todos los archivos actuales por los incluidos.
+3. Haz `Commit changes`.
+4. Espera alrededor de un minuto.
+5. Cierra y vuelve a abrir Áureo en Safari.
 
-Si Safari conserva la versión anterior:
-- cierra y vuelve a abrir la pestaña;
-- recarga la página;
-- o elimina y vuelve a instalar el acceso de Áureo en la pantalla de inicio.
+Si aún aparece la versión anterior, elimina el acceso de la pantalla de inicio y vuelve a instalarlo.
