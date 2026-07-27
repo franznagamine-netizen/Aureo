@@ -1,7 +1,7 @@
 {
   "name": "Áureo — Patrimonio personal",
   "short_name": "Áureo",
-  "description": "Tu faro para gestionar flujo de caja, presupuesto e inversión.",
+  "description": "Presupuesto, inversión y patrimonio personal.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

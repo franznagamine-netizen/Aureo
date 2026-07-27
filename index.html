@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-<title>Áureo 3.0</title>
+<title>Áureo 3.1</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -278,6 +278,98 @@ header{align-items:center}
   .year select{min-width:69px;max-width:72px;font-size:12px}
 }
 
+
+/* Áureo 3.1 — Hotfix de encabezado móvil */
+.year{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex:0 0 auto;
+}
+.year select{
+  display:block;
+  width:96px !important;
+  min-width:96px !important;
+  max-width:96px !important;
+  height:40px;
+  box-sizing:border-box;
+  padding:8px 28px 8px 12px !important;
+  color:var(--ink);
+  font-size:14px !important;
+  line-height:1;
+  font-weight:850;
+  text-align:left;
+  text-overflow:clip;
+  -webkit-appearance:auto;
+  appearance:auto;
+}
+.year #addYearBtn,
+.icon-btn{
+  width:40px !important;
+  min-width:40px !important;
+  height:40px !important;
+  flex:0 0 40px;
+}
+.icon-btn{
+  font-size:20px;
+  line-height:1;
+}
+.install{
+  padding:13px 16px;
+  gap:12px;
+}
+.install strong{font-size:16px}
+.install span{font-size:12px;line-height:1.35}
+.install-actions button{padding:9px 12px}
+
+@media(max-width:850px){
+  header{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:start;
+    column-gap:10px;
+    row-gap:8px;
+  }
+  .brand{
+    grid-column:1 / -1;
+    width:100%;
+  }
+  .brand>div:last-child{flex:1;min-width:0}
+  .ey{font-size:11px;letter-spacing:.22em}
+  h1{font-size:21px;white-space:normal}
+  .sub{font-size:12px;margin-top:2px}
+  .save-state{font-size:10px;max-width:none}
+  .top-actions{
+    grid-column:1 / -1;
+    width:100%;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    margin:0;
+    gap:7px;
+  }
+  .year select{
+    width:96px !important;
+    min-width:96px !important;
+    max-width:96px !important;
+  }
+}
+@media(max-width:390px){
+  .year select{
+    width:92px !important;
+    min-width:92px !important;
+    max-width:92px !important;
+    font-size:13px !important;
+  }
+  .year #addYearBtn,
+  .icon-btn{
+    width:38px !important;
+    min-width:38px !important;
+    height:38px !important;
+    flex-basis:38px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -297,8 +389,8 @@ header{align-items:center}
   <path d="M27 29h10l4 23H23z" fill="url(#goldHead)"/>
   <path d="M21 52h22" stroke="#F7DD91" stroke-width="3" stroke-linecap="round"/>
   <path d="M18 56c5-3 9-3 14 0 5-3 9-3 14 0" fill="none" stroke="#F7DD91" stroke-width="2" stroke-linecap="round"/>
-</svg></div><div><div class="ey">ÁUREO · 3.0</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">¡Hola, Franz! 👋</h1><div class="sub">Flujo de caja, presupuesto e inversión</div><div class="save-state" id="saveState">Guardado en este dispositivo</div></div></div>
-  <div class="top-actions"><button class="icon-btn" id="themeBtn" aria-label="Cambiar apariencia" title="Cambiar apariencia">☾</button><div class="year"><select id="yearSel"></select><button id="addYearBtn">＋ Año</button></div></div>
+</svg></div><div><div class="ey">ÁUREO</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">¡Hola, Franz! 👋</h1><div class="sub">Patrimonio personal</div><div class="save-state" id="saveState">Guardado en este dispositivo</div></div></div>
+  <div class="top-actions"><button class="icon-btn" id="themeBtn" aria-label="Cambiar apariencia" title="Cambiar apariencia">☾</button><div class="year"><select id="yearSel" aria-label="Año del presupuesto"></select><button id="addYearBtn">＋ Año</button></div></div>
 </header>
 <div class="install-banner" id="installBanner">
   <div><strong>Instala Áureo en tu celular</strong><span id="installText">Acceso rápido, pantalla completa y funcionamiento sin conexión.</span></div>
