@@ -1,19 +1,15 @@
-# Áureo 3.1.2 — Editor de presupuesto
+# Áureo 3.1.3 — Tema y edición numérica
 
-## Correcciones ejecutadas
-- El monto ya no se pierde ni llega como S/ 0.
-- Al tocar una celda de presupuesto se abre un editor claro y grande.
-- El monto actual aparece seleccionado y listo para reemplazarse.
-- Se usa teclado numérico en iPhone.
-- El selector “Solo este mes” vuelve a tener fondo y texto legibles.
-- Opciones disponibles:
-  - Solo este mes.
-  - Desde este mes hasta diciembre.
-  - Todos los meses del año.
-- Las celdas de presupuesto ya no intentan editarse directamente dentro de la tabla.
-- Caché PWA actualizada a `aureo-3.1.2`.
+## Correcciones
+- Se elimina el confuso tercer estado “Apariencia automática”.
+- El botón alterna únicamente entre modo claro y modo oscuro.
+- Se corrigen los colores de la tabla, campos y semáforo en ambos modos.
+- Los campos dejan de conservar colores claros dentro del modo oscuro.
+- Al escribir 1000, la tabla ya no se vuelve a renderizar después del primer dígito.
+- Los cambios se guardan mientras escribes y la tabla se actualiza al terminar la edición.
+- Caché PWA actualizada a `aureo-3.1.3`.
 
 ## Publicación
-Descomprime el ZIP, reemplaza todos los archivos en GitHub y realiza el commit.
-Después cierra y vuelve a abrir Áureo. Si Safari conserva la versión anterior,
+Descomprime el ZIP, reemplaza todos los archivos del repositorio y realiza el commit.
+Luego cierra y vuelve a abrir Áureo. Si Safari mantiene la versión anterior,
 elimina el acceso de la pantalla de inicio y vuelve a instalarlo.

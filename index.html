@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-<title>Áureo 3.1.2</title>
+<title>Áureo 3.1.3</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -529,6 +529,69 @@ input[data-cell*="|budget|"]{
   user-select:none;
 }
 
+
+/* Áureo 3.1.3 — contraste consistente y edición sin cortes */
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark}
+
+:root[data-theme="light"] table input,
+:root[data-theme="light"] table textarea,
+:root[data-theme="light"] table [contenteditable="true"]{
+  background:#FFFFFF !important;
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+  caret-color:#24324A !important;
+  border-color:#D7DEEA !important;
+}
+:root[data-theme="dark"] table input,
+:root[data-theme="dark"] table textarea,
+:root[data-theme="dark"] table [contenteditable="true"]{
+  background:#202A3D !important;
+  color:#F2F5FA !important;
+  -webkit-text-fill-color:#F2F5FA !important;
+  caret-color:#F2F5FA !important;
+  border-color:#3A465C !important;
+}
+:root[data-theme="light"] input.budget-cell{
+  background:transparent !important;
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+}
+:root[data-theme="dark"] input.budget-cell{
+  background:#202A3D !important;
+  color:#F2F5FA !important;
+  -webkit-text-fill-color:#F2F5FA !important;
+}
+:root[data-theme="light"] td.good,
+:root[data-theme="light"] td.status-good,
+:root[data-theme="light"] td.ok{background:#EAF7F2 !important;color:#1F7A63 !important}
+:root[data-theme="light"] td.near,
+:root[data-theme="light"] td.status-near,
+:root[data-theme="light"] td.warning{background:#FFF6DF !important;color:#A36F12 !important}
+:root[data-theme="light"] td.over,
+:root[data-theme="light"] td.status-over,
+:root[data-theme="light"] td.danger{background:#FDEBEA !important;color:#C34F45 !important}
+:root[data-theme="dark"] td.good,
+:root[data-theme="dark"] td.status-good,
+:root[data-theme="dark"] td.ok{background:#173A32 !important;color:#72D7B6 !important}
+:root[data-theme="dark"] td.near,
+:root[data-theme="dark"] td.status-near,
+:root[data-theme="dark"] td.warning{background:#403316 !important;color:#F0C35E !important}
+:root[data-theme="dark"] td.over,
+:root[data-theme="dark"] td.status-over,
+:root[data-theme="dark"] td.danger{background:#482529 !important;color:#F39A94 !important}
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .sheet,
+:root[data-theme="dark"] .search,
+:root[data-theme="dark"] .year select,
+:root[data-theme="dark"] .year button{color:#EDF1F8 !important}
+:root[data-theme="light"] .card,
+:root[data-theme="light"] .sheet,
+:root[data-theme="light"] .search,
+:root[data-theme="light"] .year select,
+:root[data-theme="light"] .year button{color:#17233E !important}
+table input:focus{opacity:1 !important;text-shadow:none !important}
+
 </style>
 </head>
 <body>
@@ -1029,14 +1092,30 @@ $('saveYearBtn').addEventListener('click',()=>{
 });
 
 $('table').addEventListener('input',e=>{
-  if(e.target.dataset.name){const x=yd().items.find(i=>i.id===e.target.dataset.name);x.name=e.target.value;save();return}
+  if(e.target.dataset.name){
+    const x=yd().items.find(i=>i.id===e.target.dataset.name);
+    x.name=e.target.value;
+    persist();
+    return;
+  }
   if(e.target.dataset.cell){
     const [id,f,m]=e.target.dataset.cell.split('|');
     if(f==='budget')return;
-    const x=yd().items.find(i=>i.id===id);x[f][+m]=+e.target.value||0;save();
-    renderDash();renderCharts();pulse(['goal','kMonth','kYear','kIncome','kExpense','kInvestment','kInvestmentMonth','kRate','kRequired']);
-    clearTimeout(timer);timer=setTimeout(renderTable,300)
+    const x=yd().items.find(i=>i.id===id);
+    x[f][+m]=Number(String(e.target.value).replace(',','.'))||0;
+    persist();
+    renderDash();
+    renderCharts();
   }
+});
+$('table').addEventListener('change',e=>{
+  if(e.target.dataset.name||e.target.dataset.cell){
+    save();
+    renderTable();
+  }
+});
+$('table').addEventListener('focusout',e=>{
+  if(e.target.dataset.name||e.target.dataset.cell)save();
 });
 $('table').addEventListener('keydown',e=>{
   if(e.key==='Enter'&&e.target.dataset.cell){
@@ -1057,20 +1136,23 @@ $('table').addEventListener('click',e=>{
 });
 
 
-// Apariencia
-const savedTheme=localStorage.getItem('aureoTheme')||'system';
+// Apariencia: solo modo claro u oscuro
+let savedTheme=localStorage.getItem('aureoTheme');
+if(savedTheme!=='light'&&savedTheme!=='dark'){
+  savedTheme=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+}
 function applyTheme(mode){
-  if(mode==='system')document.documentElement.removeAttribute('data-theme');
-  else document.documentElement.setAttribute('data-theme',mode);
-  localStorage.setItem('aureoTheme',mode);
-  if($('themeBtn'))$('themeBtn').textContent=mode==='dark'?'☀':mode==='light'?'☾':'◐';
+  const safeMode=mode==='dark'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',safeMode);
+  localStorage.setItem('aureoTheme',safeMode);
+  if($('themeBtn'))$('themeBtn').textContent=safeMode==='dark'?'☀':'☾';
 }
 applyTheme(savedTheme);
 $('themeBtn').addEventListener('click',()=>{
-  const current=localStorage.getItem('aureoTheme')||'system';
-  const next=current==='system'?'light':current==='light'?'dark':'system';
+  const current=localStorage.getItem('aureoTheme')==='dark'?'dark':'light';
+  const next=current==='dark'?'light':'dark';
   applyTheme(next);
-  toastMsg(next==='system'?'Apariencia automática':next==='dark'?'Modo oscuro':'Modo claro');
+  toastMsg(next==='dark'?'Modo oscuro':'Modo claro');
 });
 
 // Instalación y modo standalone
@@ -1130,33 +1212,23 @@ renderAll();
 
 <script>
 (function(){
-  function ensureVisibleEditableText(root){
-    (root || document).querySelectorAll('input, textarea, [contenteditable="true"]').forEach(function(el){
+  function refreshEditableText(root){
+    (root||document).querySelectorAll('input, textarea, [contenteditable="true"]').forEach(function(el){
+      el.style.removeProperty('color');
+      el.style.removeProperty('-webkit-text-fill-color');
+      el.style.removeProperty('background');
       el.style.setProperty('opacity','1','important');
-      el.style.setProperty('caret-color','#24324A','important');
-      if(!el.closest('.good,.status-good,.ok,.near,.status-near,.warning,.over,.status-over,.danger')){
-        el.style.setProperty('color','#24324A','important');
-        el.style.setProperty('-webkit-text-fill-color','#24324A','important');
-      }
     });
   }
   document.addEventListener('DOMContentLoaded',function(){
-    ensureVisibleEditableText(document);
+    refreshEditableText(document);
     new MutationObserver(function(mutations){
       mutations.forEach(function(m){
         m.addedNodes.forEach(function(node){
-          if(node.nodeType===1) ensureVisibleEditableText(node);
+          if(node.nodeType===1)refreshEditableText(node);
         });
       });
     }).observe(document.body,{childList:true,subtree:true});
-  });
-  document.addEventListener('focusin',function(e){
-    if(e.target.matches('input,textarea,[contenteditable="true"]')){
-      e.target.style.setProperty('opacity','1','important');
-      e.target.style.setProperty('caret-color','#24324A','important');
-      e.target.style.setProperty('color','#24324A','important');
-      e.target.style.setProperty('-webkit-text-fill-color','#24324A','important');
-    }
   });
 })();
 </script>
