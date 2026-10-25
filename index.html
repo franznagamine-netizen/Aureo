@@ -1,0 +1,1448 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#18213b">
+<meta name="description" content="Áureo: flujo de caja, presupuesto e inversión personal.">
+<meta name="application-name" content="Áureo">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Áureo">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
+<link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
+<title>Áureo 3.2.7</title>
+<style>
+:root{
+  --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
+  --green:#1f8067;--green-bg:#edf8f4;--amber:#b7801c;--amber-bg:#fff8e8;
+  --red:#c95d58;--red-bg:#fff0ee;--purple:#655bcb;--purple-bg:#f0efff;--blue:#4b72c5;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,Inter,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:1320px;margin:auto;padding:10px 10px 86px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#f5dc8f,#d4a02d);display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+.ey{font-size:11px;letter-spacing:.14em;color:#9b782b;font-weight:800}
+h1{font-size:20px;margin:2px 0;letter-spacing:-0.02em}
+.sub{font-size:12px;color:var(--muted)}
+.year{display:flex;gap:6px}
+.year select,.year button{border:1px solid var(--line);background:white;border-radius:11px;padding:9px}
+.nav{display:flex;gap:7px;margin:13px 0;overflow:auto}
+.nav button{border:0;border-radius:11px;padding:10px 14px;background:#e8ecf3;color:#65728a;font-weight:750}
+.nav .active{background:var(--nav);color:white}
+.nav-icon{display:none;font-size:20px;line-height:1}
+#greetingBtn{cursor:pointer;font-weight:800;letter-spacing:-0.02em}
+.history-controls{display:flex;gap:6px}
+.history-controls button{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--nav);font-size:21px;line-height:1}
+.history-controls button:disabled{opacity:.35;cursor:not-allowed}
+.page{display:none}.page.active{display:block}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:13px;margin-bottom:9px;box-shadow:0 8px 20px rgba(29,42,66,.06)}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;background:linear-gradient(135deg,#5047c8,#776be4);color:white;border:0}
+.hero-copy{display:flex;flex-direction:column;justify-content:center}
+.hero small{opacity:.78}
+.big{font-size:29px;font-weight:850;margin-top:4px;transition:transform .2s ease}
+.hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.hero-meta strong{display:block;font-size:17px;margin-top:3px}
+.ring-wrap{display:grid;place-items:center}
+.ring{width:150px;height:150px;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-track,.ring-value{fill:none;stroke-width:11}
+.ring-track{stroke:rgba(255,255,255,.22)}
+.ring-value{stroke:white;stroke-linecap:round;transition:stroke-dashoffset .45s ease}
+.ring-label{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring-label strong{font-size:26px}
+.ring-label span{font-size:12px;opacity:.82}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.kpi{background:white;border:1px solid var(--line);border-radius:15px;padding:10px;min-height:82px}
+.label{font-size:10px;color:var(--muted)}
+.value{font-size:17px;font-weight:820;margin-top:4px;transition:transform .18s ease,opacity .18s ease}
+.value.pulse,.big.pulse{transform:scale(1.035);opacity:.74}
+.green{color:var(--green)}.red{color:var(--red)}.purple{color:var(--purple)}.blue{color:var(--blue)}
+.spark{height:26px;margin-top:6px}.spark svg{width:100%;height:100%}
+.progress{height:8px;background:#edf0f6;border-radius:999px;overflow:hidden;margin-top:10px}
+.progress>span{display:block;height:100%;border-radius:inherit;background:var(--purple);transition:width .45s ease}
+.charts{display:grid;grid-template-columns:1.3fr .7fr;gap:9px;margin-top:9px}
+.chart-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.chart-head h2{font-size:16px;margin:0}
+.chart-head select{border:1px solid var(--line);border-radius:10px;padding:7px;background:white}
+.line-chart{height:205px}
+.line-chart svg{width:100%;height:100%}
+.pie-layout{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center}
+.pie{width:150px;height:150px;border-radius:50%;position:relative;transition:background .3s ease}
+.pie::after{content:"";position:absolute;inset:27px;background:white;border-radius:50%}
+.legend{display:grid;gap:8px}
+.legend-item{display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.legend-item span:first-child{display:flex;align-items:center;gap:7px}
+.dot{width:9px;height:9px;border-radius:50%}
+.annual-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.search{min-width:220px;border:1px solid var(--line);background:white;border-radius:11px;padding:9px 11px}
+.view-switch{display:flex;gap:5px;background:#edf1f6;border-radius:12px;padding:4px}
+.view-switch button{border:0;background:transparent;color:#68758b;border-radius:9px;padding:8px 11px;font-weight:800}
+.view-switch button.active{background:white;color:var(--nav);box-shadow:0 2px 8px rgba(28,42,67,.08)}
+.macro-hint{font-size:12px;color:var(--muted)}
+.tableCard{padding:0;overflow:hidden}
+.note{padding:12px 14px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line)}
+.wrap{overflow:auto;max-height:72vh}
+table{border-collapse:separate;border-spacing:0;min-width:1460px;width:100%;font-size:10.5px;font-variant-numeric:tabular-nums}
+th,td{padding:5px 4px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;background:white;line-height:1.12}
+thead th{position:sticky;top:0;z-index:20;background:#eef2f8;color:#59667d}
+th:first-child,td:first-child{position:sticky;left:0;z-index:15;text-align:left;min-width:142px;max-width:142px;background:white;box-shadow:4px 0 8px rgba(30,42,65,.06);overflow:hidden;text-overflow:ellipsis}
+thead th:first-child{z-index:30;background:#e4eaf4}
+.macro td{font-weight:900}
+.macro.income td{background:var(--green-bg);color:var(--green)}
+.macro.expense td{background:var(--red-bg);color:var(--red)}
+.macro.investment td{background:var(--purple-bg);color:var(--purple)}
+.macro td:first-child{z-index:18}
+.group td{background:#f8f9fc;font-weight:800;color:#5b687f}
+.group td:first-child{z-index:17;background:#f8f9fc}
+.group-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.group-title button{border:0;background:transparent;color:#64718a;padding:2px 4px}
+.cell,.name{width:100%;border:0;background:transparent;text-align:right;padding:2px;font-size:10.5px}
+.name{text-align:left;font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.cell:focus,.name:focus{outline:2px solid #b8c6ea;border-radius:7px}
+.status-good{background:var(--green-bg)!important;color:var(--green)!important;font-weight:850}
+.status-near{background:var(--amber-bg)!important;color:var(--amber)!important;font-weight:850}
+.status-over{background:var(--red-bg)!important;color:var(--red)!important;font-weight:850}
+.del{border:0;background:transparent;color:#9ba5b5;font-size:15px;padding:1px 2px}
+.add td{background:#fafbfe}
+.add button{border:0;background:transparent;color:#60708f;font-weight:800}
+.total td{font-weight:900;background:#f4f7fb}
+.hidden-row{display:none}
+.empty{padding:26px;text-align:center;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(14,23,40,.55);display:none;align-items:flex-end;justify-content:center;z-index:100}
+.modal.open{display:flex}
+.sheet{width:min(540px,100%);background:white;border-radius:24px 24px 0 0;padding:20px;max-height:92vh;overflow:auto}
+.sheet h2{margin:0 0 14px}
+.field{margin-bottom:11px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+.field input,.field select{width:100%;padding:11px;border:1px solid var(--line);border-radius:11px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.actions{display:flex;gap:8px}
+.actions button{flex:1;border:0;border-radius:12px;padding:11px;font-weight:800}
+.cancel{background:#edf1f5}.save{background:var(--nav);color:white}.danger{background:var(--red-bg);color:var(--red)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--nav);color:white;padding:10px 15px;border-radius:12px;display:none;z-index:150;font-weight:700}
+@media(max-width:850px){
+ .sub{display:none}.hero{grid-template-columns:1fr}.ring-wrap{order:-1}.ring{width:132px;height:132px}
+ .kpis{grid-template-columns:1fr 1fr}.charts{grid-template-columns:1fr}.pie-layout{grid-template-columns:130px 1fr}.pie{width:130px;height:130px}
+ .controls{width:100%}.search{min-width:0;flex:1}
+ .app{padding-bottom:104px}
+ .nav{position:fixed;left:10px;right:10px;bottom:9px;z-index:90;margin:0;padding:6px;
+      background:rgba(255,255,255,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 34px rgba(20,31,53,.2);
+      display:grid;grid-template-columns:1fr 1fr;gap:6px;overflow:visible}
+ .nav button{padding:7px 10px;background:transparent;border-radius:15px;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:2px;font-size:11px;min-height:50px}
+ .nav .active{background:#edf1f8;color:var(--nav)}
+ .nav-icon{display:block}
+ .toast{bottom:88px}
+}
+
+/* Áureo 2.0: experiencia PWA */
+.top-actions{display:flex;align-items:center;gap:7px}
+.icon-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--text);display:grid;place-items:center;font-size:17px;padding:0}
+.save-state{display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:10px;margin-top:2px}
+.save-state::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--green)}
+.save-state.saving::before{background:var(--amber);animation:savePulse .8s infinite alternate}
+@keyframes savePulse{to{opacity:.35}}
+.install-banner{display:none;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px;padding:12px 13px;border-radius:16px;background:linear-gradient(135deg,#18213b,#2d3857);color:white;box-shadow:0 8px 20px rgba(29,42,66,.12)}
+.install-banner.show{display:flex}
+.install-banner strong{display:block;font-size:13px}
+.install-banner span{font-size:11px;opacity:.78}
+.install-actions{display:flex;gap:6px;flex:0 0 auto}
+.install-actions button{border:0;border-radius:10px;padding:8px 10px;font-weight:800}
+.install-primary{background:white;color:#18213b}
+.install-close{background:rgba(255,255,255,.14);color:white}
+.offline-pill{display:none;position:fixed;top:max(10px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:180;background:#18213b;color:white;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:800;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.offline-pill.show{display:block}
+body.standalone{padding-top:env(safe-area-inset-top)}
+body.standalone .app{padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}
+@media(max-width:850px){
+  .year{gap:5px}
+  .year select,.year button{padding:8px}
+  .install-banner{align-items:flex-start}
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#101522;--card:#171e2d;--text:#edf1f8;--muted:#9aa6ba;--line:#2a3447;--nav:#eef2f8;
+    --green:#63c5a7;--green-bg:#17352f;--amber:#e5b758;--amber-bg:#382d18;
+    --red:#ee8882;--red-bg:#3a2224;--purple:#a89cf8;--purple-bg:#292648;--blue:#88aaf0;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101522;--card:#171e2d;--text:#edf1f8;--muted:#9aa6ba;--line:#2a3447;--nav:#eef2f8;
+  --green:#63c5a7;--green-bg:#17352f;--amber:#e5b758;--amber-bg:#382d18;
+  --red:#ee8882;--red-bg:#3a2224;--purple:#a89cf8;--purple-bg:#292648;--blue:#88aaf0;
+}
+:root[data-theme="dark"] body,:root:not([data-theme="light"]) body{color-scheme:dark}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .kpi,:root[data-theme="dark"] th,:root[data-theme="dark"] td,
+:root[data-theme="dark"] .year select,:root[data-theme="dark"] .year button,:root[data-theme="dark"] .chart-head select,
+:root[data-theme="dark"] .search,:root[data-theme="dark"] .sheet,:root[data-theme="dark"] .field input,:root[data-theme="dark"] .field select,
+:root[data-theme="dark"] .cell,:root[data-theme="dark"] .name{background:var(--card);color:var(--text)}
+:root[data-theme="dark"] thead th{background:#202a3b}
+:root[data-theme="dark"] thead th:first-child{background:#263146}
+:root[data-theme="dark"] th:first-child,:root[data-theme="dark"] td:first-child{background:var(--card)}
+:root[data-theme="dark"] .group td,:root[data-theme="dark"] .group td:first-child{background:#1c2434}
+:root[data-theme="dark"] .total td{background:#202a3b}
+:root[data-theme="dark"] .pie::after{background:var(--card)}
+:root[data-theme="dark"] .nav{background:rgba(23,30,45,.94)}
+:root[data-theme="dark"] .nav .active{background:#2a3447;color:white}
+:root[data-theme="dark"] .cancel{background:#283246;color:var(--text)}
+
+
+/* Áureo 3.0 — Identidad Faro */
+.logo.lighthouse-logo{
+  background:linear-gradient(145deg,#0d1b32,#162c4d);
+  border:1px solid rgba(224,177,72,.35);
+  box-shadow:0 10px 24px rgba(11,24,43,.18), inset 0 1px 0 rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.logo.lighthouse-logo svg{width:72%;height:72%;display:block}
+header{align-items:center}
+.brand{min-width:0}
+.brand>div:last-child{min-width:0}
+.top-actions{flex-wrap:nowrap}
+.year{display:flex;gap:6px;align-items:center}
+.year select{
+  min-width:88px;max-width:96px;
+  font-size:13px;font-weight:850;
+  padding:9px 28px 9px 11px;
+  border-radius:12px;
+}
+.year #addYearBtn{
+  width:40px;height:40px;padding:0;
+  font-size:0;border-radius:12px;
+}
+.year #addYearBtn::before{content:"+";font-size:24px;line-height:1;font-weight:500}
+.icon-btn{
+  background:var(--card);
+  transition:transform .18s ease,background .18s ease;
+}
+.icon-btn:active,.year button:active{transform:scale(.94)}
+.hero{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 86% 16%,rgba(255,255,255,.12),transparent 28%),
+    linear-gradient(135deg,#4e46c8,#7165df);
+}
+.hero::after{
+  content:"";
+  position:absolute;right:-42px;bottom:-76px;width:190px;height:190px;
+  border:1px solid rgba(255,255,255,.12);border-radius:50%;
+}
+.ring{width:124px;height:124px}
+.ring-value{animation:ringReveal .8s cubic-bezier(.22,.8,.3,1)}
+@keyframes ringReveal{from{stroke-dashoffset:302}}
+.page{opacity:0;transform:translateY(6px);transition:opacity .22s ease,transform .22s ease}
+.page.active{opacity:1;transform:none}
+.kpi,.card{transition:transform .18s ease,box-shadow .18s ease}
+.kpi:active,.card:active{transform:scale(.995)}
+.nav button{transition:background .18s ease,color .18s ease,transform .18s ease}
+.nav button:active{transform:scale(.97)}
+.save-state{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:205px}
+@media(max-width:850px){
+  header{align-items:flex-start;gap:8px}
+  .brand{align-items:flex-start}
+  .logo{width:47px;height:47px;border-radius:15px;flex:0 0 47px}
+  h1{font-size:18px;line-height:1.08;white-space:nowrap}
+  .ey{font-size:10px}
+  .save-state{font-size:9.5px;max-width:170px}
+  .top-actions{margin-left:auto;gap:5px}
+  .icon-btn{width:38px;height:38px}
+  .year select{min-width:76px;max-width:82px;padding:8px 22px 8px 9px}
+  .year #addYearBtn{width:38px;height:38px}
+  .hero{padding:13px}
+  .hero h2{font-size:28px}
+  .hero-meta strong{font-size:16px}
+  .ring{width:116px;height:116px}
+  .ring-label strong{font-size:24px}
+}
+@media(max-width:390px){
+  .logo{width:43px;height:43px;flex-basis:43px}
+  h1{font-size:17px}
+  .save-state{max-width:150px}
+  .top-actions{gap:4px}
+  .icon-btn,.year #addYearBtn{width:35px;height:35px}
+  .year select{min-width:69px;max-width:72px;font-size:12px}
+}
+
+
+/* Áureo 3.1 — Hotfix de encabezado móvil */
+.year{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex:0 0 auto;
+}
+.year select{
+  display:block;
+  width:96px !important;
+  min-width:96px !important;
+  max-width:96px !important;
+  height:40px;
+  box-sizing:border-box;
+  padding:8px 28px 8px 12px !important;
+  color:var(--ink);
+  font-size:14px !important;
+  line-height:1;
+  font-weight:850;
+  text-align:left;
+  text-overflow:clip;
+  -webkit-appearance:auto;
+  appearance:auto;
+}
+.year #addYearBtn,
+.icon-btn{
+  width:40px !important;
+  min-width:40px !important;
+  height:40px !important;
+  flex:0 0 40px;
+}
+.icon-btn{
+  font-size:20px;
+  line-height:1;
+}
+.install{
+  padding:13px 16px;
+  gap:12px;
+}
+.install strong{font-size:16px}
+.install span{font-size:12px;line-height:1.35}
+.install-actions button{padding:9px 12px}
+
+@media(max-width:850px){
+  header{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:start;
+    column-gap:10px;
+    row-gap:8px;
+  }
+  .brand{
+    grid-column:1 / -1;
+    width:100%;
+  }
+  .brand>div:last-child{flex:1;min-width:0}
+  .ey{font-size:11px;letter-spacing:.22em}
+  h1{font-size:21px;white-space:normal}
+  .sub{font-size:12px;margin-top:2px}
+  .save-state{font-size:10px;max-width:none}
+  .top-actions{
+    grid-column:1 / -1;
+    width:100%;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    margin:0;
+    gap:7px;
+  }
+  .year select{
+    width:96px !important;
+    min-width:96px !important;
+    max-width:96px !important;
+  }
+}
+@media(max-width:390px){
+  .year select{
+    width:92px !important;
+    min-width:92px !important;
+    max-width:92px !important;
+    font-size:13px !important;
+  }
+  .year #addYearBtn,
+  .icon-btn{
+    width:38px !important;
+    min-width:38px !important;
+    height:38px !important;
+    flex-basis:38px;
+  }
+}
+
+
+/* Áureo 3.1.1 — Visibilidad de subconceptos y edición en Safari iPhone */
+input,
+textarea,
+select,
+[contenteditable="true"]{
+  color:var(--ink) !important;
+  -webkit-text-fill-color:var(--ink) !important;
+  caret-color:var(--ink) !important;
+  opacity:1 !important;
+}
+
+table input,
+table textarea,
+table [contenteditable="true"],
+.concept-input,
+.subconcept-input,
+.name-input,
+.cell-input{
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+  background:#FFFFFF !important;
+  caret-color:#24324A !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+}
+
+table input::placeholder,
+table textarea::placeholder{
+  color:#8A96AA !important;
+  -webkit-text-fill-color:#8A96AA !important;
+  opacity:1 !important;
+}
+
+td,
+td *,
+.concept-name,
+.subconcept-name,
+.editable-name,
+.month-cell,
+.amount-cell{
+  opacity:1 !important;
+}
+
+td input[type="number"],
+td input[inputmode="decimal"],
+td input[inputmode="numeric"]{
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+  background:transparent !important;
+  font-weight:800 !important;
+  text-align:right;
+}
+
+/* Mantener el semáforo legible */
+.good input,
+.status-good input,
+.ok input{
+  color:#1F7A63 !important;
+  -webkit-text-fill-color:#1F7A63 !important;
+}
+.near input,
+.status-near input,
+.warning input{
+  color:#A97718 !important;
+  -webkit-text-fill-color:#A97718 !important;
+}
+.over input,
+.status-over input,
+.danger input{
+  color:#C34F45 !important;
+  -webkit-text-fill-color:#C34F45 !important;
+}
+
+/* Safari puede volver transparente el texto durante autofill o edición */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus{
+  -webkit-text-fill-color:#24324A !important;
+  transition:background-color 9999s ease-out 0s;
+}
+
+/* Cuando el campo está seleccionado, asegurar contraste */
+table input:focus,
+table textarea:focus,
+table [contenteditable="true"]:focus{
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+  background:#FFFFFF !important;
+  outline:3px solid rgba(91,112,204,.38);
+  outline-offset:-2px;
+}
+
+
+/* Áureo 3.1.2 — Editor robusto de presupuesto */
+.budget-sheet .field{margin-bottom:16px}
+.money-entry{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:56px;
+  padding:0 16px;
+  border:1px solid #D6DEEA;
+  border-radius:16px;
+  background:#FFFFFF;
+  box-shadow:inset 0 1px 0 rgba(20,35,60,.03);
+}
+.money-entry span{
+  color:#53627A;
+  font-size:20px;
+  font-weight:800;
+}
+.money-entry input{
+  width:100%;
+  min-width:0;
+  border:0 !important;
+  outline:0 !important;
+  background:#FFFFFF !important;
+  color:#17233E !important;
+  -webkit-text-fill-color:#17233E !important;
+  caret-color:#17233E !important;
+  font-size:26px;
+  font-weight:900;
+  padding:12px 0 !important;
+  text-align:left !important;
+}
+.money-entry:focus-within{
+  border-color:#6A76D9;
+  box-shadow:0 0 0 4px rgba(94,111,207,.16);
+}
+#scopeChoice,
+.modal select{
+  width:100%;
+  min-height:54px;
+  padding:0 44px 0 15px !important;
+  border:1px solid #D6DEEA !important;
+  border-radius:15px !important;
+  background-color:#FFFFFF !important;
+  color:#17233E !important;
+  -webkit-text-fill-color:#17233E !important;
+  font-size:16px !important;
+  font-weight:750 !important;
+  color-scheme:light !important;
+}
+body.dark #scopeChoice,
+body.dark .modal select,
+body.dark .money-entry,
+body.dark .money-entry input{
+  background:#17233E !important;
+  color:#F5F7FB !important;
+  -webkit-text-fill-color:#F5F7FB !important;
+  border-color:#34415C !important;
+  color-scheme:dark !important;
+}
+input[data-cell*="|budget|"]{
+  cursor:pointer;
+  user-select:none;
+}
+
+
+/* Áureo 3.1.3 — contraste consistente y edición sin cortes */
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark}
+
+:root[data-theme="light"] table input,
+:root[data-theme="light"] table textarea,
+:root[data-theme="light"] table [contenteditable="true"]{
+  background:#FFFFFF !important;
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+  caret-color:#24324A !important;
+  border-color:#D7DEEA !important;
+}
+:root[data-theme="dark"] table input,
+:root[data-theme="dark"] table textarea,
+:root[data-theme="dark"] table [contenteditable="true"]{
+  background:#202A3D !important;
+  color:#F2F5FA !important;
+  -webkit-text-fill-color:#F2F5FA !important;
+  caret-color:#F2F5FA !important;
+  border-color:#3A465C !important;
+}
+:root[data-theme="light"] input.budget-cell{
+  background:transparent !important;
+  color:#24324A !important;
+  -webkit-text-fill-color:#24324A !important;
+}
+:root[data-theme="dark"] input.budget-cell{
+  background:#202A3D !important;
+  color:#F2F5FA !important;
+  -webkit-text-fill-color:#F2F5FA !important;
+}
+:root[data-theme="light"] td.good,
+:root[data-theme="light"] td.status-good,
+:root[data-theme="light"] td.ok{background:#EAF7F2 !important;color:#1F7A63 !important}
+:root[data-theme="light"] td.near,
+:root[data-theme="light"] td.status-near,
+:root[data-theme="light"] td.warning{background:#FFF6DF !important;color:#A36F12 !important}
+:root[data-theme="light"] td.over,
+:root[data-theme="light"] td.status-over,
+:root[data-theme="light"] td.danger{background:#FDEBEA !important;color:#C34F45 !important}
+:root[data-theme="dark"] td.good,
+:root[data-theme="dark"] td.status-good,
+:root[data-theme="dark"] td.ok{background:#173A32 !important;color:#72D7B6 !important}
+:root[data-theme="dark"] td.near,
+:root[data-theme="dark"] td.status-near,
+:root[data-theme="dark"] td.warning{background:#403316 !important;color:#F0C35E !important}
+:root[data-theme="dark"] td.over,
+:root[data-theme="dark"] td.status-over,
+:root[data-theme="dark"] td.danger{background:#482529 !important;color:#F39A94 !important}
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .sheet,
+:root[data-theme="dark"] .search,
+:root[data-theme="dark"] .year select,
+:root[data-theme="dark"] .year button{color:#EDF1F8 !important}
+:root[data-theme="light"] .card,
+:root[data-theme="light"] .sheet,
+:root[data-theme="light"] .search,
+:root[data-theme="light"] .year select,
+:root[data-theme="light"] .year button{color:#17233E !important}
+table input:focus{opacity:1 !important;text-shadow:none !important}
+
+
+/* Áureo 3.2.7 */
+.hero{color:white!important}
+:root{--ink:var(--text)}
+body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.catalog-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.catalog-actions button{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--card);color:var(--text)}
+.catalog-help{font-size:12px;color:var(--muted);margin-top:10px}
+:root[data-theme="dark"] .history-controls button{background:var(--card);color:var(--text)}
+:root[data-theme="dark"] .money-entry,:root[data-theme="dark"] .money-entry input,:root[data-theme="dark"] .modal select{background:var(--card)!important;color:var(--text)!important;-webkit-text-fill-color:var(--text)!important;border-color:var(--line)!important;color-scheme:dark!important}
+:root[data-theme="dark"] .macro.income td{background:var(--green-bg);color:var(--green)}
+:root[data-theme="dark"] .macro.expense td{background:var(--red-bg);color:var(--red)}
+:root[data-theme="dark"] .macro.investment td{background:var(--purple-bg);color:var(--purple)}
+:root[data-theme="dark"] .save{background:#4554a0;color:white}
+:root[data-theme="dark"] .add td{background:var(--card)}
+:root[data-theme="dark"] .view-switch{background:#202a3b}
+:root[data-theme="dark"] .view-switch button.active{background:#34415b;color:white}
+:root[data-theme="dark"] .group td{color:var(--text)}
+
+/* Áureo 3.2.7: tabla única, como en 3.2. */
+.month-scroll{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:7px 10px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}
+.month-scroll button{width:34px;height:30px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);font-size:24px;line-height:1}
+
+.tableCard .wrap{width:100%;max-width:100%;overflow-x:auto;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;overscroll-behavior-x:contain}
+#table{width:1260px;min-width:1260px;max-width:none;table-layout:fixed}
+#table th,#table td{padding:7px 5px;font-size:12px}
+#table th:first-child,#table td:first-child{width:148px;min-width:148px;max-width:148px}
+#table .cell{display:block;min-width:0;width:100%;font-size:12px;padding:4px 0}
+.concept-title{display:flex;align-items:center;gap:3px;min-width:0}
+.concept-title .name{min-width:0;width:100%;flex:1;font-size:12px}
+.concept-title button{border:0;background:transparent;color:var(--muted);font-size:20px;padding:3px;flex:0 0 24px}
+.group-title{min-width:0;gap:2px}
+.group-title .group-toggle{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;font-size:12px;flex:1}
+.invested-label{color:var(--purple);font-size:11px!important}
+.investment-good{background:var(--green-bg)!important;color:var(--green)!important}
+.investment-pending{background:var(--amber-bg)!important;color:var(--amber)!important}
+.catalog-help{display:none}
+body.standalone::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--bg);z-index:95;pointer-events:none}
+@media(max-width:850px){.nav{bottom:max(9px,env(safe-area-inset-bottom))}.app{padding-bottom:calc(104px + env(safe-area-inset-bottom))}}
+
+/* Zen: pocos controles, lectura compacta y una sola superficie de tabla. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-weight:400}
+.card,.kpi{box-shadow:none}
+.card:active,.kpi:active{transform:none}
+.detail-tools{padding:10px 0 12px}
+.detail-tools-top,.detail-tools-search{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.detail-tools-top{margin-bottom:8px}
+.detail-tools-top>b{font-size:13px;font-weight:600}
+.detail-tools-top>b span{color:var(--muted);font-weight:400;margin-left:5px;font-size:11px}
+.detail-tools-search .search{flex:1;min-width:0;width:100%;padding:8px 10px;font-size:13px;border-radius:8px}
+.catalog-actions{margin:0;gap:5px}
+.catalog-actions button{padding:6px 8px;font-size:11px;border-radius:7px;background:transparent;font-weight:500}
+.history-controls button{width:30px;height:30px;border-radius:7px;font-size:18px}
+.tableCard{border-radius:10px;margin-bottom:12px}
+.tableCard .wrap{max-height:none!important;overflow-x:auto;overflow-y:hidden!important;height:auto;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
+#table th,#table td{font-size:10.5px;padding:4px;line-height:1.15;height:27px}
+#table .cell{font-size:10.5px;padding:2px 0;line-height:1.2}
+#table .name{font-size:10.5px;font-weight:500;padding:2px 0;line-height:1.2}
+#table .macro td,#table .total td{font-weight:650}
+#table .group td{font-weight:600}
+#table .concept-title button{font-size:16px;padding:0 2px;height:21px;line-height:1;flex-basis:21px}
+#table .group-toggle{font-size:10.5px;font-weight:600;padding:0}
+#table .group-title>button:last-child{padding:0 2px;font-size:16px;line-height:1}
+header.top{display:flex;align-items:center;gap:8px;padding:4px 0}
+header.top .brand{width:auto;flex:1;min-width:0;align-items:center;gap:7px}
+header.top .logo{width:30px;height:30px;flex:0 0 30px;border-radius:10px;box-shadow:none}
+header.top .ey,header.top .sub{display:none}
+header.top h1{font-size:15px;font-weight:600;line-height:1.2;white-space:nowrap;margin:0}
+header.top .save-state{font-size:8px;max-width:160px}
+header.top .top-actions{width:auto;flex:0 0 auto;gap:4px;align-items:center;margin:0}
+header.top .icon-btn,header.top .year #addYearBtn{width:30px!important;min-width:30px!important;height:30px!important;flex-basis:30px;border-radius:8px;font-size:16px}
+header.top .year{gap:4px}
+header.top .year select{width:66px!important;min-width:66px!important;max-width:66px!important;height:30px;padding:5px 3px!important;font-size:12px!important;border-radius:8px;font-weight:600}
+@media(max-width:850px){
+ .app{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
+ .nav{border-radius:14px;padding:4px;box-shadow:0 3px 14px rgba(20,31,53,.07)}
+ .nav button{min-height:42px;padding:4px;border-radius:10px;font-size:10px;font-weight:600}
+ .nav-icon{font-size:17px}
+}
+
+/* 3.2.4: dashboard y ventanas con la misma calma visual del detalle. */
+header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-items:center;line-height:1;padding:0;overflow:hidden}
+.year #addYearBtn::before{content:none}
+#home{padding-top:10px}
+#home .card,#home .kpi{border-radius:11px;background:var(--card);box-shadow:none}
+#home .card{padding:14px;margin-bottom:10px}
+#home .card.hero{background:var(--card)!important;color:var(--text)!important;border:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}
+#home .hero::after{display:none}
+#home .hero small{font-size:10px;letter-spacing:.04em;color:var(--muted);opacity:1;font-weight:500}
+#home .hero .big{font-size:24px;font-weight:550;letter-spacing:-.03em;margin-top:6px}
+#home .hero-meta{gap:12px;margin-top:12px}
+#home .hero-meta strong{font-size:14px;font-weight:550;margin-top:4px}
+#home .ring-wrap{order:0}
+#home .ring{width:86px;height:86px}
+#home .ring-track{stroke:var(--line);stroke-width:6}
+#home .ring-value{stroke:var(--green);stroke-width:6}
+#home .ring-label strong{font-size:18px;font-weight:550}
+#home .ring-label span{font-size:9px;color:var(--muted)}
+#home .kpis{gap:0;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--card);margin-bottom:10px}
+#home .kpi{border:0;border-radius:0;padding:12px;min-height:74px;border-bottom:1px solid var(--line)}
+#home .kpi:not(:nth-child(4n)){border-right:1px solid var(--line)}
+#home .kpi:nth-last-child(-n+4){border-bottom:0}
+#home .label{font-size:10px;line-height:1.4;font-weight:400}
+#home .value{font-size:17px;line-height:1.2;letter-spacing:-.02em;font-weight:550;margin-top:6px;color:var(--text)}
+#home #kMonth,#home #kYear{color:var(--green)}
+#home .spark{height:17px;margin-top:6px;opacity:.65}
+#home .progress{height:4px!important;background:var(--line);margin-top:8px}
+#home .progress>span{background:var(--green)}
+#home .chart-head{margin-bottom:10px;align-items:center}
+#home .chart-head h2{font-size:12px;line-height:1.4;font-weight:550}
+#home .chart-head select{font-size:11px;padding:5px 7px;border-radius:7px;color:var(--text);background:var(--card)}
+#home .chart-head strong{font-size:16px;font-weight:550}
+#home #freeAvailableCard .sub{font-size:10px;line-height:1.4;margin-top:4px}
+#home #freeAvailableCard>div:last-child{font-size:10px!important;flex-wrap:wrap;gap:5px!important}
+#home #freeAvailableCard strong{font-weight:550}
+#home .charts{gap:10px;margin-top:0}
+#home .line-chart{height:170px}
+#home .pie-layout{grid-template-columns:100px minmax(0,1fr);gap:14px}
+#home .pie{width:100px;height:100px}
+#home .pie::after{inset:19px;background:var(--card)}
+#home .legend{gap:7px}
+#home .legend-item{font-size:10px;line-height:1.4}
+#home .legend-item strong{font-weight:550}
+.modal{background:rgba(22,30,42,.30)}
+.modal .sheet{background:var(--card);color:var(--text);width:min(460px,100%);border:1px solid var(--line);border-bottom:0;border-radius:17px 17px 0 0;padding:18px 18px max(18px,env(safe-area-inset-bottom));max-height:85dvh;box-shadow:0 -8px 36px rgba(20,31,53,.06);font-size:13px}
+.modal .sheet h2{font-size:17px;font-weight:550;line-height:1.35;letter-spacing:-.02em;margin:0 0 16px}
+.modal .field,.modal .budget-sheet .field{margin-bottom:12px}
+.modal .field label{font-size:11px;font-weight:400;line-height:1.4;margin-bottom:5px}
+.modal .field input,.modal .field select,.modal #scopeChoice{min-height:40px!important;padding:9px 11px!important;border:1px solid var(--line)!important;border-radius:8px!important;background:var(--card)!important;color:var(--text)!important;-webkit-text-fill-color:var(--text)!important;font-size:16px!important;font-weight:400!important}
+.modal .money-entry{min-height:46px;padding:0 11px;border-radius:9px;border-color:var(--line);background:var(--card);box-shadow:none;gap:8px}
+.modal .money-entry span{font-size:15px;font-weight:500;color:var(--muted)}
+.modal .money-entry input{border:0!important;font-size:22px!important;font-weight:500!important;padding:9px 0!important;background:var(--card)!important;color:var(--text)!important;-webkit-text-fill-color:var(--text)!important}
+.modal .money-entry:focus-within{border-color:var(--green);box-shadow:0 0 0 2px var(--green-bg)}
+.modal .grid{gap:10px}
+.modal .actions{gap:8px}
+.modal .actions button{min-height:40px;padding:9px 10px;border-radius:8px;font-size:13px;font-weight:550;line-height:1.3}
+.modal .actions .cancel{color:var(--muted);background:transparent;border:1px solid var(--line)}
+.modal .actions .danger{color:var(--red);background:transparent;border:1px solid var(--line)}
+.modal .actions .save{color:var(--card);background:var(--text);border:1px solid var(--text)}
+.modal .sub,.modal .catalog-help{font-size:11px;line-height:1.5}
+.modal .catalog-help{display:block}
+@media(max-width:850px){
+ #home .kpis{grid-template-columns:1fr 1fr}
+ #home .kpi{border-bottom:1px solid var(--line)!important;border-right:0!important}
+ #home .kpi:nth-child(odd){border-right:1px solid var(--line)!important}
+ #home .kpi:nth-last-child(-n+2){border-bottom:0!important}
+}
+@media(min-width:851px){.modal{align-items:center}.modal .sheet{border-bottom:1px solid var(--line);border-radius:15px;padding:22px}}
+@media(prefers-reduced-motion:reduce){.page,.ring-value,.value,.big{transition:none;animation:none}}
+
+#home .goal-edit{display:block;align-self:flex-start;border:0;border-radius:5px;background:transparent;color:var(--text);padding:0;cursor:pointer;text-align:left;font-family:inherit}
+#home .goal-edit:focus-visible{outline:2px solid var(--green);outline-offset:4px}
+#home .goal-edit-hint{font-size:9px;color:var(--muted);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand"><div class="logo lighthouse-logo"><svg viewBox="0 0 64 64" aria-hidden="true">
+  <defs>
+    <linearGradient id="goldHead" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F7DD91"/>
+      <stop offset="1" stop-color="#C98A1C"/>
+    </linearGradient>
+  </defs>
+  <path d="M6 23 L23 18 L23 27 Z" fill="url(#goldHead)" opacity=".85"/>
+  <path d="M58 23 L41 18 L41 27 Z" fill="url(#goldHead)" opacity=".85"/>
+  <path d="M28 13h8l4 7H24z" fill="url(#goldHead)"/>
+  <rect x="25" y="20" width="14" height="9" rx="2" fill="none" stroke="url(#goldHead)" stroke-width="2.5"/>
+  <path d="M27 29h10l4 23H23z" fill="url(#goldHead)"/>
+  <path d="M21 52h22" stroke="#F7DD91" stroke-width="3" stroke-linecap="round"/>
+  <path d="M18 56c5-3 9-3 14 0 5-3 9-3 14 0" fill="none" stroke="#F7DD91" stroke-width="2" stroke-linecap="round"/>
+</svg></div><div><div class="ey">ÁUREO</div><h1 id="greetingBtn" title="Toca para cambiar el nombre">¡Hola, Franz! 👋</h1><div class="sub">Patrimonio personal</div><div class="save-state" id="saveState">Guardado en este dispositivo</div></div></div>
+  <div class="top-actions"><button class="icon-btn" id="themeBtn" aria-label="Cambiar apariencia" title="Cambiar apariencia">☾</button><div class="year"><select id="yearSel" aria-label="Año del presupuesto"></select><button id="addYearBtn" aria-label="Crear año" title="Crear año">+</button></div></div>
+</header>
+<div class="install-banner" id="installBanner">
+  <div><strong>Instala Áureo en tu celular</strong><span id="installText">Acceso rápido, pantalla completa y funcionamiento sin conexión.</span></div>
+  <div class="install-actions"><button class="install-primary" id="installBtn">Instalar</button><button class="install-close" id="installClose" aria-label="Cerrar">×</button></div>
+</div>
+<div class="offline-pill" id="offlinePill">Modo sin conexión</div>
+
+<nav class="nav" aria-label="Navegación principal">
+  <button class="active" data-page="home"><span class="nav-icon">⌂</span><span>Dashboard</span></button>
+  <button data-page="annual"><span class="nav-icon">▦</span><span>Detalle</span></button>
+</nav>
+
+<section id="home" class="page active">
+  <div class="card hero">
+    <div class="hero-copy">
+      <small>META DE INVERSIÓN ANUAL</small>
+      <button class="big goal-edit" id="goal" aria-label="Editar meta de inversión anual" title="Editar meta anual"></button><span class="goal-edit-hint">Toca el monto para editar</span>
+      <div class="hero-meta">
+        <div><small>Invertido</small><strong id="invested"></strong></div>
+        <div><small>Falta</small><strong id="left"></strong></div>
+      </div>
+    </div>
+    <div class="ring-wrap">
+      <div class="ring">
+        <svg viewBox="0 0 120 120" aria-label="Avance de la meta anual"><circle class="ring-track" cx="60" cy="60" r="48"></circle><circle class="ring-value" id="ringValue" cx="60" cy="60" r="48"></circle></svg>
+        <div class="ring-label"><div><strong id="ringPct">0%</strong><br><span>de la meta</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="label">Disponible este mes</div><div class="value green" id="kMonth"></div><div class="spark" id="sparkMonth"></div></div>
+    <div class="kpi"><div class="label">Disponible libre del año</div><div class="value blue" id="kYear"></div><div class="spark" id="sparkYear"></div></div>
+    <div class="kpi"><div class="label">Ingresos previstos del año</div><div class="value green" id="kIncome"></div></div>
+    <div class="kpi"><div class="label">Egresos previstos del año</div><div class="value red" id="kExpense"></div></div>
+    <div class="kpi"><div class="label">Inversión del año</div><div class="value purple" id="kInvestment"></div><div class="progress"><span id="investmentProgress"></span></div></div>
+    <div class="kpi"><div class="label">Inversión este mes</div><div class="value purple" id="kInvestmentMonth"></div></div>
+    <div class="kpi"><div class="label">% de ahorro e inversión previstos</div><div class="value" id="kRate"></div></div>
+    <div class="kpi"><div class="label">Inversión mensual requerida</div><div class="value purple" id="kRequired"></div></div>
+  </div>
+
+  <div class="card" id="freeAvailableCard">
+    <div class="chart-head">
+      <div><h2>Disponible libre respecto a ingresos</h2><div class="sub" style="display:block">Según presupuesto, reservando la inversión obligatoria</div></div>
+      <strong id="freeAvailablePct" class="blue">0%</strong>
+    </div>
+    <div class="progress" style="height:12px"><span id="freeAvailableBar" style="background:var(--blue);width:0%"></span></div>
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:9px;font-size:12px;color:var(--muted)">
+      <span>Disponible libre: <strong id="freeAvailableAmount" style="color:var(--text)"></strong></span>
+      <span>Ingresos: <strong id="freeIncomeAmount" style="color:var(--text)"></strong></span>
+    </div>
+  </div>
+
+  <div class="charts">
+    <div class="card">
+      <div class="chart-head"><h2>Evolución mensual</h2><select id="metricSelect"><option value="available">Disponible</option><option value="income">Ingresos</option><option value="expense">Egresos</option><option value="investment">Inversión</option></select></div>
+      <div class="line-chart" id="lineChart"></div>
+    </div>
+    <div class="card">
+      <div class="chart-head"><h2>Distribución de egresos</h2></div>
+      <div class="pie-layout"><div class="pie" id="expensePie"></div><div class="legend" id="expenseLegend"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="annual" class="page">
+  <div class="detail-tools">
+    <div class="detail-tools-top"><b>Detalle <span>S/</span></b><div class="catalog-actions"><button id="quickConceptBtn">＋ Concepto</button><button id="quickGroupBtn">＋ Subgrupo</button></div></div>
+    <div class="detail-tools-search"><input id="searchInput" class="search" type="search" placeholder="Buscar" aria-label="Buscar concepto o subgrupo"><div class="history-controls"><button id="undoBtn" title="Deshacer" aria-label="Deshacer">↶</button><button id="redoBtn" title="Rehacer" aria-label="Rehacer">↷</button></div></div>
+  </div>
+  <div class="card tableCard">
+    <div class="wrap" id="annualScroll" tabindex="0" aria-label="Tabla anual: desplaza para ver los meses"><table id="table"></table></div>
+  </div>
+</section>
+</div>
+
+<div class="modal" id="conceptModal"><div class="sheet">
+<h2>Agregar concepto</h2>
+<div class="field"><label>Nombre</label><input id="cName" placeholder="Ej. Netflix"></div>
+<div class="grid"><div class="field"><label>Grupo</label><select id="cType"><option value="income">Ingresos</option><option value="expense">Egresos</option><option value="investment">Inversión</option></select></div><div class="field"><label>Subgrupo</label><select id="cGroup"></select></div></div>
+<div class="grid"><div class="field"><label>Aplicar a</label><select id="cFreq"><option value="all">Todos los meses</option><option value="one">Solo un mes</option></select></div><div class="field"><label>Mes</label><select id="cMonth"></select></div></div>
+<div class="field"><label>Presupuesto</label><input id="cAmount" type="number" inputmode="decimal"></div>
+<div class="actions"><button class="cancel" data-close="conceptModal">Cancelar</button><button class="save" id="saveConceptBtn">Guardar</button></div>
+</div></div>
+
+<div class="modal" id="groupModal"><div class="sheet">
+<h2>Agregar subgrupo</h2>
+<div class="field"><label>Grupo</label><select id="gType"><option value="income">Ingresos</option><option value="expense">Egresos</option><option value="investment">Inversión</option></select></div>
+<div class="field"><label>Nombre</label><input id="gName" placeholder="Ej. Streaming"></div>
+<div class="actions"><button class="cancel" data-close="groupModal">Cancelar</button><button class="save" id="saveGroupBtn">Guardar</button></div>
+</div></div>
+
+<div class="modal" id="editGroupModal"><div class="sheet">
+<h2>Editar subgrupo</h2><input type="hidden" id="egType"><input type="hidden" id="egOld">
+<div class="field"><label>Nombre</label><input id="egName"></div>
+<div class="actions"><button class="danger" id="deleteGroupBtn">Eliminar</button><button class="cancel" data-close="editGroupModal">Cancelar</button><button class="save" id="renameGroupBtn">Guardar</button></div>
+</div></div>
+
+<div class="modal" id="moveModal"><div class="sheet">
+<h2>Mover concepto</h2><input type="hidden" id="moveId">
+<div class="field"><label>Nuevo subgrupo</label><select id="moveGroup"></select></div>
+<div class="actions"><button class="cancel" data-close="moveModal">Cancelar</button><button class="save" id="saveMoveBtn">Mover</button></div>
+</div></div>
+
+<div class="modal" id="yearModal"><div class="sheet">
+<h2>Crear nuevo año</h2>
+<div class="field"><label>Año</label><input id="newYear" type="number"></div>
+<div class="field"><label>Punto de partida</label><select id="yearBase">
+<option value="copy">Copiar estructura y presupuestos del año anterior</option>
+<option value="structure">Copiar solo estructura y conceptos</option>
+<option value="blank">Crear año vacío</option>
+</select></div>
+<div class="sub" style="display:block;margin:-4px 0 14px">Los valores reales siempre comenzarán en cero.</div>
+<div class="actions"><button class="cancel" data-close="yearModal">Cancelar</button><button class="save" id="saveYearBtn">Crear</button></div>
+</div></div>
+
+
+<div class="modal" id="scopeModal"><div class="sheet budget-sheet">
+<h2>Editar presupuesto</h2>
+<div class="sub" id="scopeDescription" style="display:block;margin-bottom:15px"></div>
+<div class="field">
+<label for="scopeAmount">Nuevo monto</label>
+<div class="money-entry"><span>S/</span><input id="scopeAmount" type="number" inputmode="decimal" min="0" step="0.01" autocomplete="off"></div>
+</div>
+<div class="field"><label for="scopeChoice">¿Dónde deseas aplicar el nuevo monto?</label>
+<select id="scopeChoice">
+<option value="one">Solo este mes</option>
+<option value="forward">Desde este mes hasta diciembre</option>
+<option value="all">Todos los meses del año</option>
+<option value="future">Desde este mes y en los años siguientes</option>
+</select></div>
+<div class="actions"><button class="cancel" id="cancelScopeBtn">Cancelar</button><button class="save" id="applyScopeBtn">Aplicar</button></div>
+</div></div>
+
+<div class="modal" id="reassignModal"><div class="sheet">
+<h2>Eliminar subgrupo</h2><p id="reassignInfo" class="catalog-help"></p>
+<div class="field"><label for="reassignGroup">Mover sus conceptos a</label><select id="reassignGroup"></select></div>
+<div class="actions"><button class="cancel" data-close="reassignModal">Cancelar</button><button class="save" id="confirmReassignBtn">Mover y eliminar subgrupo</button></div>
+</div></div>
+<div class="modal" id="conceptActionsModal"><div class="sheet"><h2 id="conceptMenuTitle">Opciones del concepto</h2><div class="actions"><button class="cancel" id="menuMoveBtn">Mover</button><button class="danger" id="menuDeleteBtn">Eliminar concepto</button></div><div class="actions" style="margin-top:10px"><button class="cancel" data-close="conceptActionsModal">Cerrar</button></div></div></div>
+<div class="modal" id="goalModal"><div class="sheet"><h2>Meta de inversión <span id="goalYear"></span></h2><div class="field"><label for="goalAmount">Monto anual en S/</label><div class="money-entry"><span>S/</span><input id="goalAmount" type="number" inputmode="decimal" min="0" step="0.01" autocomplete="off"></div></div><div class="actions"><button class="cancel" data-close="goalModal">Cancelar</button><button class="save" id="saveGoalBtn">Guardar</button></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const M=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const currentMonth=Math.min(new Date().getMonth(),11);
+const baseGroups={income:['Ingresos','Cuentas por cobrar'],expense:['Casa','Educación','Apps','Restaurantes','Auto','Gastos personales','Aportes a familia','Préstamos','Otros egresos'],investment:['ETF y acciones','Seguro de vida','Renta fija','Otros']};
+const zeros=()=>Array(12).fill(0);
+const seed=[];
+
+function loadDb(){
+  const keys=['aureoV16','aureoV15','aureoV14','aureoV13','aureoV12','aureoV11','aureoV10'];
+  for(const k of keys){
+    try{const v=JSON.parse(localStorage.getItem(k)||'null');if(v&&v.years)return v}catch(e){}
+  }
+  return {years:{2026:{goal:0,groups:structuredClone(baseGroups),items:structuredClone(seed),collapsed:{}}}}
+}
+let db=loadDb();
+// Migración de catálogo única; los subgrupos eliminados no reaparecen al recargar.
+if(!db.catalog32){
+ Object.values(db.years).forEach(y=>{
+  y.groups=y.groups||structuredClone(baseGroups);
+  y.groups.expense=y.groups.expense||[];
+  ['Auto','Préstamos'].forEach(g=>{if(!y.groups.expense.includes(g)&&!(g==='Auto'&&y.groups.expense.includes('Automóvil')))y.groups.expense.push(g)});
+ });
+ db.catalog32=true;
+}
+db.budgetRules=db.budgetRules||[];
+function applyBudgetRules(targetYear){
+ const target=db.years[targetYear];
+ (db.budgetRules||[]).slice().sort((a,b)=>a.year-b.year||a.month-b.month).forEach(r=>{
+  if(+targetYear<r.year)return;
+  const item=target.items.find(x=>x.id===r.id);
+  if(!item)return;
+  for(let m=+targetYear===r.year?r.month:0;m<12;m++)item.budget[m]=r.amount;
+ });
+}
+
+
+db.profileName=db.profileName||'Franz';
+Object.values(db.years).forEach(y=>{y.groups=y.groups||structuredClone(baseGroups);y.items=y.items||[];y.collapsed=y.collapsed||{}});
+let year=Number(Object.keys(db.years).sort((a,b)=>b-a)[0]);
+let annualView='detail',searchTerm='',timer,pendingEdit=null,budgetInputTimer=null;
+let undoStack=[],redoStack=[],lastSavedState=JSON.stringify(db),historyLocked=false;
+
+const $=id=>document.getElementById(id);
+const yd=()=>db.years[year];
+const persist=()=>{
+  const s=$('saveState');
+  if(s){s.textContent='Guardando…';s.classList.add('saving')}
+  localStorage.setItem('aureoV16',JSON.stringify(db));
+  clearTimeout(window.__saveStateTimer);
+  window.__saveStateTimer=setTimeout(()=>{
+    if(s){s.textContent='Guardado en este dispositivo';s.classList.remove('saving')}
+  },420);
+};
+const updateHistoryButtons=()=>{if($('undoBtn'))$('undoBtn').disabled=!undoStack.length;if($('redoBtn'))$('redoBtn').disabled=!redoStack.length};
+const save=()=>{
+  const current=JSON.stringify(db);
+  if(!historyLocked&&current!==lastSavedState){
+    undoStack.push(lastSavedState);
+    if(undoStack.length>60)undoStack.shift();
+    redoStack=[];
+  }
+  lastSavedState=current;
+  persist();
+  updateHistoryButtons();
+};
+const sum=a=>a.reduce((x,y)=>x+(+y||0),0);
+const money=n=>new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN',maximumFractionDigits:0}).format(+n||0);const compactMoney=n=>new Intl.NumberFormat('es-PE',{maximumFractionDigits:0}).format(+n||0);
+const typeItems=t=>yd().items.filter(x=>x.type===t);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const escJs=s=>String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+
+function monthTotals(m){
+  const o={income:0,expense:0,investment:0,bIncome:0,bExpense:0,bInvestment:0};
+  yd().items.forEach(x=>{
+    const a=+x.actual[m]||0,b=+x.budget[m]||0;
+    if(x.type==='income'){o.income+=b;o.bIncome+=b}
+    else if(x.type==='expense'){o.expense+=b;o.bExpense+=b}
+    else{o.investment+=a;o.bInvestment+=b}
+  });
+  o.available=o.income-o.expense-Math.max(o.bInvestment,o.investment);
+  o.projected=o.bIncome-o.bExpense-o.bInvestment;
+  return o
+}
+function totalType(t,f=(t==='investment'?'actual':'budget')){return sum(typeItems(t).flatMap(x=>x[f]))}
+function aggregate(arr,m){
+  const budget=sum(arr.map(x=>x.budget[m])),actual=sum(arr.map(x=>x.actual[m]));
+  return {budget,actual,available:budget-actual}
+}
+function statusClass(b,a){
+  if(b<=0)return a>0?'status-over':'';
+  const ratio=a/b;
+  if(ratio>1)return 'status-over';
+  if(ratio>=.85)return 'status-near';
+  return 'status-good';
+}
+function toastMsg(s){$('toast').textContent=s;$('toast').style.display='block';setTimeout(()=>$('toast').style.display='none',1600)}
+function pulse(ids){ids.forEach(id=>{const e=$(id);if(!e)return;e.classList.remove('pulse');void e.offsetWidth;e.classList.add('pulse');setTimeout(()=>e.classList.remove('pulse'),220)})}
+
+function renderYears(){
+  $('yearSel').innerHTML=Object.keys(db.years).sort((a,b)=>b-a).map(y=>`<option value="${y}" ${+y===year?'selected':''}>${y}</option>`).join('')
+}
+function renderDash(){
+  $('greetingBtn').textContent='¡Hola, '+(db.profileName||'Franz')+'! 👋';
+  const inc=totalType('income'),exp=totalType('expense'),inv=totalType('investment');
+  const left=Math.max(yd().goal-inv,0),pct=yd().goal?Math.min(inv/yd().goal*100,100):0;
+  $('goal').textContent=money(yd().goal);$('invested').textContent=money(inv);$('left').textContent=money(left);
+  const freeAvailable=sum(M.map((_,m)=>monthTotals(m).available));$('kMonth').textContent=money(monthTotals(currentMonth).available);$('kYear').textContent=money(freeAvailable);
+  $('kIncome').textContent=money(inc);$('kExpense').textContent=money(exp);$('kInvestment').textContent=money(inv);const freePct=inc?Math.max(0,Math.min(freeAvailable/inc*100,100)):0;$('freeAvailablePct').textContent=freePct.toFixed(0)+'%';$('freeAvailableBar').style.width=freePct+'%';$('freeAvailableAmount').textContent=money(freeAvailable);$('freeIncomeAmount').textContent=money(inc);
+  $('kInvestmentMonth').textContent=money(monthTotals(currentMonth).investment);
+  $('kRate').textContent=(inc?((inc-exp)/inc*100):0).toFixed(1)+'%';
+  const remainingMonths=Math.max(12-(currentMonth+1),1);
+  $('kRequired').textContent=money(left/remainingMonths);
+  $('ringPct').textContent=pct.toFixed(0)+'%';$('investmentProgress').style.width=pct+'%';
+  const c=2*Math.PI*48;$('ringValue').style.strokeDasharray=c;$('ringValue').style.strokeDashoffset=c*(1-pct/100);
+  $('sparkMonth').innerHTML=sparkline(M.map((_,i)=>monthTotals(i).available),'#237f68');
+  let run=0,cum=[];M.forEach((_,i)=>{run+=monthTotals(i).available;cum.push(run)});
+  $('sparkYear').innerHTML=sparkline(cum,'#4d73c6');
+}
+function sparkline(vals,color){
+  const w=160,h=30,p=2,min=Math.min(...vals),max=Math.max(...vals),range=max-min||1;
+  const pts=vals.map((v,i)=>`${p+i*(w-2*p)/(vals.length-1)},${h-p-(v-min)*(h-2*p)/range}`).join(' ');
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`
+}
+function renderCharts(){
+  const metric=$('metricSelect').value,vals=M.map((_,i)=>monthTotals(i)[metric]);
+  $('lineChart').innerHTML=lineSvg(vals);
+  const gs=(yd().groups.expense||[]).map(g=>({g,v:sum(typeItems('expense').filter(x=>x.group===g).flatMap(x=>x.budget))})).filter(x=>x.v>0);
+  const total=sum(gs.map(x=>x.v))||1,colors=['#c75e58','#665bcb','#237f68','#d7aa3d','#4d73c6','#8a6f9e'];
+  let acc=0,parts=[];gs.forEach((x,i)=>{const s=acc/total*360;acc+=x.v;parts.push(`${colors[i%colors.length]} ${s}deg ${acc/total*360}deg`)});
+  $('expensePie').style.background=parts.length?`conic-gradient(${parts.join(',')})`:'#edf0f6';
+  $('expenseLegend').innerHTML=gs.length?gs.map((x,i)=>`<div class="legend-item"><span><i class="dot" style="background:${colors[i%colors.length]}"></i>${esc(x.g)}</span><strong>${(x.v/total*100).toFixed(0)}%</strong></div>`).join(''):'<span class="sub">Sin egresos presupuestados</span>'
+}
+function lineSvg(vals){
+  const w=680,h=220,pl=46,pr=12,pt=12,pb=30,min=Math.min(0,...vals),max=Math.max(...vals,1),range=max-min||1;
+  const pts=vals.map((v,i)=>[pl+i*(w-pl-pr)/(vals.length-1),pt+(max-v)*(h-pt-pb)/range]);
+  const path=pts.map((p,i)=>(i?'L':'M')+p[0]+' '+p[1]).join(' ');
+  const grid=[0,.25,.5,.75,1].map(k=>{const y=pt+k*(h-pt-pb),val=max-k*range;return `<line x1="${pl}" y1="${y}" x2="${w-pr}" y2="${y}" stroke="#e8ecf3"/><text x="${pl-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#7a879d">${Math.round(val/1000)}k</text>`}).join('');
+  const labels=M.map((m,i)=>`<text x="${pts[i][0]}" y="${h-8}" text-anchor="middle" font-size="10" fill="#7a879d">${m}</text>`).join('');
+  const dots=pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#665bcb"><title>${M[i]}: ${money(vals[i])}</title></circle>`).join('');
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Evolución mensual">${grid}<path d="${path}" fill="none" stroke="#665bcb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`
+}
+
+function matches(text){return !searchTerm||text.toLowerCase().includes(searchTerm)}
+
+function renderTable(){
+ const labels=[['income','INGRESOS'],['expense','EGRESOS'],['investment','INVERSIÓN']];
+ let visible=0;
+ const cols='<col style="width:148px">'+M.map(()=>'<col style="width:84px">').join('')+'<col style="width:104px">';
+ let h='<colgroup>'+cols+'</colgroup><thead><tr><th>Concepto</th>'+M.map(m=>`<th>${m}</th>`).join('')+'<th>Total anual</th></tr></thead><tbody>';
+ const totals=(arr,f)=>M.map((_,m)=>`<td>${compactMoney(sum(arr.map(x=>x[f][m])))}</td>`).join('')+`<td>${compactMoney(sum(arr.flatMap(x=>x[f])))}</td>`;
+ labels.forEach(([t,label])=>{
+  const all=typeItems(t),inv=t==='investment',groups=(yd().groups[t]||[]).filter(g=>!searchTerm||matches(g)||all.some(x=>x.group===g&&matches(x.name)));
+  if(searchTerm&&!groups.length)return;visible++;
+  h+=`<tr class="macro ${t}"><td>${label}${inv?' · Ppto.':''}</td>${totals(all,'budget')}</tr>`;
+  if(inv)h+=`<tr class="macro investment"><td>↳ Invertido</td>${totals(all,'actual')}</tr>`;
+  groups.forEach(g=>{
+   const items=all.filter(x=>x.group===g),key=t+'|'+g,collapsed=!!yd().collapsed[key];
+   h+=`<tr class="group"><td><div class="group-title"><button class="group-toggle" data-toggle="${esc(key)}" title="${esc(g)}">${collapsed?'▶':'▼'} ${esc(g)}</button><button data-editgroup="${esc(key)}" aria-label="Opciones del subgrupo">⋯</button></div></td>${totals(items,'budget')}</tr>`;
+   if(inv)h+=`<tr class="group"><td>↳ Invertido</td>${totals(items,'actual')}</tr>`;
+   items.filter(x=>!searchTerm||matches(x.name)||matches(g)).forEach(x=>{
+    if(collapsed&&!searchTerm)return;
+    h+=`<tr data-item="${esc(x.id)}"><td><div class="concept-title"><input class="name" value="${esc(x.name)}" data-name="${esc(x.id)}" aria-label="Nombre del concepto"><button data-conceptmenu="${esc(x.id)}" aria-label="Opciones de ${esc(x.name)}">⋯</button></div></td>`;
+    M.forEach((_,m)=>{const b=+x.budget[m]||0;h+=`<td><input class="cell budget-cell" type="text" inputmode="none" readonly value="${compactMoney(b)}" data-cell="${esc(x.id)}|budget|${m}" aria-label="${inv?'Presupuesto':'Monto'} de ${M[m]}"></td>`});
+    h+=`<td>${compactMoney(sum(x.budget))}</td></tr>`;
+    if(inv){h+=`<tr data-investment="${esc(x.id)}"><td class="invested-label">↳ Invertido</td>`;M.forEach((_,m)=>{const a=+x.actual[m]||0,b=+x.budget[m]||0;h+=`<td class="${a>=b&&a>0?'investment-good':b>0?'investment-pending':''}"><input class="cell" type="number" inputmode="decimal" min="0" step="0.01" value="${a}" data-cell="${esc(x.id)}|actual|${m}" aria-label="Invertido en ${M[m]}"></td>`});h+=`<td>${compactMoney(sum(x.actual))}</td></tr>`}
+   });
+  });
+ });
+ if(!visible)h+=`<tr><td colspan="14" class="empty">No encontramos coincidencias para “${esc(searchTerm)}”.</td></tr>`;
+ h+='<tr class="total"><td>DISPONIBLE</td>'+M.map((_,m)=>`<td>${compactMoney(monthTotals(m).available)}</td>`).join('')+`<td>${compactMoney(sum(M.map((_,m)=>monthTotals(m).available)))}</td></tr></tbody>`;
+ $('table').innerHTML=h;
+}
+function deleteConcept(id){
+ const item=yd().items.find(x=>x.id===id);if(!item)return false;
+ if(!confirm(`¿Eliminar "${item.name}" y todos sus montos de ${year}? Puedes deshacer este cambio.`))return false;
+ yd().items=yd().items.filter(x=>x.id!==id);
+ if(pendingEdit&&pendingEdit.id===id){pendingEdit=null;closeModal('scopeModal')}
+ save();renderAll();toastMsg('Concepto y montos eliminados');return true;
+}
+
+function restoreState(serialized){
+  historyLocked=true;
+  db=JSON.parse(serialized);
+  db.profileName=db.profileName||'Franz';
+  Object.values(db.years).forEach(y=>{y.groups=y.groups||structuredClone(baseGroups);y.items=y.items||[];y.collapsed=y.collapsed||{}});
+  if(!db.years[year])year=Number(Object.keys(db.years).sort((a,b)=>b-a)[0]);
+  lastSavedState=JSON.stringify(db);
+  persist();
+  historyLocked=false;
+  renderAll();
+  updateHistoryButtons();
+}
+function undo(){
+  if(!undoStack.length)return;
+  redoStack.push(JSON.stringify(db));
+  restoreState(undoStack.pop());
+  toastMsg('Cambio deshecho');
+}
+function redo(){
+  if(!redoStack.length)return;
+  undoStack.push(JSON.stringify(db));
+  restoreState(redoStack.pop());
+  toastMsg('Cambio rehecho');
+}
+function renderAll(){renderYears();renderDash();renderCharts();renderTable();updateHistoryButtons()}
+function showPage(id,btn){
+  const next=$(id),current=document.querySelector('.page.active');
+  if(current===next)return;
+  if(current)current.classList.remove('active');
+  requestAnimationFrame(()=>next.classList.add('active'));
+  document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  if(id==='annual')renderTable();
+}
+function openModal(id){$(id).classList.add('open')}
+function closeModal(id){$(id).classList.remove('open')}
+function fillGroups(){ $('cGroup').innerHTML=(yd().groups[$('cType').value]||[]).map(g=>`<option>${esc(g)}</option>`).join('') }
+function openConcept(t){$('cType').value=t;fillGroups();$('cMonth').innerHTML=M.map((m,i)=>`<option value="${i}">${m}</option>`).join('');openModal('conceptModal')}
+function openGroup(t){$('gType').value=t;$('gName').value='';openModal('groupModal')}
+function openEditGroup(t,g){$('egType').value=t;$('egOld').value=g;$('egName').value=g;openModal('editGroupModal')}
+function openMove(id){const x=yd().items.find(i=>i.id===id);$('moveId').value=id;$('moveGroup').innerHTML=(yd().groups[x.type]||[]).map(g=>`<option ${g===x.group?'selected':''}>${esc(g)}</option>`).join('');openModal('moveModal')}
+
+function requestBudgetScope(input){
+  if($('scopeModal').classList.contains('open'))return true;
+  const [id,f,m]=input.dataset.cell.split('|');
+  if(f!=='budget')return false;
+  const x=yd().items.find(i=>i.id===id);
+  const current=Number(x.budget[+m])||0;
+  pendingEdit={id,f,month:+m,newValue:current,oldValue:current,input};
+  $('scopeDescription').textContent=`${x.name} · ${M[+m]}`;
+  $('scopeAmount').value=current;
+  $('scopeChoice').value='one';
+  openModal('scopeModal');
+  requestAnimationFrame(()=>{
+    $('scopeAmount').focus();
+    $('scopeAmount').select();
+  });
+  return true
+}
+function finishEditRefresh(){
+  save();renderDash();renderCharts();
+  pulse(['goal','kMonth','kYear','kIncome','kExpense','kInvestment','kInvestmentMonth','kRate','kRequired']);
+  renderTable()
+}
+
+
+
+let conceptMenuId=null;
+$('goal').addEventListener('click',()=>{
+ $('goalYear').textContent=year;$('goalAmount').value=yd().goal||0;openModal('goalModal');
+ requestAnimationFrame(()=>{$('goalAmount').focus();$('goalAmount').select()});
+});
+$('saveGoalBtn').addEventListener('click',()=>{
+ const raw=String($('goalAmount').value).trim(),amount=Number(raw.replace(',','.'));
+ if(!raw||!Number.isFinite(amount)||amount<0){$('goalAmount').focus();return toastMsg('Ingresa una meta válida')}
+ yd().goal=amount;save();renderDash();closeModal('goalModal');toastMsg('Meta anual actualizada');
+});
+$('goalAmount').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('saveGoalBtn').click()}});
+
+$('menuMoveBtn').addEventListener('click',()=>{closeModal('conceptActionsModal');if(conceptMenuId)openMove(conceptMenuId)});
+$('menuDeleteBtn').addEventListener('click',()=>{if(conceptMenuId&&deleteConcept(conceptMenuId))closeModal('conceptActionsModal')});
+$('greetingBtn').addEventListener('click',()=>{
+  const name=prompt('¿Cómo deseas que te salude Áureo?',db.profileName||'Franz');
+  if(name&&name.trim()){db.profileName=name.trim();save();renderDash();toastMsg('Nombre actualizado')}
+});
+$('undoBtn').addEventListener('click',undo);
+$('redoBtn').addEventListener('click',redo);
+document.addEventListener('keydown',e=>{
+  const mod=e.ctrlKey||e.metaKey;
+  if(mod&&e.key.toLowerCase()==='z'){
+    e.preventDefault();
+    if(e.shiftKey)redo();else undo();
+  }else if(mod&&e.key.toLowerCase()==='y'){e.preventDefault();redo()}
+});
+
+$('yearSel').addEventListener('change',e=>{year=+e.target.value;renderAll()});
+$('addYearBtn').addEventListener('click',()=>{$('newYear').value=Math.max(...Object.keys(db.years).map(Number))+1;openModal('yearModal')});
+$('metricSelect').addEventListener('change',renderCharts);
+$('searchInput').addEventListener('input',e=>{searchTerm=e.target.value.trim().toLowerCase();renderTable()});
+$('cType').addEventListener('change',fillGroups);
+$('quickConceptBtn').addEventListener('click',()=>openConcept('expense'));
+$('quickGroupBtn').addEventListener('click',()=>openGroup('expense'));
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page,b)));
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
+
+
+
+$('scopeAmount').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();$('applyScopeBtn').click()}
+});
+
+$('applyScopeBtn').addEventListener('click',()=>{
+  clearTimeout(budgetInputTimer);
+  if(!pendingEdit)return closeModal('scopeModal');
+  const raw=String($('scopeAmount').value).replace(',','.');
+  const amount=Number(raw);
+  if(!Number.isFinite(amount)||amount<0){
+    $('scopeAmount').focus();
+    return toastMsg('Ingresa un monto válido');
+  }
+  const x=yd().items.find(i=>i.id===pendingEdit.id),choice=$('scopeChoice').value;
+  if(choice==='one')x.budget[pendingEdit.month]=amount;
+  else if(choice==='forward')for(let i=pendingEdit.month;i<12;i++)x.budget[i]=amount;
+  else if(choice==='future'){
+    for(let m=pendingEdit.month;m<12;m++)x.budget[m]=amount;
+    db.budgetRules=db.budgetRules.filter(r=>r.id!==x.id||r.year<year||(r.year===year&&r.month<pendingEdit.month));
+    db.budgetRules.push({id:x.id,year,month:pendingEdit.month,amount});
+    Object.keys(db.years).filter(y=>+y>year).forEach(y=>{
+      const futureItem=db.years[y].items.find(i=>i.id===x.id);
+      if(futureItem)futureItem.budget.fill(amount);
+    });
+  }else x.budget.fill(amount);
+  pendingEdit=null;closeModal('scopeModal');finishEditRefresh();toastMsg('Presupuesto actualizado')
+});
+$('cancelScopeBtn').addEventListener('click',()=>{
+  clearTimeout(budgetInputTimer);
+  pendingEdit=null;
+  closeModal('scopeModal')
+});
+
+$('saveConceptBtn').addEventListener('click',()=>{
+  const name=$('cName').value.trim(),type=$('cType').value,group=$('cGroup').value,amount=+$('cAmount').value||0,budget=zeros();
+  if(!name)return toastMsg('Escribe un nombre');
+  if(!group)return toastMsg('Primero agrega un subgrupo');
+  if(!Number.isFinite(amount)||amount<0)return toastMsg('Ingresa un monto válido');
+  if($('cFreq').value==='all')budget.fill(amount);else budget[+$('cMonth').value]=amount;
+  yd().items.push({id:'c'+crypto.randomUUID(),type,group,name,budget,actual:zeros()});save();closeModal('conceptModal');$('cName').value='';$('cAmount').value='';renderAll();toastMsg('Concepto agregado')
+});
+$('saveGroupBtn').addEventListener('click',()=>{
+  const type=$('gType').value,name=$('gName').value.trim();if(!name)return toastMsg('Escribe un nombre');if(yd().groups[type].includes(name))return toastMsg('Ese subgrupo ya existe');
+  yd().groups[type].push(name);save();closeModal('groupModal');renderAll();toastMsg('Subgrupo agregado')
+});
+$('renameGroupBtn').addEventListener('click',()=>{
+  const type=$('egType').value,old=$('egOld').value,name=$('egName').value.trim();if(!name)return;
+  if(name!==old&&yd().groups[type].includes(name))return toastMsg('Ese nombre ya existe');
+  yd().groups[type]=yd().groups[type].map(g=>g===old?name:g);yd().items.filter(x=>x.type===type&&x.group===old).forEach(x=>x.group=name);
+  yd().collapsed[type+'|'+name]=yd().collapsed[type+'|'+old]||false;delete yd().collapsed[type+'|'+old];
+  save();closeModal('editGroupModal');renderAll();toastMsg('Subgrupo actualizado')
+});
+$('deleteGroupBtn').addEventListener('click',()=>{
+ const type=$('egType').value,g=$('egOld').value;
+ const affected=yd().items.filter(x=>x.type===type&&x.group===g);
+ if(affected.length){
+  const destinations=yd().groups[type].filter(x=>x!==g);
+  if(!destinations.length)return toastMsg('Crea otro subgrupo para conservar los conceptos');
+  $('reassignGroup').innerHTML=destinations.map(x=>`<option>${esc(x)}</option>`).join('');
+  $('reassignInfo').textContent=`Los ${affected.length} conceptos de “${g}” conservarán sus presupuestos e importes reales.`;
+  openModal('reassignModal');return;
+ }
+ if(confirm(`¿Eliminar el subgrupo "${g}"?`))removeGroup(type,g);
+});
+function removeGroup(type,g){
+ yd().groups[type]=yd().groups[type].filter(x=>x!==g);
+ delete yd().collapsed[type+'|'+g];
+ save();closeModal('editGroupModal');closeModal('reassignModal');renderAll();toastMsg('Subgrupo eliminado');
+}
+$('confirmReassignBtn').addEventListener('click',()=>{
+ const type=$('egType').value,g=$('egOld').value,dest=$('reassignGroup').value;
+ if(!dest||dest===g||!yd().groups[type].includes(dest))return;
+ yd().items.filter(x=>x.type===type&&x.group===g).forEach(x=>x.group=dest);
+ removeGroup(type,g);
+});
+$('saveMoveBtn').addEventListener('click',()=>{
+  const x=yd().items.find(i=>i.id===$('moveId').value);x.group=$('moveGroup').value;save();closeModal('moveModal');renderAll();toastMsg('Concepto movido')
+});
+$('saveYearBtn').addEventListener('click',()=>{
+  const y=+$('newYear').value;if(!Number.isInteger(y)||y<1900||y>9999||db.years[y])return toastMsg('Año no válido o ya existente');
+  const mode=$('yearBase').value;
+  const previous=Object.keys(db.years).map(Number).filter(n=>n<y).sort((a,b)=>b-a)[0];
+  if(mode!=='blank'&&!previous)return toastMsg('No hay un año anterior para copiar');
+  const source=previous?db.years[previous]:null;
+  if(mode==='copy'){
+    db.years[y]=structuredClone(source);
+    db.years[y].items.forEach(x=>x.actual=zeros());
+    db.years[y].collapsed={}
+  }else if(mode==='structure'){
+    db.years[y]=structuredClone(source);
+    db.years[y].items.forEach(x=>{x.budget=zeros();x.actual=zeros()});
+    db.years[y].collapsed={}
+  }else db.years[y]={goal:0,groups:structuredClone(baseGroups),items:[],collapsed:{}};
+  if(mode==='copy')applyBudgetRules(y);
+  year=y;save();closeModal('yearModal');renderAll();toastMsg('Año creado')
+});
+
+$('table').addEventListener('input',e=>{
+  if(e.target.dataset.name){
+    const x=yd().items.find(i=>i.id===e.target.dataset.name);
+    return;
+  }
+  if(e.target.dataset.cell){
+    const [id,f,m]=e.target.dataset.cell.split('|');
+    if(f==='budget')return;
+    const x=yd().items.find(i=>i.id===id);
+    x[f][+m]=Number(String(e.target.value).replace(',','.'))||0;
+    persist();
+    renderDash();
+    renderCharts();
+  }
+});
+$('table').addEventListener('change',e=>{
+  if(e.target.dataset.name){
+    const x=yd().items.find(i=>i.id===e.target.dataset.name);if(!x)return;
+    const name=e.target.value.trim();
+    if(!name){if(!deleteConcept(x.id))e.target.value=x.name;return}
+    x.name=name;save();return;
+  }
+  if(e.target.dataset.cell){save();renderTable()}
+
+});
+$('table').addEventListener('focusout',e=>{
+  if(e.target.dataset.name||e.target.dataset.cell)save();
+});
+$('table').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&e.target.dataset.cell){
+    const [,f]=e.target.dataset.cell.split('|');
+    if(f==='budget'){e.preventDefault();clearTimeout(budgetInputTimer);requestBudgetScope(e.target)}
+  }
+});
+// Keep a tap on Delete from being lost to a blur-triggered table rebuild.
+$('table').addEventListener('pointerdown',e=>{
+ if(e.target.closest('button[data-conceptmenu]'))e.preventDefault();
+});
+$('table').addEventListener('click',e=>{if(e.target.dataset.name)return;
+  const budgetCell=e.target.closest('input[data-cell*="|budget|"]');
+  if(budgetCell){requestBudgetScope(budgetCell);return}
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.conceptmenu){const item=yd().items.find(x=>x.id===b.dataset.conceptmenu);if(!item)return;conceptMenuId=item.id;$('conceptMenuTitle').textContent=item.name;openModal('conceptActionsModal')}
+  else if(b.dataset.toggle){const [t,g]=b.dataset.toggle.split('|');yd().collapsed[t+'|'+g]=!yd().collapsed[t+'|'+g];save();renderTable()}
+  else if(b.dataset.editgroup){const [t,g]=b.dataset.editgroup.split('|');openEditGroup(t,g)}
+  else if(b.dataset.addconcept)openConcept(b.dataset.addconcept)
+  else if(b.dataset.addgroup)openGroup(b.dataset.addgroup)
+  else if(b.dataset.move)openMove(b.dataset.move)
+  else if(b.dataset.remove)deleteConcept(b.dataset.remove)
+});
+
+
+// Apariencia: solo modo claro u oscuro
+let savedTheme=localStorage.getItem('aureoTheme');
+if(savedTheme!=='light'&&savedTheme!=='dark'){
+  savedTheme=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+}
+function applyTheme(mode){
+  const safeMode=mode==='dark'?'dark':'light';
+  document.documentElement.setAttribute('data-theme',safeMode);
+  localStorage.setItem('aureoTheme',safeMode);
+  if($('themeBtn'))$('themeBtn').textContent=safeMode==='dark'?'☀':'☾';
+}
+applyTheme(savedTheme);
+$('themeBtn').addEventListener('click',()=>{
+  const current=localStorage.getItem('aureoTheme')==='dark'?'dark':'light';
+  const next=current==='dark'?'light':'dark';
+  applyTheme(next);
+  toastMsg(next==='dark'?'Modo oscuro':'Modo claro');
+});
+
+// Instalación y modo standalone
+const isStandalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+if(isStandalone)document.body.classList.add('standalone');
+let deferredInstallPrompt=null;
+const installBanner=$('installBanner');
+const installText=$('installText');
+const installBtn=$('installBtn');
+const installDismissed=sessionStorage.getItem('aureoInstallDismissed')==='1';
+
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  if(!isStandalone&&!installDismissed)installBanner.classList.add('show');
+});
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+if(isIOS&&!isStandalone&&!installDismissed){
+  installText.textContent='En Safari, toca Compartir y luego “Agregar a pantalla de inicio”.';
+  installBtn.textContent='Ver cómo';
+  setTimeout(()=>installBanner.classList.add('show'),700);
+}
+installBtn.addEventListener('click',async()=>{
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt=null;
+    installBanner.classList.remove('show');
+  }else if(isIOS){
+    alert('Para instalar Áureo:\n\n1. Abre esta página en Safari.\\n2. Toca el botón Compartir.\\n3. Elige “Agregar a pantalla de inicio”.\\n4. Pulsa “Agregar”.');
+  }
+});
+$('installClose').addEventListener('click',()=>{
+  installBanner.classList.remove('show');
+  sessionStorage.setItem('aureoInstallDismissed','1');
+});
+window.addEventListener('appinstalled',()=>{
+  installBanner.classList.remove('show');
+  toastMsg('Áureo se instaló correctamente');
+});
+
+// Estado de conexión
+function updateOnlineState(){
+  $('offlinePill').classList.toggle('show',!navigator.onLine);
+}
+window.addEventListener('online',()=>{updateOnlineState();toastMsg('Conexión restablecida')});
+window.addEventListener('offline',updateOnlineState);
+updateOnlineState();
+
+// Service worker
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+
+persist();
+renderAll();
+</script>
+
+<script>
+(function(){
+  function refreshEditableText(root){
+    (root||document).querySelectorAll('input, textarea, [contenteditable="true"]').forEach(function(el){
+      el.style.removeProperty('color');
+      el.style.removeProperty('-webkit-text-fill-color');
+      el.style.removeProperty('background');
+      el.style.setProperty('opacity','1','important');
+    });
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    refreshEditableText(document);
+    new MutationObserver(function(mutations){
+      mutations.forEach(function(m){
+        m.addedNodes.forEach(function(node){
+          if(node.nodeType===1)refreshEditableText(node);
+        });
+      });
+    }).observe(document.body,{childList:true,subtree:true});
+  });
+})();
+</script>
+
+</body>
+</html>
