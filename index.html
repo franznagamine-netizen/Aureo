@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-<title>Áureo 3.2.8</title>
+<title>Áureo 3.2.9</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -593,7 +593,7 @@ button[data-cell*="|budget|"]{
 table input:focus{opacity:1 !important;text-shadow:none !important}
 
 
-/* Áureo 3.2.8 */
+/* Áureo 3.2.9 */
 .hero{color:white!important}
 :root{--ink:var(--text)}
 body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -611,7 +611,7 @@ body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI
 :root[data-theme="dark"] .view-switch button.active{background:#34415b;color:white}
 :root[data-theme="dark"] .group td{color:var(--text)}
 
-/* Áureo 3.2.8: tabla única, como en 3.2. */
+/* Áureo 3.2.9: tabla única, como en 3.2. */
 .month-scroll{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:7px 10px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}
 .month-scroll button{width:34px;height:30px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);font-size:24px;line-height:1}
 
@@ -786,8 +786,8 @@ header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-i
       <small>META DE INVERSIÓN ANUAL</small>
       <button class="big goal-edit" id="goal" aria-label="Editar meta de inversión anual" title="Editar meta anual"></button><span class="goal-edit-hint">Toca el monto para editar</span>
       <div class="hero-meta">
-        <div><small>Invertido</small><strong id="invested"></strong></div>
-        <div><small>Falta</small><strong id="left"></strong></div>
+        <div><small>Registrada y prevista</small><strong id="invested"></strong></div>
+        <div><small>Falta para la meta</small><strong id="left"></strong></div>
       </div>
     </div>
     <div class="ring-wrap">
@@ -803,10 +803,10 @@ header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-i
     <div class="kpi"><div class="label">Disponible libre del año</div><div class="value blue" id="kYear"></div><div class="spark" id="sparkYear"></div></div>
     <div class="kpi"><div class="label">Ingresos previstos del año</div><div class="value green" id="kIncome"></div></div>
     <div class="kpi"><div class="label">Egresos previstos del año</div><div class="value red" id="kExpense"></div></div>
-    <div class="kpi"><div class="label">Inversión del año</div><div class="value purple" id="kInvestment"></div><div class="progress"><span id="investmentProgress"></span></div></div>
-    <div class="kpi"><div class="label">Inversión este mes</div><div class="value purple" id="kInvestmentMonth"></div></div>
+    <div class="kpi"><div class="label">Inversión registrada y prevista del año</div><div class="value purple" id="kInvestment"></div><div class="progress"><span id="investmentProgress"></span></div></div>
+    <div class="kpi"><div class="label">Inversión registrada y prevista este mes</div><div class="value purple" id="kInvestmentMonth"></div></div>
     <div class="kpi"><div class="label">% de ahorro e inversión previstos</div><div class="value" id="kRate"></div></div>
-    <div class="kpi"><div class="label">Inversión mensual requerida</div><div class="value purple" id="kRequired"></div></div>
+    <div class="kpi"><div class="label">Por asignar al mes para la meta</div><div class="value purple" id="kRequired"></div></div>
   </div>
 
   <div class="card" id="freeAvailableCard">
@@ -988,13 +988,13 @@ function monthTotals(m){
     const a=+x.actual[m]||0,b=+x.budget[m]||0;
     if(x.type==='income'){o.income+=b;o.bIncome+=b}
     else if(x.type==='expense'){o.expense+=b;o.bExpense+=b}
-    else{o.investment+=a;o.bInvestment+=b}
+    else{o.investment+=b;o.bInvestment+=b}
   });
-  o.available=o.income-o.expense-Math.max(o.bInvestment,o.investment);
+  o.available=o.income-o.expense-o.investment;
   o.projected=o.bIncome-o.bExpense-o.bInvestment;
   return o
 }
-function totalType(t,f=(t==='investment'?'actual':'budget')){return sum(typeItems(t).flatMap(x=>x[f]))}
+function totalType(t,f='budget'){return sum(typeItems(t).flatMap(x=>x[f]))}
 function aggregate(arr,m){
   const budget=sum(arr.map(x=>x.budget[m])),actual=sum(arr.map(x=>x.actual[m]));
   return {budget,actual,available:budget-actual}
@@ -1064,7 +1064,7 @@ function renderTable(){
  labels.forEach(([t,label])=>{
   const all=typeItems(t),inv=t==='investment',groups=(yd().groups[t]||[]).filter(g=>!searchTerm||matches(g)||all.some(x=>x.group===g&&matches(x.name)));
   if(searchTerm&&!groups.length)return;visible++;
-  h+=`<tr class="macro ${t}"><td>${label}${inv?' · Ppto.':''}</td>${totals(all,'budget')}</tr>`;
+  h+=`<tr class="macro ${t}"><td>${label}</td>${totals(all,'budget')}</tr>`;
 
   groups.forEach(g=>{
    const items=all.filter(x=>x.group===g),key=t+'|'+g,collapsed=!!yd().collapsed[key];
