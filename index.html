@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-<title>Áureo 3.2.7</title>
+<title>Áureo 3.2.8</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -524,7 +524,7 @@ body.dark .money-entry input{
   border-color:#34415C !important;
   color-scheme:dark !important;
 }
-input[data-cell*="|budget|"]{
+button[data-cell*="|budget|"]{
   cursor:pointer;
   user-select:none;
 }
@@ -552,12 +552,12 @@ input[data-cell*="|budget|"]{
   caret-color:#F2F5FA !important;
   border-color:#3A465C !important;
 }
-:root[data-theme="light"] input.budget-cell{
+:root[data-theme="light"] button.budget-cell{
   background:transparent !important;
   color:#24324A !important;
   -webkit-text-fill-color:#24324A !important;
 }
-:root[data-theme="dark"] input.budget-cell{
+:root[data-theme="dark"] button.budget-cell{
   background:#202A3D !important;
   color:#F2F5FA !important;
   -webkit-text-fill-color:#F2F5FA !important;
@@ -593,7 +593,7 @@ input[data-cell*="|budget|"]{
 table input:focus{opacity:1 !important;text-shadow:none !important}
 
 
-/* Áureo 3.2.7 */
+/* Áureo 3.2.8 */
 .hero{color:white!important}
 :root{--ink:var(--text)}
 body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -611,7 +611,7 @@ body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI
 :root[data-theme="dark"] .view-switch button.active{background:#34415b;color:white}
 :root[data-theme="dark"] .group td{color:var(--text)}
 
-/* Áureo 3.2.7: tabla única, como en 3.2. */
+/* Áureo 3.2.8: tabla única, como en 3.2. */
 .month-scroll{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:7px 10px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}
 .month-scroll button{width:34px;height:30px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);font-size:24px;line-height:1}
 
@@ -619,6 +619,7 @@ body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI
 #table{width:1260px;min-width:1260px;max-width:none;table-layout:fixed}
 #table th,#table td{padding:7px 5px;font-size:12px}
 #table th:first-child,#table td:first-child{width:148px;min-width:148px;max-width:148px}
+#table button.budget-cell{border:0;border-radius:5px;text-align:right;font-family:inherit;color:var(--text);background:transparent;cursor:pointer;touch-action:manipulation;min-height:36px}
 #table .cell{display:block;min-width:0;width:100%;font-size:12px;padding:4px 0}
 .concept-title{display:flex;align-items:center;gap:3px;min-width:0}
 .concept-title .name{min-width:0;width:100%;flex:1;font-size:12px}
@@ -1064,17 +1065,16 @@ function renderTable(){
   const all=typeItems(t),inv=t==='investment',groups=(yd().groups[t]||[]).filter(g=>!searchTerm||matches(g)||all.some(x=>x.group===g&&matches(x.name)));
   if(searchTerm&&!groups.length)return;visible++;
   h+=`<tr class="macro ${t}"><td>${label}${inv?' · Ppto.':''}</td>${totals(all,'budget')}</tr>`;
-  if(inv)h+=`<tr class="macro investment"><td>↳ Invertido</td>${totals(all,'actual')}</tr>`;
+
   groups.forEach(g=>{
    const items=all.filter(x=>x.group===g),key=t+'|'+g,collapsed=!!yd().collapsed[key];
-   h+=`<tr class="group"><td><div class="group-title"><button class="group-toggle" data-toggle="${esc(key)}" title="${esc(g)}">${collapsed?'▶':'▼'} ${esc(g)}</button><button data-editgroup="${esc(key)}" aria-label="Opciones del subgrupo">⋯</button></div></td>${totals(items,'budget')}</tr>`;
-   if(inv)h+=`<tr class="group"><td>↳ Invertido</td>${totals(items,'actual')}</tr>`;
+   if(!inv)h+=`<tr class="group"><td><div class="group-title"><button class="group-toggle" data-toggle="${esc(key)}" title="${esc(g)}">${collapsed?'▶':'▼'} ${esc(g)}</button><button data-editgroup="${esc(key)}" aria-label="Opciones del subgrupo">⋯</button></div></td>${totals(items,'budget')}</tr>`;
+
    items.filter(x=>!searchTerm||matches(x.name)||matches(g)).forEach(x=>{
-    if(collapsed&&!searchTerm)return;
+    if(!inv&&collapsed&&!searchTerm)return;
     h+=`<tr data-item="${esc(x.id)}"><td><div class="concept-title"><input class="name" value="${esc(x.name)}" data-name="${esc(x.id)}" aria-label="Nombre del concepto"><button data-conceptmenu="${esc(x.id)}" aria-label="Opciones de ${esc(x.name)}">⋯</button></div></td>`;
-    M.forEach((_,m)=>{const b=+x.budget[m]||0;h+=`<td><input class="cell budget-cell" type="text" inputmode="none" readonly value="${compactMoney(b)}" data-cell="${esc(x.id)}|budget|${m}" aria-label="${inv?'Presupuesto':'Monto'} de ${M[m]}"></td>`});
+    M.forEach((_,m)=>{const b=+x.budget[m]||0;h+=`<td><button class="cell budget-cell" type="button" data-cell="${esc(x.id)}|budget|${m}" aria-label="Editar presupuesto de ${esc(x.name)}, ${M[m]}">${compactMoney(b)}</button></td>`});
     h+=`<td>${compactMoney(sum(x.budget))}</td></tr>`;
-    if(inv){h+=`<tr data-investment="${esc(x.id)}"><td class="invested-label">↳ Invertido</td>`;M.forEach((_,m)=>{const a=+x.actual[m]||0,b=+x.budget[m]||0;h+=`<td class="${a>=b&&a>0?'investment-good':b>0?'investment-pending':''}"><input class="cell" type="number" inputmode="decimal" min="0" step="0.01" value="${a}" data-cell="${esc(x.id)}|actual|${m}" aria-label="Invertido en ${M[m]}"></td>`});h+=`<td>${compactMoney(sum(x.actual))}</td></tr>`}
    });
   });
  });
@@ -1333,7 +1333,7 @@ $('table').addEventListener('pointerdown',e=>{
  if(e.target.closest('button[data-conceptmenu]'))e.preventDefault();
 });
 $('table').addEventListener('click',e=>{if(e.target.dataset.name)return;
-  const budgetCell=e.target.closest('input[data-cell*="|budget|"]');
+  const budgetCell=e.target.closest('button[data-cell*="|budget|"]');
   if(budgetCell){requestBudgetScope(budgetCell);return}
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.conceptmenu){const item=yd().items.find(x=>x.id===b.dataset.conceptmenu);if(!item)return;conceptMenuId=item.id;$('conceptMenuTitle').textContent=item.name;openModal('conceptActionsModal')}
