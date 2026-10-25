@@ -1,4 +1,4 @@
-Áureo 3.2.10
+Áureo 3.2.11
 
 Sube los archivos de este ZIP a la misma raíz del repositorio Aureo. No cambies la dirección ni desinstales la app.
 
@@ -13,3 +13,5 @@ Al abrir desde el mismo dispositivo y navegador, se recupera aureoV16 y se conse
 Al editar o eliminar un aporte histórico, no se modifican las celdas de Detalle. El registro refleja aportes, no rentabilidad ni valor de mercado.
 
 El respaldo JSON contiene datos personales. No lo subas al repositorio público.
+
+Versión 3.2.11: filas de Detalle más bajas, herramientas en dos líneas compactas, respaldo discreto y tarjeta de inversiones reducida. Mismos datos y cálculos de 3.2.10.
