@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-<title>Áureo 3.2.9</title>
+<title>Áureo 3.2.10</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -593,7 +593,7 @@ button[data-cell*="|budget|"]{
 table input:focus{opacity:1 !important;text-shadow:none !important}
 
 
-/* Áureo 3.2.9 */
+/* Áureo 3.2.10 */
 .hero{color:white!important}
 :root{--ink:var(--text)}
 body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -611,7 +611,7 @@ body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI
 :root[data-theme="dark"] .view-switch button.active{background:#34415b;color:white}
 :root[data-theme="dark"] .group td{color:var(--text)}
 
-/* Áureo 3.2.9: tabla única, como en 3.2. */
+/* Áureo 3.2.10: tabla única, como en 3.2. */
 .month-scroll{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:7px 10px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}
 .month-scroll button{width:34px;height:30px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);font-size:24px;line-height:1}
 
@@ -747,6 +747,25 @@ header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-i
 #home .goal-edit{display:block;align-self:flex-start;border:0;border-radius:5px;background:transparent;color:var(--text);padding:0;cursor:pointer;text-align:left;font-family:inherit}
 #home .goal-edit:focus-visible{outline:2px solid var(--green);outline-offset:4px}
 #home .goal-edit-hint{font-size:9px;color:var(--muted);margin-top:4px}
+
+/* Controles compactos y tamaño ajustable de la tabla. */
+.utility-row,.zoom-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.utility-row{justify-content:space-between;margin:10px 0}
+.utility-row button,.zoom-controls button,.ledger-actions button{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:8px;padding:8px 10px;font:inherit}
+.zoom-controls button{min-width:36px;min-height:36px}
+#zoomValue{min-width:42px;text-align:center;font-size:12px}
+#table{width:calc(1260px * var(--table-scale,1));min-width:calc(1260px * var(--table-scale,1))}
+#table th,#table td{font-size:calc(10.5px * var(--table-scale,1));padding:calc(4px * var(--table-scale,1));height:calc(27px * var(--table-scale,1))}
+#table th:first-child,#table td:first-child{width:calc(148px * var(--table-scale,1));min-width:calc(148px * var(--table-scale,1));max-width:calc(148px * var(--table-scale,1))}
+#table .cell,#table .name,#table .group-toggle{font-size:calc(10.5px * var(--table-scale,1))}
+#table button.budget-cell{min-height:calc(36px * var(--table-scale,1))}
+#table .concept-title button{font-size:calc(16px * var(--table-scale,1));flex-basis:calc(21px * var(--table-scale,1));height:calc(21px * var(--table-scale,1))}
+.ledger-row{display:flex;gap:10px;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:10px 0}
+.ledger-row small{display:block;color:var(--muted)}
+.ledger-actions{display:flex;gap:5px;flex-wrap:wrap}
+.sheet .help{color:var(--muted);font-size:12px;line-height:1.5}
+#investmentHistory{max-height:300px;overflow:auto}
+#scopeRange[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -780,14 +799,15 @@ header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-i
   <button data-page="annual"><span class="nav-icon">▦</span><span>Detalle</span></button>
 </nav>
 
+<div class="utility-row"><small>Áureo 3.2.10</small><button id="backupBtn">Respaldo</button></div>
 <section id="home" class="page active">
   <div class="card hero">
     <div class="hero-copy">
       <small>META DE INVERSIÓN ANUAL</small>
       <button class="big goal-edit" id="goal" aria-label="Editar meta de inversión anual" title="Editar meta anual"></button><span class="goal-edit-hint">Toca el monto para editar</span>
       <div class="hero-meta">
-        <div><small>Registrada y prevista</small><strong id="invested"></strong></div>
-        <div><small>Falta para la meta</small><strong id="left"></strong></div>
+        <div><small>Ya invertido</small><strong id="invested"></strong></div>
+        <div><small>Falta por invertir</small><strong id="left"></strong></div>
       </div>
     </div>
     <div class="ring-wrap">
@@ -798,20 +818,26 @@ header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-i
     </div>
   </div>
 
+  <div class="card">
+<div class="utility-row"><h2>Inversiones realizadas</h2><button id="addInvestmentBtn">＋ Registrar inversión</button></div>
+<p class="help">Registra aquí tus aportes realizados. En Detalle deja solamente lo pendiente de invertir.</p>
+<div class="hero-meta"><div><small>Pendiente en Detalle</small><strong id="plannedInvestment"></strong></div><div><small>Por asignar para la meta</small><strong id="unassignedInvestment"></strong></div></div>
+<details><summary>Ver y editar aportes del año</summary><div id="investmentHistory"></div></details>
+</div>
   <div class="kpis">
     <div class="kpi"><div class="label">Disponible este mes</div><div class="value green" id="kMonth"></div><div class="spark" id="sparkMonth"></div></div>
     <div class="kpi"><div class="label">Disponible libre del año</div><div class="value blue" id="kYear"></div><div class="spark" id="sparkYear"></div></div>
-    <div class="kpi"><div class="label">Ingresos previstos del año</div><div class="value green" id="kIncome"></div></div>
-    <div class="kpi"><div class="label">Egresos previstos del año</div><div class="value red" id="kExpense"></div></div>
-    <div class="kpi"><div class="label">Inversión registrada y prevista del año</div><div class="value purple" id="kInvestment"></div><div class="progress"><span id="investmentProgress"></span></div></div>
-    <div class="kpi"><div class="label">Inversión registrada y prevista este mes</div><div class="value purple" id="kInvestmentMonth"></div></div>
-    <div class="kpi"><div class="label">% de ahorro e inversión previstos</div><div class="value" id="kRate"></div></div>
+    <div class="kpi"><div class="label">Saldo e ingresos pendientes del año</div><div class="value green" id="kIncome"></div></div>
+    <div class="kpi"><div class="label">Pagos pendientes del año</div><div class="value red" id="kExpense"></div></div>
+    <div class="kpi"><div class="label">Inversión realizada + pendiente del año</div><div class="value purple" id="kInvestment"></div><div class="progress"><span id="investmentProgress"></span></div></div>
+    <div class="kpi"><div class="label">Pendiente de invertir este mes</div><div class="value purple" id="kInvestmentMonth"></div></div>
+    <div class="kpi"><div class="label">% disponible e inversión pendiente</div><div class="value" id="kRate"></div></div>
     <div class="kpi"><div class="label">Por asignar al mes para la meta</div><div class="value purple" id="kRequired"></div></div>
   </div>
 
   <div class="card" id="freeAvailableCard">
     <div class="chart-head">
-      <div><h2>Disponible libre respecto a ingresos</h2><div class="sub" style="display:block">Según presupuesto, reservando la inversión obligatoria</div></div>
+      <div><h2>Disponible libre respecto a ingresos</h2><div class="sub" style="display:block">Según saldos pendientes, reservando la inversión de Detalle</div></div>
       <strong id="freeAvailablePct" class="blue">0%</strong>
     </div>
     <div class="progress" style="height:12px"><span id="freeAvailableBar" style="background:var(--blue);width:0%"></span></div>
@@ -836,6 +862,7 @@ header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-i
 <section id="annual" class="page">
   <div class="detail-tools">
     <div class="detail-tools-top"><b>Detalle <span>S/</span></b><div class="catalog-actions"><button id="quickConceptBtn">＋ Concepto</button><button id="quickGroupBtn">＋ Subgrupo</button></div></div>
+    <div class="utility-row"><span style="font-size:12px;color:var(--muted)">Saldos, pagos e inversiones pendientes</span><div class="zoom-controls" aria-label="Tamaño de la tabla"><button id="zoomOut" aria-label="Reducir tamaño de celdas">−</button><output id="zoomValue" aria-live="polite">100%</output><button id="zoomIn" aria-label="Aumentar tamaño de celdas">＋</button><button id="zoomReset">100%</button></div></div>
     <div class="detail-tools-search"><input id="searchInput" class="search" type="search" placeholder="Buscar" aria-label="Buscar concepto o subgrupo"><div class="history-controls"><button id="undoBtn" title="Deshacer" aria-label="Deshacer">↶</button><button id="redoBtn" title="Rehacer" aria-label="Rehacer">↷</button></div></div>
   </div>
   <div class="card tableCard">
@@ -895,10 +922,13 @@ header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-i
 <div class="field"><label for="scopeChoice">¿Dónde deseas aplicar el nuevo monto?</label>
 <select id="scopeChoice">
 <option value="one">Solo este mes</option>
+<option value="range">Elegir rango de meses</option>
 <option value="forward">Desde este mes hasta diciembre</option>
 <option value="all">Todos los meses del año</option>
 <option value="future">Desde este mes y en los años siguientes</option>
 </select></div>
+<div class="grid" id="scopeRange" hidden><div class="field"><label for="scopeFrom">Desde</label><select id="scopeFrom"></select></div><div class="field"><label for="scopeTo">Hasta</label><select id="scopeTo"></select></div></div>
+<p class="help">Para borrar montos, escribe 0 y elige los meses.</p>
 <div class="actions"><button class="cancel" id="cancelScopeBtn">Cancelar</button><button class="save" id="applyScopeBtn">Aplicar</button></div>
 </div></div>
 
@@ -909,6 +939,22 @@ header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-i
 </div></div>
 <div class="modal" id="conceptActionsModal"><div class="sheet"><h2 id="conceptMenuTitle">Opciones del concepto</h2><div class="actions"><button class="cancel" id="menuMoveBtn">Mover</button><button class="danger" id="menuDeleteBtn">Eliminar concepto</button></div><div class="actions" style="margin-top:10px"><button class="cancel" data-close="conceptActionsModal">Cerrar</button></div></div></div>
 <div class="modal" id="goalModal"><div class="sheet"><h2>Meta de inversión <span id="goalYear"></span></h2><div class="field"><label for="goalAmount">Monto anual en S/</label><div class="money-entry"><span>S/</span><input id="goalAmount" type="number" inputmode="decimal" min="0" step="0.01" autocomplete="off"></div></div><div class="actions"><button class="cancel" data-close="goalModal">Cancelar</button><button class="save" id="saveGoalBtn">Guardar</button></div></div></div>
+
+<div class="modal" id="backupModal"><div class="sheet"><h2>Respaldo de tus datos</h2>
+<p class="help">Exporta todos los años, montos, conceptos, metas e inversiones realizadas. Guarda el archivo en Archivos del iPhone.</p>
+<div class="actions"><button class="save" id="exportBackupBtn">Exportar respaldo</button><button class="cancel" id="importBackupBtn">Restaurar archivo</button></div>
+<input type="file" id="backupFile" accept=".json,application/json" hidden>
+<p class="help">Antes de esta actualización se conserva una copia local de los datos existentes. Esta copia sigue en este dispositivo: expórtala para tenerla aparte.</p>
+<div class="actions"><button class="cancel" id="exportPreviousBtn">Exportar copia anterior</button><button class="cancel" id="exportBeforeRestoreBtn">Exportar copia previa a restauración</button><button class="cancel" data-close="backupModal">Cerrar</button></div>
+</div></div>
+<div class="modal" id="investmentModal"><div class="sheet"><h2 id="investmentTitle">Registrar inversión realizada</h2>
+<div class="field"><label for="investmentMode">Registro</label><select id="investmentMode"><option value="history">Aporte ya realizado (sin modificar Detalle)</option><option value="planned">Realizar una inversión pendiente de Detalle</option></select></div>
+<div class="grid"><div class="field"><label for="investmentMonth">Mes del aporte</label><select id="investmentMonth"></select></div><div class="field"><label for="investmentAmount">Monto en S/</label><input id="investmentAmount" type="number" inputmode="decimal" min="0.01" step="0.01"></div></div>
+<div class="field" id="investmentNameField"><label for="investmentName">Concepto</label><input id="investmentName" placeholder="ETF y acciones / Seguro de vida" maxlength="160"></div>
+<div class="field" id="investmentItemField" hidden><label for="investmentItem">Inversión pendiente</label><select id="investmentItem"></select></div>
+<p class="help" id="investmentHelp">Suma al avance anual sin descontarse del disponible. No dupliques aquí un aporte que todavía figura como pendiente en Detalle.</p>
+<div class="actions"><button class="cancel" data-close="investmentModal">Cancelar</button><button class="save" id="saveInvestmentBtn">Guardar aporte</button></div>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -921,20 +967,18 @@ const seed=[];
 function loadDb(){
   const keys=['aureoV16','aureoV15','aureoV14','aureoV13','aureoV12','aureoV11','aureoV10'];
   for(const k of keys){
-    try{const v=JSON.parse(localStorage.getItem(k)||'null');if(v&&v.years)return v}catch(e){}
+    const raw=localStorage.getItem(k);
+    if(raw===null)continue;
+    let v;
+    try{v=JSON.parse(raw)}catch(e){alert('No se pudieron leer los datos guardados. No se han reemplazado.');throw e}
+    if(!v||!v.years){alert('Los datos guardados requieren revisión. No se han reemplazado.');throw new Error('Datos guardados no válidos')}
+    if(!localStorage.getItem('aureoBackupBefore3210'))localStorage.setItem('aureoBackupBefore3210',JSON.stringify({app:'Aureo',version:'3.2.10',createdAt:new Date().toISOString(),db:v,preferences:{theme:localStorage.getItem('aureoTheme'),tableZoom:localStorage.getItem('aureoTableZoom')}}));
+    return v;
   }
   return {years:{2026:{goal:0,groups:structuredClone(baseGroups),items:structuredClone(seed),collapsed:{}}}}
 }
 let db=loadDb();
-// Migración de catálogo única; los subgrupos eliminados no reaparecen al recargar.
-if(!db.catalog32){
- Object.values(db.years).forEach(y=>{
-  y.groups=y.groups||structuredClone(baseGroups);
-  y.groups.expense=y.groups.expense||[];
-  ['Auto','Préstamos'].forEach(g=>{if(!y.groups.expense.includes(g)&&!(g==='Auto'&&y.groups.expense.includes('Automóvil')))y.groups.expense.push(g)});
- });
- db.catalog32=true;
-}
+// Se respeta el catálogo guardado, incluidas sus eliminaciones.
 db.budgetRules=db.budgetRules||[];
 function applyBudgetRules(targetYear){
  const target=db.years[targetYear];
@@ -1015,14 +1059,17 @@ function renderYears(){
 function renderDash(){
   $('greetingBtn').textContent='¡Hola, '+(db.profileName||'Franz')+'! 👋';
   const inc=totalType('income'),exp=totalType('expense'),inv=totalType('investment');
-  const left=Math.max(yd().goal-inv,0),pct=yd().goal?Math.min(inv/yd().goal*100,100):0;
-  $('goal').textContent=money(yd().goal);$('invested').textContent=money(inv);$('left').textContent=money(left);
+  const done=investmentRecords().reduce((n,r)=>n+r.amount,0);
+  const left=Math.max(yd().goal-done,0),gap=Math.max(left-inv,0),pct=yd().goal?Math.min(done/yd().goal*100,100):0;
+  $('plannedInvestment').textContent=money(inv);$('unassignedInvestment').textContent=money(gap);
+  renderInvestmentHistory();
+  $('goal').textContent=money(yd().goal);$('invested').textContent=money(done);$('left').textContent=money(left);
   const freeAvailable=sum(M.map((_,m)=>monthTotals(m).available));$('kMonth').textContent=money(monthTotals(currentMonth).available);$('kYear').textContent=money(freeAvailable);
-  $('kIncome').textContent=money(inc);$('kExpense').textContent=money(exp);$('kInvestment').textContent=money(inv);const freePct=inc?Math.max(0,Math.min(freeAvailable/inc*100,100)):0;$('freeAvailablePct').textContent=freePct.toFixed(0)+'%';$('freeAvailableBar').style.width=freePct+'%';$('freeAvailableAmount').textContent=money(freeAvailable);$('freeIncomeAmount').textContent=money(inc);
+  $('kIncome').textContent=money(inc);$('kExpense').textContent=money(exp);$('kInvestment').textContent=money(done+inv);const freePct=inc?Math.max(0,Math.min(freeAvailable/inc*100,100)):0;$('freeAvailablePct').textContent=freePct.toFixed(0)+'%';$('freeAvailableBar').style.width=freePct+'%';$('freeAvailableAmount').textContent=money(freeAvailable);$('freeIncomeAmount').textContent=money(inc);
   $('kInvestmentMonth').textContent=money(monthTotals(currentMonth).investment);
   $('kRate').textContent=(inc?((inc-exp)/inc*100):0).toFixed(1)+'%';
-  const remainingMonths=Math.max(12-(currentMonth+1),1);
-  $('kRequired').textContent=money(left/remainingMonths);
+  const remainingMonths=year>new Date().getFullYear()?12:year<new Date().getFullYear()?0:12-currentMonth;
+  $('kRequired').textContent=remainingMonths?money(gap/remainingMonths):money(gap);
   $('ringPct').textContent=pct.toFixed(0)+'%';$('investmentProgress').style.width=pct+'%';
   const c=2*Math.PI*48;$('ringValue').style.strokeDasharray=c;$('ringValue').style.strokeDashoffset=c*(1-pct/100);
   $('sparkMonth').innerHTML=sparkline(M.map((_,i)=>monthTotals(i).available),'#237f68');
@@ -1058,7 +1105,7 @@ function matches(text){return !searchTerm||text.toLowerCase().includes(searchTer
 function renderTable(){
  const labels=[['income','INGRESOS'],['expense','EGRESOS'],['investment','INVERSIÓN']];
  let visible=0;
- const cols='<col style="width:148px">'+M.map(()=>'<col style="width:84px">').join('')+'<col style="width:104px">';
+ const cols='<col style="width:11.746%">'+M.map(()=>'<col style="width:6.667%">').join('')+'<col style="width:8.25%">';
  let h='<colgroup>'+cols+'</colgroup><thead><tr><th>Concepto</th>'+M.map(m=>`<th>${m}</th>`).join('')+'<th>Total anual</th></tr></thead><tbody>';
  const totals=(arr,f)=>M.map((_,m)=>`<td>${compactMoney(sum(arr.map(x=>x[f][m])))}</td>`).join('')+`<td>${compactMoney(sum(arr.flatMap(x=>x[f])))}</td>`;
  labels.forEach(([t,label])=>{
@@ -1141,7 +1188,8 @@ function requestBudgetScope(input){
   pendingEdit={id,f,month:+m,newValue:current,oldValue:current,input};
   $('scopeDescription').textContent=`${x.name} · ${M[+m]}`;
   $('scopeAmount').value=current;
-  $('scopeChoice').value='one';
+  $('scopeChoice').value='one';$('scopeRange').hidden=true;
+  $('scopeFrom').value=m;$('scopeTo').value=m;
   openModal('scopeModal');
   requestAnimationFrame(()=>{
     $('scopeAmount').focus();
@@ -1156,6 +1204,119 @@ function finishEditRefresh(){
 }
 
 
+
+function investmentRecords(){return yd().investmentRecords||[]}
+let editingInvestmentId=null;
+function renderInvestmentHistory(){
+ const rows=investmentRecords().slice().sort((a,b)=>a.month-b.month);
+ $('investmentHistory').innerHTML=rows.length?rows.map(r=>`<div class="ledger-row"><div><strong>${esc(r.name)}</strong><small>${M[r.month]} · ${money(r.amount)}</small></div><div class="ledger-actions"><button data-editinvestment="${esc(r.id)}">Editar</button><button data-deleteinvestment="${esc(r.id)}">Eliminar</button></div></div>`).join(''):'<p class="help">Aún no hay aportes realizados registrados para este año.</p>';
+}
+function updateInvestmentMode(){
+ const planned=$('investmentMode').value==='planned';
+ $('investmentNameField').hidden=planned;$('investmentItemField').hidden=!planned;
+ $('investmentHelp').textContent=planned?'El monto se retira de la inversión pendiente del mes elegido y pasa a realizada. Actualiza también el saldo de dinero en Detalle al valor que realmente queda.':'Suma al avance anual sin descontarse del disponible. Si editas un aporte existente, Detalle permanece igual.';
+}
+function openInvestment(record=null){
+ editingInvestmentId=record?record.id:null;
+ $('investmentTitle').textContent=record?'Editar aporte realizado':'Registrar inversión realizada';
+ $('investmentMode').value='history';$('investmentMode').disabled=!!record;
+ $('investmentMonth').value=record?record.month:currentMonth;
+ $('investmentAmount').value=record?record.amount:'';$('investmentName').value=record?record.name:'';
+ $('investmentItem').innerHTML=typeItems('investment').map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');
+ updateInvestmentMode();openModal('investmentModal');
+}
+$('investmentMonth').innerHTML=M.map((m,i)=>`<option value="${i}">${m}</option>`).join('');
+['scopeFrom','scopeTo'].forEach(id=>$(id).innerHTML=M.map((m,i)=>`<option value="${i}">${m}</option>`).join(''));
+$('scopeChoice').addEventListener('change',()=>{$('scopeRange').hidden=$('scopeChoice').value!=='range'});
+$('investmentMode').addEventListener('change',updateInvestmentMode);
+$('addInvestmentBtn').addEventListener('click',()=>openInvestment());
+$('saveInvestmentBtn').addEventListener('click',()=>{
+ const amount=Number($('investmentAmount').value),month=+$('investmentMonth').value;
+ if(!Number.isFinite(amount)||amount<=0)return toastMsg('Ingresa un aporte mayor que cero');
+ let name=$('investmentName').value.trim();
+ const planned=!editingInvestmentId&&$('investmentMode').value==='planned';
+ let item;
+ if(planned){
+  item=typeItems('investment').find(x=>x.id===$('investmentItem').value);
+  if(!item)return toastMsg('Elige una inversión pendiente');
+  if(amount>(+item.budget[month]||0))return toastMsg('El aporte supera lo pendiente en ese mes. Ajusta primero Detalle.');
+  name=item.name;
+ }
+ if(!name)return toastMsg('Escribe el concepto del aporte');
+ const records=yd().investmentRecords=yd().investmentRecords||[];
+ if(editingInvestmentId){
+  const record=records.find(r=>r.id===editingInvestmentId);if(!record)return;
+  Object.assign(record,{name,month,amount});
+ }else{
+  if(planned)item.budget[month]=Math.round((item.budget[month]-amount)*100)/100;
+  records.push({id:crypto.randomUUID(),name,month,amount});
+ }
+ save();closeModal('investmentModal');renderAll();toastMsg('Aporte guardado');
+});
+$('investmentHistory').addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.editinvestment){const r=investmentRecords().find(r=>r.id===b.dataset.editinvestment);if(r)openInvestment(r)}
+ if(b.dataset.deleteinvestment&&confirm('¿Eliminar este aporte realizado? Las celdas de Detalle no cambiarán. Puedes deshacer.')){
+  yd().investmentRecords=investmentRecords().filter(r=>r.id!==b.dataset.deleteinvestment);save();renderAll();
+ }
+});
+function applyTableZoom(value){
+ const stored=Number(value??localStorage.getItem('aureoTableZoom'));
+ const zoom=Number.isFinite(stored)&&stored>0?Math.max(60,Math.min(140,Math.round(stored/10)*10)):100;
+ document.documentElement.style.setProperty('--table-scale',zoom/100);
+ $('zoomValue').value=zoom+'%';$('zoomValue').textContent=zoom+'%';
+ $('zoomOut').disabled=zoom<=60;$('zoomIn').disabled=zoom>=140;
+ localStorage.setItem('aureoTableZoom',String(zoom));
+}
+$('zoomOut').addEventListener('click',()=>applyTableZoom(Number(localStorage.getItem('aureoTableZoom'))-10));
+$('zoomIn').addEventListener('click',()=>applyTableZoom(Number(localStorage.getItem('aureoTableZoom'))+10));
+$('zoomReset').addEventListener('click',()=>applyTableZoom(100));
+function makeBackup(){return {app:'Aureo',version:'3.2.10',createdAt:new Date().toISOString(),db:structuredClone(db),preferences:{theme:localStorage.getItem('aureoTheme'),tableZoom:localStorage.getItem('aureoTableZoom')}}}
+function downloadBackup(payload,prefix='Aureo_respaldo'){
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download=prefix+'_'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+function validateBackup(payload){
+ if(!payload||payload.app!=='Aureo'||!payload.db||!payload.db.years||typeof payload.db.years!=='object'||Array.isArray(payload.db.years)||!Object.keys(payload.db.years).length)throw Error('No es un respaldo de Áureo válido');
+ const validArray=a=>Array.isArray(a)&&a.length===12&&a.every(n=>typeof n==='number'&&Number.isFinite(n));
+ for(const [key,y] of Object.entries(payload.db.years)){
+  if(!/^\d{4}$/.test(key)||!y||!Number.isFinite(y.goal)||y.goal<0||!Array.isArray(y.items)||!y.groups)throw Error('Año no válido');
+  for(const t of ['income','expense','investment'])if(!Array.isArray(y.groups[t])||!y.groups[t].every(g=>typeof g==='string'))throw Error('Subgrupos no válidos');
+  const ids=new Set();
+  for(const x of y.items){
+   if(!x||typeof x.id!=='string'||ids.has(x.id)||typeof x.name!=='string'||!['income','expense','investment'].includes(x.type)||!y.groups[x.type].includes(x.group)||!validArray(x.budget)||!validArray(x.actual))throw Error('Conceptos o montos no válidos');
+   ids.add(x.id);
+  }
+  if(y.investmentRecords!==undefined&&!Array.isArray(y.investmentRecords))throw Error('Aportes no válidos');
+  const recordIds=new Set();
+  for(const r of y.investmentRecords||[]){if(!r||typeof r.id!=='string'||recordIds.has(r.id)||typeof r.name!=='string'||!Number.isInteger(r.month)||r.month<0||r.month>11||!Number.isFinite(r.amount)||r.amount<=0)throw Error('Aporte no válido');recordIds.add(r.id)}
+ }
+ if(payload.db.budgetRules!==undefined&&(!Array.isArray(payload.db.budgetRules)||payload.db.budgetRules.some(r=>!r||typeof r.id!=='string'||!Number.isInteger(r.year)||!Number.isInteger(r.month)||r.month<0||r.month>11||!Number.isFinite(r.amount)||r.amount<0)))throw Error('Reglas no válidas');
+ return structuredClone(payload.db);
+}
+$('backupBtn').addEventListener('click',()=>{$('exportPreviousBtn').disabled=!localStorage.getItem('aureoBackupBefore3210');$('exportBeforeRestoreBtn').disabled=!localStorage.getItem('aureoBeforeRestore');openModal('backupModal')});
+$('exportBackupBtn').addEventListener('click',()=>downloadBackup(makeBackup()));
+$('exportPreviousBtn').addEventListener('click',()=>{const previous=localStorage.getItem('aureoBackupBefore3210');if(previous)downloadBackup(JSON.parse(previous),'Aureo_antes_actualizacion')});
+$('exportBeforeRestoreBtn').addEventListener('click',()=>{const raw=localStorage.getItem('aureoBeforeRestore');if(raw)downloadBackup(JSON.parse(raw),'Aureo_antes_restauracion')});
+$('importBackupBtn').addEventListener('click',()=>$('backupFile').click());
+$('backupFile').addEventListener('change',async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{
+  if(file.size>20*1024*1024)throw Error('El archivo es demasiado grande');
+  const payload=JSON.parse(await file.text()),restored=validateBackup(payload);
+  if(!confirm('¿Restaurar este respaldo y reemplazar todos los años actuales? Se conservará una copia local previa.'))return;
+  localStorage.setItem('aureoBeforeRestore',JSON.stringify(makeBackup()));
+  // Commit data only after validation and after saving the recovery snapshot.
+  localStorage.setItem('aureoV16',JSON.stringify(restored));
+  db=restored;db.budgetRules=db.budgetRules||[];
+  Object.values(db.years).forEach(y=>y.collapsed=y.collapsed||{});
+  year=Number(Object.keys(db.years).sort((a,b)=>b-a)[0]);
+  undoStack=[];redoStack=[];lastSavedState=JSON.stringify(db);
+  if(payload.preferences?.theme)applyTheme(payload.preferences.theme);
+  applyTableZoom(payload.preferences?.tableZoom??100);
+  closeModal('backupModal');renderAll();toastMsg('Respaldo restaurado');
+ }catch(err){toastMsg('No se restauró: '+err.message)}finally{e.target.value=''}
+});
 
 let conceptMenuId=null;
 $('goal').addEventListener('click',()=>{
@@ -1211,7 +1372,11 @@ $('applyScopeBtn').addEventListener('click',()=>{
     return toastMsg('Ingresa un monto válido');
   }
   const x=yd().items.find(i=>i.id===pendingEdit.id),choice=$('scopeChoice').value;
-  if(choice==='one')x.budget[pendingEdit.month]=amount;
+  if(choice==='range'){
+    const from=+$('scopeFrom').value,to=+$('scopeTo').value;
+    if(from>to)return toastMsg('El mes inicial debe ser anterior al final');
+    for(let m=from;m<=to;m++)x.budget[m]=amount;
+  }else if(choice==='one')x.budget[pendingEdit.month]=amount;
   else if(choice==='forward')for(let i=pendingEdit.month;i<12;i++)x.budget[i]=amount;
   else if(choice==='future'){
     for(let m=pendingEdit.month;m<12;m++)x.budget[m]=amount;
@@ -1284,11 +1449,11 @@ $('saveYearBtn').addEventListener('click',()=>{
   if(mode==='copy'){
     db.years[y]=structuredClone(source);
     db.years[y].items.forEach(x=>x.actual=zeros());
-    db.years[y].collapsed={}
+    db.years[y].collapsed={};delete db.years[y].investmentRecords
   }else if(mode==='structure'){
     db.years[y]=structuredClone(source);
     db.years[y].items.forEach(x=>{x.budget=zeros();x.actual=zeros()});
-    db.years[y].collapsed={}
+    db.years[y].collapsed={};delete db.years[y].investmentRecords
   }else db.years[y]={goal:0,groups:structuredClone(baseGroups),items:[],collapsed:{}};
   if(mode==='copy')applyBudgetRules(y);
   year=y;save();closeModal('yearModal');renderAll();toastMsg('Año creado')
@@ -1417,6 +1582,7 @@ if('serviceWorker' in navigator){
   window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
 }
 
+applyTableZoom();
 persist();
 renderAll();
 </script>

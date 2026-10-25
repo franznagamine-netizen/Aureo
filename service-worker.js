@@ -1,4 +1,4 @@
-const CACHE='aureo-3.2.9';
+const CACHE='aureo-3.2.10';
 const APP_SHELL=[
   './',
   './index.html',
