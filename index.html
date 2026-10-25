@@ -17,7 +17,7 @@
 <link rel="icon" type="image/png" sizes="512x512" href="./icons/icon-512.png">
 <link rel="apple-touch-startup-image" href="./splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)">
 <link rel="apple-touch-startup-image" href="./splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)">
-<title>Áureo 3.2.11</title>
+<title>Áureo 3.2.12</title>
 <style>
 :root{
   --bg:#f4f6fa;--card:#fff;--text:#172238;--muted:#738097;--line:#e4e9f1;--nav:#18213b;
@@ -593,7 +593,7 @@ button[data-cell*="|budget|"]{
 table input:focus{opacity:1 !important;text-shadow:none !important}
 
 
-/* Áureo 3.2.11 */
+/* Áureo 3.2.12 */
 .hero{color:white!important}
 :root{--ink:var(--text)}
 body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -611,7 +611,7 @@ body{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI
 :root[data-theme="dark"] .view-switch button.active{background:#34415b;color:white}
 :root[data-theme="dark"] .group td{color:var(--text)}
 
-/* Áureo 3.2.11: tabla única, como en 3.2. */
+/* Áureo 3.2.12: tabla única, como en 3.2. */
 .month-scroll{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:7px 10px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}
 .month-scroll button{width:34px;height:30px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text);font-size:24px;line-height:1}
 
@@ -767,7 +767,7 @@ header.top .year #addYearBtn{font-size:21px;font-weight:400;display:grid;place-i
 #investmentHistory{max-height:300px;overflow:auto}
 #scopeRange[hidden]{display:none}
 
-/* 3.2.11: menor altura, controles discretos y espacio para los datos. */
+/* 3.2.12: menor altura, controles discretos y espacio para los datos. */
 .app-utility{margin:2px 0 4px;min-height:22px;gap:6px}
 .app-utility small{font-size:9px;line-height:1.2;color:var(--muted)}
 .app-utility #backupBtn{border:0;background:transparent;border-radius:4px;padding:4px 2px;min-height:24px;font-size:10px;line-height:1.2;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
@@ -826,6 +826,18 @@ button:disabled{cursor:default}
  .app{padding-bottom:calc(62px + env(safe-area-inset-bottom))}
  .toast{bottom:calc(62px + env(safe-area-inset-bottom))}
 }
+
+/* 3.2.12: meta, avance y planificación en una sola tarjeta. */
+#home .investment-summary{row-gap:8px}
+#home .investment-summary .investment-stats{grid-column:1 / -1;grid-template-columns:1fr 1fr;margin-top:0;row-gap:9px;border-top:1px solid var(--line);padding-top:9px}
+#home .investment-summary .investment-plan-hint{grid-column:1 / -1;font-size:10px;line-height:1.4;color:var(--muted);margin:0}
+#home .investment-footer{grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:8px;border-top:1px solid var(--line);padding-top:7px}
+#home .investment-footer details{min-width:0;font-size:11px;line-height:1.4}
+#home .investment-footer details[open]{grid-column:1 / -1;grid-row:2}
+#home .investment-footer details[open]+button{grid-column:2;grid-row:1}
+#home .investment-footer summary{font-size:11px;line-height:1.4;padding:5px 0;cursor:pointer;color:var(--muted)}
+#home .investment-footer #addInvestmentBtn{border:1px solid var(--line);color:var(--text);font-family:inherit}
+#home .investment-footer .ledger-row{flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -859,31 +871,30 @@ button:disabled{cursor:default}
   <button data-page="annual"><span class="nav-icon">▦</span><span>Detalle</span></button>
 </nav>
 
-<div class="utility-row app-utility"><small>Áureo 3.2.11</small><button id="backupBtn" aria-label="Exportar o restaurar respaldo">Respaldo</button></div>
+<div class="utility-row app-utility"><small>Áureo 3.2.12</small><button id="backupBtn" aria-label="Exportar o restaurar respaldo">Respaldo</button></div>
 <section id="home" class="page active">
-  <div class="card hero">
+  <div class="card hero investment-summary">
     <div class="hero-copy">
       <small>META DE INVERSIÓN ANUAL</small>
       <button class="big goal-edit" id="goal" aria-label="Editar meta de inversión anual" title="Editar meta anual"></button><span class="goal-edit-hint">Toca el monto para editar</span>
-      <div class="hero-meta">
-        <div><small>Ya invertido</small><strong id="invested"></strong></div>
-        <div><small>Falta por invertir</small><strong id="left"></strong></div>
-      </div>
     </div>
-    <div class="ring-wrap">
-      <div class="ring">
-        <svg viewBox="0 0 120 120" aria-label="Avance de la meta anual"><circle class="ring-track" cx="60" cy="60" r="48"></circle><circle class="ring-value" id="ringValue" cx="60" cy="60" r="48"></circle></svg>
-        <div class="ring-label"><div><strong id="ringPct">0%</strong><br><span>de la meta</span></div></div>
-      </div>
+    <div class="ring-wrap"><div class="ring">
+      <svg viewBox="0 0 120 120" aria-label="Avance de la meta anual"><circle class="ring-track" cx="60" cy="60" r="48"></circle><circle class="ring-value" id="ringValue" cx="60" cy="60" r="48"></circle></svg>
+      <div class="ring-label"><div><strong id="ringPct">0%</strong><br><span>de la meta</span></div></div>
+    </div></div>
+    <div class="hero-meta investment-stats">
+      <div><small>Ya invertido</small><strong id="invested"></strong></div>
+      <div><small>Falta invertir</small><strong id="left"></strong></div>
+      <div><small>Previsto en Detalle</small><strong id="plannedInvestment"></strong></div>
+      <div><small>Falta planificar</small><strong id="unassignedInvestment"></strong></div>
+    </div>
+    <p class="investment-plan-hint" id="investmentPlanHint"></p>
+    <div class="investment-footer">
+      <details><summary>Ver aportes del año</summary><div id="investmentHistory"></div></details>
+      <button id="addInvestmentBtn" aria-label="Registrar inversión realizada">＋ Registrar</button>
     </div>
   </div>
 
-  <div class="card investment-card">
-<div class="utility-row investment-heading"><h2>Inversiones realizadas</h2><button id="addInvestmentBtn" aria-label="Registrar inversión realizada">＋ Registrar</button></div>
-<p class="help">Aportes realizados. En Detalle queda lo pendiente de invertir.</p>
-<div class="hero-meta"><div><small>Pendiente en Detalle</small><strong id="plannedInvestment"></strong></div><div><small>Por asignar para la meta</small><strong id="unassignedInvestment"></strong></div></div>
-<details><summary>Ver aportes del año</summary><div id="investmentHistory"></div></details>
-</div>
   <div class="kpis">
     <div class="kpi"><div class="label">Disponible este mes</div><div class="value green" id="kMonth"></div><div class="spark" id="sparkMonth"></div></div>
     <div class="kpi"><div class="label">Disponible libre del año</div><div class="value blue" id="kYear"></div><div class="spark" id="sparkYear"></div></div>
@@ -892,7 +903,7 @@ button:disabled{cursor:default}
     <div class="kpi"><div class="label">Inversión realizada + pendiente del año</div><div class="value purple" id="kInvestment"></div><div class="progress"><span id="investmentProgress"></span></div></div>
     <div class="kpi"><div class="label">Pendiente de invertir este mes</div><div class="value purple" id="kInvestmentMonth"></div></div>
     <div class="kpi"><div class="label">% disponible e inversión pendiente</div><div class="value" id="kRate"></div></div>
-    <div class="kpi"><div class="label">Por asignar al mes para la meta</div><div class="value purple" id="kRequired"></div></div>
+    <div class="kpi"><div class="label">Falta planificar por mes</div><div class="value purple" id="kRequired"></div></div>
   </div>
 
   <div class="card" id="freeAvailableCard">
@@ -1009,7 +1020,7 @@ button:disabled{cursor:default}
 <div class="modal" id="investmentModal"><div class="sheet"><h2 id="investmentTitle">Registrar inversión realizada</h2>
 <div class="field"><label for="investmentMode">Registro</label><select id="investmentMode"><option value="history">Aporte ya realizado (sin modificar Detalle)</option><option value="planned">Realizar una inversión pendiente de Detalle</option></select></div>
 <div class="grid"><div class="field"><label for="investmentMonth">Mes del aporte</label><select id="investmentMonth"></select></div><div class="field"><label for="investmentAmount">Monto en S/</label><input id="investmentAmount" type="number" inputmode="decimal" min="0.01" step="0.01"></div></div>
-<div class="field" id="investmentNameField"><label for="investmentName">Concepto</label><input id="investmentName" placeholder="ETF y acciones / Seguro de vida" maxlength="160"></div>
+<div class="field" id="investmentNameField"><label for="investmentName">Concepto</label><select id="investmentName" aria-label="Concepto de inversión realizada"></select></div>
 <div class="field" id="investmentItemField" hidden><label for="investmentItem">Inversión pendiente</label><select id="investmentItem"></select></div>
 <p class="help" id="investmentHelp">Suma al avance anual sin descontarse del disponible. No dupliques aquí un aporte que todavía figura como pendiente en Detalle.</p>
 <div class="actions"><button class="cancel" data-close="investmentModal">Cancelar</button><button class="save" id="saveInvestmentBtn">Guardar aporte</button></div>
@@ -1031,7 +1042,7 @@ function loadDb(){
     let v;
     try{v=JSON.parse(raw)}catch(e){alert('No se pudieron leer los datos guardados. No se han reemplazado.');throw e}
     if(!v||!v.years){alert('Los datos guardados requieren revisión. No se han reemplazado.');throw new Error('Datos guardados no válidos')}
-    if(!localStorage.getItem('aureoBackupBefore3210'))localStorage.setItem('aureoBackupBefore3210',JSON.stringify({app:'Aureo',version:'3.2.11',createdAt:new Date().toISOString(),db:v,preferences:{theme:localStorage.getItem('aureoTheme'),tableZoom:localStorage.getItem('aureoTableZoom')}}));
+    if(!localStorage.getItem('aureoBackupBefore3210'))localStorage.setItem('aureoBackupBefore3210',JSON.stringify({app:'Aureo',version:'3.2.12',createdAt:new Date().toISOString(),db:v,preferences:{theme:localStorage.getItem('aureoTheme'),tableZoom:localStorage.getItem('aureoTableZoom')}}));
     return v;
   }
   return {years:{2026:{goal:0,groups:structuredClone(baseGroups),items:structuredClone(seed),collapsed:{}}}}
@@ -1121,6 +1132,7 @@ function renderDash(){
   const done=investmentRecords().reduce((n,r)=>n+r.amount,0);
   const left=Math.max(yd().goal-done,0),gap=Math.max(left-inv,0),pct=yd().goal?Math.min(done/yd().goal*100,100):0;
   $('plannedInvestment').textContent=money(inv);$('unassignedInvestment').textContent=money(gap);
+  $('investmentPlanHint').textContent=!yd().goal?'Define tu meta anual para calcular lo que falta.':gap>0?'Necesitas prever '+money(gap)+' adicionales en Detalle.':'Lo ya invertido y lo previsto cubren tu meta anual.';
   renderInvestmentHistory();
   $('goal').textContent=money(yd().goal);$('invested').textContent=money(done);$('left').textContent=money(left);
   const freeAvailable=sum(M.map((_,m)=>monthTotals(m).available));$('kMonth').textContent=money(monthTotals(currentMonth).available);$('kYear').textContent=money(freeAvailable);
@@ -1275,12 +1287,19 @@ function updateInvestmentMode(){
  $('investmentNameField').hidden=planned;$('investmentItemField').hidden=!planned;
  $('investmentHelp').textContent=planned?'El monto se retira de la inversión pendiente del mes elegido y pasa a realizada. Actualiza también el saldo de dinero en Detalle al valor que realmente queda.':'Suma al avance anual sin descontarse del disponible. Si editas un aporte existente, Detalle permanece igual.';
 }
+function investmentConceptNames(){
+ const names=[...new Set([...typeItems('investment').map(x=>x.name),...investmentRecords().map(r=>r.name)].filter(Boolean))];
+ return names.length?names:['ETF y acciones','Seguro de vida'];
+}
 function openInvestment(record=null){
  editingInvestmentId=record?record.id:null;
  $('investmentTitle').textContent=record?'Editar aporte realizado':'Registrar inversión realizada';
  $('investmentMode').value='history';$('investmentMode').disabled=!!record;
  $('investmentMonth').value=record?record.month:currentMonth;
- $('investmentAmount').value=record?record.amount:'';$('investmentName').value=record?record.name:'';
+ $('investmentAmount').value=record?record.amount:'';
+ const names=investmentConceptNames();
+ $('investmentName').innerHTML=names.map(name=>`<option value="${esc(name)}">${esc(name)}</option>`).join('');
+ $('investmentName').value=record?record.name:names[0];
  $('investmentItem').innerHTML=typeItems('investment').map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');
  updateInvestmentMode();openModal('investmentModal');
 }
@@ -1301,7 +1320,7 @@ $('saveInvestmentBtn').addEventListener('click',()=>{
   if(amount>(+item.budget[month]||0))return toastMsg('El aporte supera lo pendiente en ese mes. Ajusta primero Detalle.');
   name=item.name;
  }
- if(!name)return toastMsg('Escribe el concepto del aporte');
+ if(!name||(!planned&&!investmentConceptNames().includes(name)))return toastMsg('Elige un concepto de inversión');
  const records=yd().investmentRecords=yd().investmentRecords||[];
  if(editingInvestmentId){
   const record=records.find(r=>r.id===editingInvestmentId);if(!record)return;
@@ -1330,7 +1349,7 @@ function applyTableZoom(value){
 $('zoomOut').addEventListener('click',()=>applyTableZoom(Number(localStorage.getItem('aureoTableZoom'))-10));
 $('zoomIn').addEventListener('click',()=>applyTableZoom(Number(localStorage.getItem('aureoTableZoom'))+10));
 $('zoomReset').addEventListener('click',()=>applyTableZoom(100));
-function makeBackup(){return {app:'Aureo',version:'3.2.11',createdAt:new Date().toISOString(),db:structuredClone(db),preferences:{theme:localStorage.getItem('aureoTheme'),tableZoom:localStorage.getItem('aureoTableZoom')}}}
+function makeBackup(){return {app:'Aureo',version:'3.2.12',createdAt:new Date().toISOString(),db:structuredClone(db),preferences:{theme:localStorage.getItem('aureoTheme'),tableZoom:localStorage.getItem('aureoTableZoom')}}}
 function downloadBackup(payload,prefix='Aureo_respaldo'){
  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download=prefix+'_'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);

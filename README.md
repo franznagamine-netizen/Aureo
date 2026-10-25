@@ -1,4 +1,4 @@
-Áureo 3.2.11
+Áureo 3.2.12
 
 Sube los archivos de este ZIP a la misma raíz del repositorio Aureo. No cambies la dirección ni desinstales la app.
 
@@ -14,4 +14,6 @@ Al editar o eliminar un aporte histórico, no se modifican las celdas de Detalle
 
 El respaldo JSON contiene datos personales. No lo subas al repositorio público.
 
-Versión 3.2.11: filas de Detalle más bajas, herramientas en dos líneas compactas, respaldo discreto y tarjeta de inversiones reducida. Mismos datos y cálculos de 3.2.10.
+Versión 3.2.12: filas de Detalle más bajas, herramientas en dos líneas compactas, respaldo discreto y tarjeta de inversiones reducida. Mismos datos y cálculos de 3.2.10.
+
+Versión 3.2.12: meta y registro de inversiones en una sola tarjeta. Falta planificar = máximo entre 0 y meta menos aportes realizados menos inversión pendiente en Detalle. El concepto del aporte se elige de una lista con los conceptos de inversión y los nombres del historial, conservando aportes de conceptos eliminados.
